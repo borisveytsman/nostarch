@@ -132,7 +132,7 @@
 % |\documentclass[|\meta{options}|]{nostarch}|
 % \end{flushleft}
 %
-% \DescribeOption{fonts,nofonts} \emph{No Starch Press} uses a
+% \DescribeOptions{fonts,nofonts} \emph{No Starch Press} uses a
 % number of commercial fonts to typeset their books.  You might either
 % buy them or sublicense from the publisher.  The option
 % |fonts| (default) tells \LaTeX{} that you do have these
@@ -154,7 +154,7 @@
 % \progname{dvips} what paper size to choose.  One way to do this is
 % to add to the \progname{dvips} options the following:
 % \begin{verbatim}
-%   -T 7in,9.25in -O -0in,0in
+%   -T 7in,9.25in
 % \end{verbatim}
 % 
 %
@@ -209,7 +209,7 @@
 %\label{sec:options}
 %
 %
-% First, let us decide whether we have nonfreefonts:
+% First, let us decide whether we have non-free fonts:
 %    \begin{macrocode}
 \newif\ifnostarch@fonts
 \nostarch@fontstrue
