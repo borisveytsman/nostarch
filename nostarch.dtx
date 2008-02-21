@@ -1,0 +1,439 @@
+% \iffalse
+% $Id$
+%
+% Copyright 2008, Boris Veytsman
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either
+% version 1.3 of this license or (at your option) any 
+% later version.
+% The latest version of the license is in
+%    http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of
+% LaTeX version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Boris Veytsman,
+% <borisv@lk.net> 
+%
+% This work consists of the file nostarch.dtx and the
+% derived file nostarch.cls
+%
+% \fi 
+% \CheckSum{0}
+%
+%
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~} 
+%
+%\iffalse
+% Taken from xkeyval.dtx
+%\fi
+%\makeatletter
+%\def\DescribeOption#1{\leavevmode\@bsphack
+%              \marginpar{\raggedleft\PrintDescribeOption{#1}}%
+%              \SpecialOptionIndex{#1}\@esphack\ignorespaces}
+%\def\PrintDescribeOption#1{\strut\emph{option}\\\MacroFont #1\ }
+%\def\SpecialOptionIndex#1{\@bsphack
+%    \index{#1\actualchar{\protect\ttfamily#1}
+%           (option)\encapchar usage}%
+%    \index{options:\levelchar#1\actualchar{\protect\ttfamily#1}\encapchar
+%           usage}\@esphack}
+%\def\DescribeOptions#1{\leavevmode\@bsphack
+%  \marginpar{\raggedleft\strut\emph{options}%
+%  \@for\@tempa:=#1\do{%
+%    \\\strut\MacroFont\@tempa\SpecialOptionIndex\@tempa
+%  }}\@esphack\ignorespaces}
+%\makeatother
+%
+% \MakeShortVerb{|}
+% \GetFileInfo{nostarch.dtx}
+% \newcommand{\progname}[1]{\textsf{#1}}
+% \title{\LaTeX{} Style For \emph{No Starch Press}
+%   \thanks{\copyright 2008, Boris Veytsman}}
+% \author{Boris Veytsman\thanks{%
+% \href{mailto:borisv@lk.net}{\texttt{borisv@lk.net}},
+% \href{mailto:boris@varphi.com}{\texttt{boris@varphi.com}}}} 
+% \date{\filedate, \fileversion}
+% \maketitle
+% \begin{abstract}
+%   This package provides class for typesetting books for No Starch
+%   Press, \url{http://www.nostarch.com}
+% \end{abstract}
+% \tableofcontents
+%
+% \clearpage
+%
+%
+%
+%\section{Introduction}
+%\label{sec:intro}
+%
+%
+%\section{User's Guide}
+%\label{sec:manual}
+%
+%
+%\subsection{Installation}
+%\label{sec:installation}
+%
+% The installation of the class follows the usual
+% practice~\cite{TeXFAQ} for \LaTeX{} packages:
+% \begin{enumerate}
+% \item Run \progname{latex} on |nostarch.ins|.  This will produce the file
+% |nostarch.cls|.
+% \item Put the files |nostarch.cls| and |nostarch.bst| to
+% the places where \LaTeX{} and Bib\TeX{} can find them (see
+% \cite{TeXFAQ} or the documentation for your \TeX{}
+% system).\label{item:install} 
+% \item Update the database of file names.  Again, see \cite{TeXFAQ}
+% or the documentation for your \TeX{} system for the system-specific
+% details.\label{item:update}
+% \item The file |nostarch.pdf| provides the documentation for the
+% package (this is the file you are probably reading now).
+% \end{enumerate}
+% As an alternative to items~\ref{item:install} and~\ref{item:update}
+% you can just put the files in the working directory where your
+% |.tex| file is.
+% 
+%
+% The class uses some other \LaTeX{} classes or packages.  Most
+% probably, they are already installed on your system.  If not (or if
+% their versions are very old), you need to download and
+% install them.  Here is the list:
+% \begin{enumerate}
+% \item Font support packages \progname{nbaskerv},
+% \progname{futurans}, \progname{dogma} and \progname{thsmc}.  Of
+% course you also need fonts themselves, see Section{sec:invocation}.
+% \item \progname{ifpdf} package~\cite{Oberdiek06:Ifpdf},
+% \item \progname{fancyhdr} package~\cite{Oostrum04:Fancyhdr},
+% \item \progname{booktabs} package~\cite{Fear05:Booktabs}.
+% \end{enumerate}
+% 
+%
+%\subsection{Invocation}
+%\label{sec:invocation}
+%
+% To use the class, put in the preamble of your document
+% \begin{flushleft}
+% |\documentclass[|\meta{options}|]{nostarch}|
+% \end{flushleft}
+%
+% \DescribeOption{fonts,nofonts} \emph{No Starch Press} uses a
+% number of commercial fonts to typeset their books.  You might either
+% buy them or sublicense from the publisher.  The option
+% |fonts| (default) tells \LaTeX{} that you do have these
+% fonts.  On the other hand, the option |nofonts| instructs \LaTeX{}
+% to use freely available fonts for typesetting.  Of course in this
+% case the result will not look like a \emph{No Starch Press} Book.
+%
+% 
+% \DescribeOptions{8pt,9pt,10pt,11pt,12pt}
+% The fontsize changing options (|8pt|, |9pt|, \dots, |12pt|) have no
+% effect other than producing a warning in the log.
+%
+%
+%
+% \emph{No Starch Press} uses a special paper size.  If you process the
+% manuscript with \progname{pdflatex} to produce PDF output, the paper
+% dimensions will be automatically set up by the class.  However, if
+% you use \progname{latex} and \progname{dvips}, you need to tell
+% \progname{dvips} what paper size to choose.  One way to do this is
+% to add to the \progname{dvips} options the following:
+% \begin{verbatim}
+%   -T 7in,9.25in -O -0in,0in
+% \end{verbatim}
+% 
+%
+%
+% \StopEventually{%
+% \clearpage
+% \bibliography{tex}
+% \bibliographystyle{unsrt}}
+% 
+% \clearpage
+%
+%
+%\section{Implementation}
+%\label{sec:impl}
+%
+%\subsection{Identification}
+%\label{sec:ident}
+%
+% We start with the declaration who we are.  Most |.dtx| files put
+% driver code in a separate driver file |.drv|.  We roll this code into the
+% main file, and use the pseudo-guard |<gobble>| for it.
+%    \begin{macrocode}
+%<class>\NeedsTeXFormat{LaTeX2e}
+%<*gobble>
+\ProvidesFile{nostarch.dtx}
+%</gobble>
+%<class>\ProvidesClass{nostarch}
+[2008/02/19 v0.1 Typesetting books for No Starch Press]
+%    \end{macrocode}
+%
+% And the driver code:
+%    \begin{macrocode}
+%<*gobble>
+\documentclass{ltxdoc}
+\usepackage{array}
+\usepackage{url,amsfonts}
+\usepackage[breaklinks,colorlinks,linkcolor=black,citecolor=black,
+            pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
+\PageIndex
+\CodelineIndex
+\RecordChanges
+\EnableCrossrefs
+\begin{document}
+  \DocInput{nostarch.dtx}
+\end{document}
+%</gobble> 
+%<*class>
+%    \end{macrocode}
+%
+%
+%\subsection{Options}
+%\label{sec:options}
+%
+%
+% First, let us decide whether we have nonfreefonts:
+%    \begin{macrocode}
+\newif\ifnostarch@fonts
+\nostarch@fontstrue
+\DeclareOption{fonts}{\nostarch@fontstrue}
+\DeclareOption{nofonts}{\nostarch@fontsfalse}
+%    \end{macrocode}
+%
+% The size-changing options produce a warning:
+%    \begin{macrocode}
+\long\def\nostarch@size@warning#1{%
+  \ClassWarning{nostarch}{Size-changing option #1 will not be
+    honored}}%
+\DeclareOption{8pt}{\nostarch@size@warning{\CurrentOption}}%
+\DeclareOption{9pt}{\nostarch@size@warning{\CurrentOption}}%
+\DeclareOption{10pt}{\nostarch@size@warning{\CurrentOption}}%
+\DeclareOption{11pt}{\nostarch@size@warning{\CurrentOption}}%
+\DeclareOption{12pt}{\nostarch@size@warning{\CurrentOption}}%
+%    \end{macrocode}
+% 
+%
+%
+% All other options are passed to \progname{book}:
+%    \begin{macrocode}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
+%    \end{macrocode}
+% 
+% Now we read the configuration file
+%    \begin{macrocode}
+\InputIfFileExists{nostarch.cfg}{%
+  \ClassInfo{nostarch}{%
+    Loading configuration file nostarch.cfg}}{%
+  \ClassInfo{nostarch}{%
+    Configuration file nostarch.cfg is not found}}
+%    \end{macrocode}
+% And process the options:
+%    \begin{macrocode}
+\ProcessOptions\relax
+%    \end{macrocode}
+%
+%
+%\subsection{Loading Class and Packages}
+%\label{sec:loading}
+%
+% We start with the base class
+%    \begin{macrocode}
+\LoadClass{book}
+%    \end{macrocode}
+%
+% A bunch of packages:
+%    \begin{macrocode}
+\RequirePackage{ifpdf, fancyhdr, booktabs}
+%    \end{macrocode}
+%
+% 
+%
+%
+%\subsection{Page Dimensions and Paragraphing}
+%\label{sec:page}
+%
+% \begin{macro}{\paperheight}
+% \begin{macro}{\paperwidth}
+% The journal has rather narrow pages:
+%    \begin{macrocode}
+\setlength{\paperheight}{9.25in}
+\setlength{\paperwidth}{7in}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \begin{macro}{\pdfpaperheight}
+% \begin{macro}{\pdfpaperwidth}
+% \begin{macro}{\pdfvorigin}
+% \begin{macro}{\pdfhorigin}
+% If we deal with \progname{pdftex}, we can use this information more
+% creatively.  This was inspired by
+% \progname{memoir}~\cite{Wilson04:Memoir}.
+%    \begin{macrocode}
+\ifpdf\relax
+  \pdfpageheight=\paperheight
+  \pdfpagewidth=\paperwidth
+  \pdfvorigin=1in
+  \pdfhorigin=1in
+\fi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\headheight}
+%   We leave generous header space:
+%    \begin{macrocode}
+\setlength{\headheight}{32pt}
+%    \end{macrocode}
+%   
+% \end{macro}
+%
+% \begin{macro}{\footskip}
+%   \changes{v0.3}{2007/08/23}{Redefined} 
+%   \changes{v0.4}{2007/09/02}{Changed} 
+% The footer is slightly larger than in \progname{amsart}
+%    \begin{macrocode}
+\setlength{\footskip}{42pt}%
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%
+% \begin{macro}{\topmargin}
+%   The top margin is 50 bp:
+%   \changes{v0.4}{2007/09/02}{Changed offsets} 
+%    \begin{macrocode}
+\setlength\topmargin{50bp}
+\addtolength\topmargin{-0.9in}
+\addtolength\topmargin{-\topskip}
+\addtolength\topmargin{-\headsep}
+\@settopoint\topmargin
+%    \end{macrocode}  
+% \end{macro}
+% \begin{macro}{\textheight}
+%   \changes{v0.4}{2007/09/02}{Changed} 
+%   This code is similar to the one in~\cite{classes}.  |\textheight|
+%   is the height of the text including footnotes, but excluding
+%   running head and foot.  We start with |\paperheight| and subtract
+%   margins, running heads and foots:
+%    \begin{macrocode}
+\setlength\@tempdima{\paperheight}
+\addtolength\@tempdima{-\topmargin}
+\addtolength\@tempdima{-26bp} % Bottom margin
+\addtolength\@tempdima{-\headheight}
+\addtolength\@tempdima{-\headsep}
+\addtolength\@tempdima{-\footskip}
+\addtolength\@tempdima{-1in}
+%    \end{macrocode}
+%   We want this length to contain an integer number of lines:
+%    \begin{macrocode}
+\divide\@tempdima\baselineskip
+\@tempcnta=\@tempdima
+\setlength\textheight{\@tempcnta\baselineskip}
+%    \end{macrocode}
+% Now we take care of the first line height:
+%    \begin{macrocode}
+\addtolength\textheight{\topskip}
+%    \end{macrocode}   
+% \end{macro}
+%
+% \begin{macro}{\evensidemargin}
+% \begin{macro}{\oddsidemargin}
+%   The margins on even and odd pages are 43 bp:
+%    \begin{macrocode}
+\setlength\evensidemargin{43bp}
+\addtolength{\evensidemargin}{-1in}
+\setlength\oddsidemargin{43bp}
+\addtolength{\oddsidemargin}{-1in}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \begin{macro}{\textwidth}
+%   The way to set up the right margin is slightly different:
+%    \begin{macrocode}
+\setlength\textwidth{\paperwidth}
+\addtolength{\textwidth}{-1in}
+\addtolength\textwidth{-\evensidemargin}
+\addtolength\textwidth{-43bp} % right margin
+\@settopoint\textwidth
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\parindent}
+%   The paragraph indentation is 1em:
+%    \begin{macrocode}
+\setlength\parindent{1em}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% 
+%
+%\subsection{Headers}
+%\label{sec:headers}
+%
+%
+% \begin{macro}{\headrulewidth}
+% \begin{macro}{\footrulewidth}
+%   We do not want decorative rules in the journal:
+%    \begin{macrocode}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% 
+% It is easy to set up headers with \progname{fancyhdr}:
+%    \begin{macrocode}
+\pagestyle{fancy}
+\fancyfoot{}
+%    \end{macrocode}
+% 
+% The first page has the special headers.  The style |firstpage| is
+% invoked by \progname{amsart}; here we just redefine it.
+%    \begin{macrocode}
+\fancypagestyle{firstpage}{%
+  \fancyhf{}%
+  \chead{\tiny%
+    ISRAEL JOURNAL OF MATHEMATICS \textbf{\currentvolume}
+    (\currentyear), 
+    \start@page--\end@page\\[0.5ex] 
+  DOI: \@doiinfo}%
+   \cfoot{\thepage}}%
+%    \end{macrocode}
+%
+%
+%\subsection{End of Class}
+%\label{end}
+%
+%
+%    \begin{macrocode}
+%</class>
+%    \end{macrocode}
+%
+%\Finale
+%\clearpage
+%
+%\PrintChanges
+%\clearpage
+%\PrintIndex
+%
+\endinput
