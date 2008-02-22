@@ -109,20 +109,26 @@
 % you can just put the files in the working directory where your
 % |.tex| file is.
 % 
+% To typeset the books in the distinctive \emph{No Starch Press} style
+% you will need the fonts used by them.  Unfortunately these fonts
+% (New Baskerville, Futura, The Sans Mono Condensed and Dogma) are not
+% free.  You may buy them from the vendor or license from the
+% publisher to typeset your book.  Please contact \emph{No Starch
+% Press} directly for the arrangements.
 %
 % The class uses some other \LaTeX{} classes or packages.  Most
-% probably, they are already installed on your system.  If not (or if
-% their versions are very old), you need to download and
+% probably, some of them they are already installed on your system.
+% If not (or if their versions are very old), you need to download and
 % install them.  Here is the list:
 % \begin{enumerate}
 % \item Font support packages \progname{nbaskerv},
-% \progname{futurans}, \progname{dogma} and \progname{thsmc}.  Of
-% course you also need fonts themselves, see Section{sec:invocation}.
+% \progname{futurans}, \progname{dogma} and \progname{thsmc}
 % \item \progname{ifpdf} package~\cite{Oberdiek06:Ifpdf},
 % \item \progname{fancyhdr} package~\cite{Oostrum04:Fancyhdr},
 % \item \progname{booktabs} package~\cite{Fear05:Booktabs}.
 % \end{enumerate}
-% 
+% These packages are called internally by |nostarch.cls|;  you do not
+% need to explicitly call them from your document.
 %
 %\subsection{Invocation}
 %\label{sec:invocation}
@@ -132,11 +138,12 @@
 % |\documentclass[|\meta{options}|]{nostarch}|
 % \end{flushleft}
 %
-% \DescribeOptions{fonts,nofonts} \emph{No Starch Press} uses a
-% number of commercial fonts to typeset their books.  You might either
-% buy them or sublicense from the publisher.  The option
-% |fonts| (default) tells \LaTeX{} that you do have these
-% fonts.  On the other hand, the option |nofonts| instructs \LaTeX{}
+% \DescribeOptions{cfonts,nocfonts} 
+% As discussed above, \emph{No  Starch Press} uses a number of
+% commercial fonts to typeset their  books.  
+% The option |cfonts| (default) tells \LaTeX{} that you do have these
+% commercial fonts.  On the other hand, the option |nocfonts| instructs
+% \LaTeX{} 
 % to use freely available fonts for typesetting.  Of course in this
 % case the result will not look like a \emph{No Starch Press} Book.
 %
@@ -211,10 +218,10 @@
 %
 % First, let us decide whether we have non-free fonts:
 %    \begin{macrocode}
-\newif\ifnostarch@fonts
-\nostarch@fontstrue
-\DeclareOption{fonts}{\nostarch@fontstrue}
-\DeclareOption{nofonts}{\nostarch@fontsfalse}
+\newif\ifnostarch@cfonts
+\nostarch@cfontstrue
+\DeclareOption{cfonts}{\nostarch@cfontstrue}
+\DeclareOption{nocfonts}{\nostarch@cfontsfalse}
 %    \end{macrocode}
 %
 % The size-changing options produce a warning:
@@ -250,12 +257,15 @@
 %    \end{macrocode}
 %
 %
+% 
+%
+%
 %\subsection{Loading Class and Packages}
 %\label{sec:loading}
 %
 % We start with the base class
 %    \begin{macrocode}
-\LoadClass{book}
+\LoadClass[10pt]{book}
 %    \end{macrocode}
 %
 % A bunch of packages:
@@ -265,13 +275,42 @@
 %
 % 
 %
+%\subsection{Fonts}
+%\label{sec:fonts}
+%
+% If we have commercial fonts, we load them.  Note that the body text
+% has roman font at 10pt, and typewriter at 8.5pt.
+% Therefore we will load |thsmc| scaled.  We also add |dgdefault| for
+% dogma family
+%    \begin{macrocode}
+\ifnostarch@cfonts
+  \RequirePackage{nbaskerv}%
+  \RequirePackage{futurans}%
+  \RequirePackage[scaled=0.85]{thsmc}%
+  \RequirePackage{dogma}%
+  \newcommand{\dgdefault}{fdg}%
+%    \end{macrocode}
+% Otherwise we just use sans serif font for dogma.
+%    \begin{macrocode}
+\else
+  \newcommand{\dgdefault}{fdg}%
+\fi
+%    \end{macrocode}
+%
+%
+% And switch to normalsize---just in case
+%    \begin{macrocode}
+\normalsize
+%    \end{macrocode}
+% 
+%
 %
 %\subsection{Page Dimensions and Paragraphing}
 %\label{sec:page}
 %
 % \begin{macro}{\paperheight}
 % \begin{macro}{\paperwidth}
-% The journal has rather narrow pages:
+% The trim size:
 %    \begin{macrocode}
 \setlength{\paperheight}{9.25in}
 \setlength{\paperwidth}{7in}
@@ -298,12 +337,67 @@
 % \end{macro}
 % \end{macro}
 %
-% \begin{macro}{\headheight}
-%   We leave generous header space:
+% \begin{macro}{\topmargin}
+%   The top margin is 0.625''
 %    \begin{macrocode}
-\setlength{\headheight}{32pt}
+\setlength\topmargin{0.625in}
+\addtolength\topmargin{-1in}
+\addtolength\topmargin{-\topskip}
+%    \end{macrocode}  
+% \end{macro}
+% \begin{macro}{\textheight}
+%   This is the height of the text including footnotes, but excluding
+%   running head and foot.  We start with |\paperheight| and subtract
+%   margins, running heads and foots:
+%    \begin{macrocode}
+\setlength\textheight{8in}
 %    \end{macrocode}
-%   
+% Now we take care of the first line height:
+%    \begin{macrocode}
+\addtolength\textheight{\topskip}
+%    \end{macrocode}   
+% \end{macro}
+%
+% \begin{macro}{\evensidemargin}
+% \begin{macro}{\oddsidemargin}
+%   The margins on even and odd pages are 0.687''+0.833'' (margin par
+%   width) + 0.167'' (margin par gap):
+%    \begin{macrocode}
+\setlength\evensidemargin{0.687in}
+\addtolength{\evensidemargin}{-1in}
+\addtolength{\evensidemargin}{0.833in}
+\addtolength{\evensidemargin}{0.167in}
+\setlength\oddsidemargin{\evensidemargin}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \begin{macro}{\textwidth}
+%   The way to set up the right margin is slightly different.  The
+%   type area is 5.625'', but this includes margin pars:
+%    \begin{macrocode}
+\setlength\textwidth{5.625in}
+\addtolength\textwidth{-0.833in}
+\addtolength\textwidth{-0.167in}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\parindent}
+%   The paragraph indentation is 0.25'':
+%    \begin{macrocode}
+\setlength\parindent{0.25in}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%
+% \begin{macro}{\headheight}
+% \begin{macro}{\headsep}
+%   We do not have headers in these books:
+%    \begin{macrocode}
+\setlength\headheight{0pt}
+\setlength\headsep{0pt}
+%    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 % \begin{macro}{\footskip}
@@ -315,74 +409,6 @@
 %    \end{macrocode}
 % \end{macro}
 %
-%
-%
-% \begin{macro}{\topmargin}
-%   The top margin is 50 bp:
-%   \changes{v0.4}{2007/09/02}{Changed offsets} 
-%    \begin{macrocode}
-\setlength\topmargin{50bp}
-\addtolength\topmargin{-0.9in}
-\addtolength\topmargin{-\topskip}
-\addtolength\topmargin{-\headsep}
-\@settopoint\topmargin
-%    \end{macrocode}  
-% \end{macro}
-% \begin{macro}{\textheight}
-%   \changes{v0.4}{2007/09/02}{Changed} 
-%   This code is similar to the one in~\cite{classes}.  |\textheight|
-%   is the height of the text including footnotes, but excluding
-%   running head and foot.  We start with |\paperheight| and subtract
-%   margins, running heads and foots:
-%    \begin{macrocode}
-\setlength\@tempdima{\paperheight}
-\addtolength\@tempdima{-\topmargin}
-\addtolength\@tempdima{-26bp} % Bottom margin
-\addtolength\@tempdima{-\headheight}
-\addtolength\@tempdima{-\headsep}
-\addtolength\@tempdima{-\footskip}
-\addtolength\@tempdima{-1in}
-%    \end{macrocode}
-%   We want this length to contain an integer number of lines:
-%    \begin{macrocode}
-\divide\@tempdima\baselineskip
-\@tempcnta=\@tempdima
-\setlength\textheight{\@tempcnta\baselineskip}
-%    \end{macrocode}
-% Now we take care of the first line height:
-%    \begin{macrocode}
-\addtolength\textheight{\topskip}
-%    \end{macrocode}   
-% \end{macro}
-%
-% \begin{macro}{\evensidemargin}
-% \begin{macro}{\oddsidemargin}
-%   The margins on even and odd pages are 43 bp:
-%    \begin{macrocode}
-\setlength\evensidemargin{43bp}
-\addtolength{\evensidemargin}{-1in}
-\setlength\oddsidemargin{43bp}
-\addtolength{\oddsidemargin}{-1in}
-%    \end{macrocode}
-% \end{macro}
-% \end{macro}
-% \begin{macro}{\textwidth}
-%   The way to set up the right margin is slightly different:
-%    \begin{macrocode}
-\setlength\textwidth{\paperwidth}
-\addtolength{\textwidth}{-1in}
-\addtolength\textwidth{-\evensidemargin}
-\addtolength\textwidth{-43bp} % right margin
-\@settopoint\textwidth
-%    \end{macrocode}
-% \end{macro}
-%
-% \begin{macro}{\parindent}
-%   The paragraph indentation is 1em:
-%    \begin{macrocode}
-\setlength\parindent{1em}
-%    \end{macrocode}
-% \end{macro}
 %
 %
 % 
