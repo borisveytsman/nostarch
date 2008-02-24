@@ -270,7 +270,7 @@
 %
 % A bunch of packages:
 %    \begin{macrocode}
-\RequirePackage{ifpdf, fancyhdr, booktabs}
+\RequirePackage{ifpdf, fancyhdr, booktabs, graphicx}
 %    \end{macrocode}
 %
 % 
@@ -338,19 +338,20 @@
 % \end{macro}
 %
 % \begin{macro}{\topmargin}
-%   The top margin is 0.625''
+%   The top margin is 0.625''.  We use fake headers of 12pt:
 %    \begin{macrocode}
 \setlength\topmargin{0.625in}
 \addtolength\topmargin{-1in}
 \addtolength\topmargin{-\topskip}
+\addtolength\topmargin{-12pt}
 %    \end{macrocode}  
 % \end{macro}
 % \begin{macro}{\textheight}
 %   This is the height of the text including footnotes, but excluding
-%   running head and foot.  We start with |\paperheight| and subtract
-%   margins, running heads and foots:
+%   running head and foot. 
 %    \begin{macrocode}
 \setlength\textheight{8in}
+\addtolength{\textheight}{-0.167in}
 %    \end{macrocode}
 % Now we take care of the first line height:
 %    \begin{macrocode}
@@ -372,8 +373,7 @@
 % \end{macro}
 % \end{macro}
 % \begin{macro}{\textwidth}
-%   The way to set up the right margin is slightly different.  The
-%   type area is 5.625'', but this includes margin pars:
+%   The type area is 5.625'', but this includes side gap:
 %    \begin{macrocode}
 \setlength\textwidth{5.625in}
 \addtolength\textwidth{-0.833in}
@@ -392,20 +392,23 @@
 %
 % \begin{macro}{\headheight}
 % \begin{macro}{\headsep}
-%   We do not have headers in these books:
+%   We do not have headers in these books.  Fancyhdr sets headheight
+%   to 12pt, so we compensate it above inf |\topmargin|
 %    \begin{macrocode}
-\setlength\headheight{0pt}
+\setlength\headheight{12pt}
 \setlength\headsep{0pt}
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
 %
 % \begin{macro}{\footskip}
-%   \changes{v0.3}{2007/08/23}{Redefined} 
-%   \changes{v0.4}{2007/09/02}{Changed} 
-% The footer is slightly larger than in \progname{amsart}
+% The footer is 8.792'' from top
 %    \begin{macrocode}
-\setlength{\footskip}{42pt}%
+\setlength{\footskip}{9in}
+\addtolength{\footskip}{-\textheight}
+\addtolength{\footskip}{0.167in}
+\addtolength{\footskip}{\baselineskip}
+\addtolength{\footskip}{-1in}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -413,7 +416,7 @@
 %
 % 
 %
-%\subsection{Headers}
+%\subsection{Headers and Footers}
 %\label{sec:headers}
 %
 %
@@ -427,24 +430,221 @@
 % \end{macro}
 % \end{macro}
 % 
-% It is easy to set up headers with \progname{fancyhdr}:
+%
+% We do not have headers:
 %    \begin{macrocode}
 \pagestyle{fancy}
-\fancyfoot{}
+\lhead{}
+\rhead{}
+\chead{}
 %    \end{macrocode}
 % 
-% The first page has the special headers.  The style |firstpage| is
-% invoked by \progname{amsart}; here we just redefine it.
+% The right footer is stuck 0.833''+0.167'' = 1'' to the right
 %    \begin{macrocode}
-\fancypagestyle{firstpage}{%
-  \fancyhf{}%
-  \chead{\tiny%
-    ISRAEL JOURNAL OF MATHEMATICS \textbf{\currentvolume}
-    (\currentyear), 
-    \start@page--\end@page\\[0.5ex] 
-  DOI: \@doiinfo}%
-   \cfoot{\thepage}}%
+\fancyhfoffset[L]{1in}
 %    \end{macrocode}
+%
+% On even pages we put page number and chapter title in footer:
+%    \begin{macrocode}
+\fancyfoot[RO]{\small{\leftmark}\hspace{2em}\textbf{\thepage}}
+\fancyfoot[LO]{}
+\fancyfoot[CO]{}
+%    \end{macrocode}
+% 
+% On even pages we put page number and chapter number in footer:
+%    \begin{macrocode}
+\fancyfoot[LE]{\textbf{\thepage}\hspace{2em}\small{\@chapapp~\thechapter}}
+\fancyfoot[RE]{}
+\fancyfoot[CE]{}
+%    \end{macrocode}
+% 
+%
+%
+%\subsection{Sectioning}
+%\label{sec:sectioning}
+%
+% We do not number sections and below:
+%    \begin{macrocode}
+\setcounter{secnumdepth}{0}
+%    \end{macrocode}
+% 
+%
+% We have special marks mechanism.  
+%
+% \begin{macro}{chaptermark}
+%   First, chaptercommands \emph{always} mark:
+%    \begin{macrocode}
+\def\chaptermark#1{
+  \markboth{#1}{}}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\sectionmark}
+% Section commands never mark:
+%    \begin{macrocode}
+\def\sectionmark#1{}%
+%    \end{macrocode}
+% \end{macro}
+% 
+%
+% Chapters, unlike the ones in~\cite{classes}, have \emph{two} obligatory
+% arguments. The second argument is the command to fill the ``circular
+% graphics''. Otherwise we follow the desgin in~\cite{classes}.  One
+% problem, however: we \emph{cannot} use |\secdef| because we have
+% three arguments, not two.
+%
+% \begin{macro}{\ifnostarch@chapter@starred}
+% We introduce a switch to check whether we are at a starred chapter:
+%    \begin{macrocode}
+\newif\ifnostarch@chapter@starred
+\nostarch@chapter@starredfalse
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ifnostarch@firstpara}
+%   And another macro to get special typesetting for the first
+%   paragraph after chaper begins:
+%    \begin{macrocode}
+\newif\ifnostarch@firstpara
+\nostarch@firstparafalse
+%    \end{macrocode}   
+% \end{macro}
+%
+% \begin{macro}{\nostarch@chapart}
+%   We also keep track of the current artwork for chapter start:
+%    \begin{macrocode}
+\def\nostarch@chapart{}
+%    \end{macrocode}
+%   
+% \end{macro}
+%
+% \begin{macro}{\chapter}
+% First, we suppress floats, set up empty page style and delete
+% indentation after the chapter.  Then we check whether the chapter is
+% starred:
+%    \begin{macrocode}
+\def\chapter{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \global\@topnum\z@
+  \@afterindentfalse
+  \@ifnextchar*{%
+    \nostarch@chapter@starredtrue}{\nostarch@chapter@starredfalse}%
+  \@chapter}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@chapter}
+%   Now we check whether there is an optional argument:
+%    \begin{macrocode}
+\def\@chapter{%
+  \@ifnextchar[{\@@chapter}{\@@chapter[]}}%
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\@@chapter}
+%   The actual work is done by |\@@chapter| macro.
+%    \begin{macrocode}
+\def\@@chapter[#1]#2#3{%
+  \vspace*{1.172in}
+  {\centering
+  \def\chaptershorttitle{#1}%
+  \ifx\chaptershorttitle\@empty
+     \def\chaptershorttitle{#2}\fi
+   \chaptermark{\chaptershorttitle}%
+%    \end{macrocode}
+% Now check whether we need to typeset the chapter number
+%    \begin{macrocode}
+    \ifnostarch@chapter@starred
+    \addcontentsline{toc}{chapter}{\chaptershorttitle}%
+    \else
+       \ifnum \c@secnumdepth > \m@ne
+          \refstepcounter{chapter}%
+          \typeout{\@chapapp\space\thechapter.}%
+           \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}%
+            {\fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
+              \selectfont
+              \thechapter\par\nobreak\vskip16pt}
+          \else
+             \addcontentsline{toc}{chapter}{\chaptershorttitle}%
+          \fi
+     \fi 
+     {\fontfamily{\dgdefault}\fontseries{bx}\fontsize{16pt}{16pt}\selectfont
+       \MakeLowercase{\textsc{#2}}\par\nobreak\vskip81pt}}%
+   \nostarch@firstparatrue
+   \def\nostarch@chapart{#3}%
+   \@afterheading}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@afterheading}
+% We cannot use the standard |\@afterheading| since we want to put the
+% first paragraph in larger font and put there the artwork.  So we
+% take |\@afterheading| code and patch it:
+%    \begin{macrocode}
+\def\@afterheading{%
+  \@nobreaktrue
+  \everypar{%
+    \if@nobreak
+      \@nobreakfalse
+      \clubpenalty \@M
+       \setbox\z@\lastbox
+    \else
+      \clubpenalty \@clubpenalty
+      \everypar{}%
+    \fi
+      \ifnostarch@firstpara
+%    \end{macrocode}
+% The first paragraph has a special font and artwork in the beginning:
+%    \begin{macrocode}
+       \makebox[0pt][r]{\raisebox{-0.5in}[0pt][0pt]{%
+          \nostarch@chapart\hspace{0.1in}}}%
+      \hangindent=0.364in
+      \hangafter=-3
+      \fontsize{14pt}{16.5pt}\selectfont%
+      \parskip=3pt
+      \else
+        \parskip=0pt
+        \normalsize\selectfont
+       \fi
+    \nostarch@firstparafalse}}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\section}
+%   Sections correspond to |HeadA| in our specs.  We use |\everypar{}|
+%   to deal with the special case when a section follows the first
+%   paragraph after chapter start.
+%    \begin{macrocode}
+\renewcommand{\section}{\everypar{}%
+  \@startsection{section}{1}{-1in}{16pt}{6pt}{%
+    \fontfamily{\sfdefault}\fontseries{b}\fontsize{12pt}{16pt}\selectfont}}%
+%    \end{macrocode}   
+% \end{macro}
+% 
+% \begin{macro}{\subsection}
+%   Sections correspond to |HeadB| in our specs:
+%    \begin{macrocode}
+\renewcommand{\subsection}{\everypar{}%
+  \@startsection{subsection}{2}{0pt}{14pt}{4pt}{%
+    \fontfamily{\sfdefault}\fontshape{it}%
+    \fontseries{bc}\fontsize{12pt}{17pt}\selectfont}}%
+%    \end{macrocode}   
+% \end{macro}
+%
+% \begin{macro}{\subsubsection}
+%   Sections correspond to |HeadB| in our specs:
+%    \begin{macrocode}
+\renewcommand{\subsubsection}{\everypar{}%
+  \@startsection{subsubsection}{3}{0pt}{10pt}{2pt}{%
+    \fontfamily{\sfdefault}%
+    \fontseries{bc}\fontsize{10pt}{14pt}\selectfont}}%
+%    \end{macrocode}   
+% \end{macro}
+%
+% We do not redefine levels below, leaving the options
+% from~\cite{classes} in place.
 %
 %
 %\subsection{End of Class}
