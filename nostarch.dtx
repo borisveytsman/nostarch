@@ -126,6 +126,7 @@
 % \item \progname{ifpdf} package~\cite{Oberdiek06:Ifpdf},
 % \item \progname{fancyhdr} package~\cite{Oostrum04:Fancyhdr},
 % \item \progname{booktabs} package~\cite{Fear05:Booktabs}.
+% \item \progname{graphics} package~\cite{Carlisle05:Graphics}.
 % \end{enumerate}
 % These packages are called internally by |nostarch.cls|;  you do not
 % need to explicitly call them from your document.
@@ -165,6 +166,48 @@
 % \end{verbatim}
 % 
 %
+%\subsection{Chapters and Sections}
+%\label{sec:guide:sections}
+%
+% \DescribeMacro{\section}
+% \DescribeMacro{\subsection}
+% \DescribeMacro{\subsubsection}
+% \emph{No Starch Press} books have chapters, sections, subsections and
+% subsubsections.  The chapters are usually numbered, but sections ande
+% below are not.  The commands for sections are the same as in the
+% standard \LaTeX: |\section|\marg{short title}\oarg{long title}, for
+% example
+% \begin{verbatim}
+% \section[Building Lego Fire Track]{How To Build A Lego Fire Track 
+%    And Why It Is Fun}
+% \end{verbatim}
+%  
+% \DescribeMacro{\chapter}
+% The command for chapter is, however, different from the standard
+% \LaTeX:  it has two mandatory arguments and may have one optional
+% argument: |\chapter|\oarg{short title}\marg{long
+% title}\marg{artwork}.  The reason is, \emph{No Starch Press} books
+% use  ``circular art'' for chapter openings.  The second mandatory
+% argument specifies this art.  In the simplest case it is an external
+% graphics file, for example:
+% \begin{verbatim}
+% \chapter[Building Lego Fire Track]{How To Build A Lego Fire Track 
+%    And Why It Is Fun}{\includegraphics[width=1.264in]{firetrack.jpg}}
+% \end{verbatim}
+% \DescribeMacro{\circleartfile}
+% Actually, this simplest case is so ubiquitous, that there is a
+% special command |\circleartfile|\marg{filename} for it, for example
+% \begin{verbatim}
+% \chapter{Building Lego Fire Track}{\circleartfile{firetrack.jpg}}
+% \end{verbatim}
+% However, you can use instead any \LaTeX{} commands  to produce
+% the artwork.  Rememer that it must be $1.264''\times1.222''$.
+%
+% The first paragraph after chapter start is typeset in larger size
+% font than the body font.  If this paragraph is too long, you may
+% need to manually change the font size back in the middle of it.  The
+% simplest way to do this is the combination |\par\noindent| in a
+% strategic place.
 %
 % \StopEventually{%
 % \clearpage
@@ -612,6 +655,15 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\circleartfile}
+%   This is just a shorthand for |\includegraphics| for chapter beginning:
+%    \begin{macrocode}
+\newcommand{\circleartfile}[1]{\includegraphics[width=1.264in]{#1}}%
+%    \end{macrocode}
+%   
+% \end{macro}
+%
+%
 % \begin{macro}{\section}
 %   Sections correspond to |HeadA| in our specs.  We use |\everypar{}|
 %   to deal with the special case when a section follows the first
@@ -646,6 +698,39 @@
 % We do not redefine levels below, leaving the options
 % from~\cite{classes} in place.
 %
+%
+%
+%\subsection{Lists}
+%\label{sec:lists}
+%
+% This follows design of~\cite{classes} with the values from our
+% specifications:
+% \begin{macro}{\leftmargin}
+% \begin{macro}{\leftmargini}
+% \begin{macro}{\leftmarginii}
+% \begin{macro}{\leftmarginiii}
+% \begin{macro}{\leftmarginiv}
+%   The host of |\leftmargin| commands:
+%    \begin{macrocode}
+\setlength{\leftmargin}{0.25in}
+\setlength{\leftmargini}{0.25in}
+\setlength{\leftmarginii}{0.25in}
+\setlength{\leftmarginiii}{0.25in}
+\setlength{\leftmarginiv}{0.25in}
+%    \end{macrocode}   
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% 
+% \begin{macro}{\rightmargin}
+%   Right margin is always zero:
+%    \begin{macrocode}
+\setlength{\rightmargin}{0pt}
+%    \end{macrocode}
+% \end{macro}
+% 
 %
 %\subsection{End of Class}
 %\label{end}
