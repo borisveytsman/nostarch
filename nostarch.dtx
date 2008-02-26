@@ -121,12 +121,15 @@
 % If not (or if their versions are very old), you need to download and
 % install them.  Here is the list:
 % \begin{enumerate}
-% \item Font support packages \progname{nbaskerv},
-% \progname{futurans}, \progname{dogma} and \progname{thsmc}
+% \item Font support packages \progname{nbaskerv}~\cite{NbaskervFont},
+% \progname{futurans}~\cite{FuturansFont},
+% \progname{dogma}~\cite{DogmaFont} and
+% \progname{thsmc}~\cite{ThsmcFont} 
 % \item \progname{ifpdf} package~\cite{Oberdiek06:Ifpdf},
 % \item \progname{fancyhdr} package~\cite{Oostrum04:Fancyhdr},
 % \item \progname{booktabs} package~\cite{Fear05:Booktabs}.
 % \item \progname{graphics} package~\cite{Carlisle05:Graphics}.
+% \item \progname{soul} package~\cite{Franz03:Soul}
 % \end{enumerate}
 % These packages are called internally by |nostarch.cls|;  you do not
 % need to explicitly call them from your document.
@@ -211,7 +214,7 @@
 %
 % \StopEventually{%
 % \clearpage
-% \bibliography{tex}
+% \bibliography{tex,myworks}
 % \bibliographystyle{unsrt}}
 % 
 % \clearpage
@@ -313,7 +316,7 @@
 %
 % A bunch of packages:
 %    \begin{macrocode}
-\RequirePackage{ifpdf, fancyhdr, booktabs, graphicx}
+\RequirePackage{ifpdf, fancyhdr, booktabs, graphicx, soul}
 %    \end{macrocode}
 %
 % 
@@ -465,7 +468,7 @@
 %
 % \begin{macro}{\headrulewidth}
 % \begin{macro}{\footrulewidth}
-%   We do not want decorative rules in the journal:
+%   We do not want decorative rules:
 %    \begin{macrocode}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
@@ -487,16 +490,29 @@
 \fancyhfoffset[L]{1in}
 %    \end{macrocode}
 %
-% On even pages we put page number and chapter title in footer:
+% On even pages we put page number and chapter title in footer. 
+% \begin{macro}{\nostarch@chapls}
+% There is a special letterspaced font for chapter title and number in
+% footer:
 %    \begin{macrocode}
-\fancyfoot[RO]{\small{\leftmark}\hspace{2em}\textbf{\thepage}}
+\sodef\nostarch@chapls{}{0.1em}{0.5em}{0.5em}
+%    \end{macrocode}
+% \end{macro}
+% 
+%    \begin{macrocode}
+\fancyfoot[RO]{\fontfamily{\sfdefault}\fontsize{9pt}{6pt}%
+  \fontseries{lc}\selectfont%
+  \expandafter\nostarch@chapls\expandafter{\chaptershorttitle}%
+  \hspace*{2em}\fontseries{bc}\selectfont\thepage}
 \fancyfoot[LO]{}
 \fancyfoot[CO]{}
 %    \end{macrocode}
 % 
 % On even pages we put page number and chapter number in footer:
 %    \begin{macrocode}
-\fancyfoot[LE]{\textbf{\thepage}\hspace{2em}\small{\@chapapp~\thechapter}}
+\fancyfoot[LE]{\fontfamily{\sfdefault}\fontseries{bc}\fontsize{9pt}{6pt}%
+  \selectfont\thepage\hspace*{2em}\fontseries{lc}\selectfont
+  \expandafter\nostarch@chapls\expandafter{\chaptermark}}
 \fancyfoot[RE]{}
 \fancyfoot[CE]{}
 %    \end{macrocode}
@@ -512,21 +528,19 @@
 %    \end{macrocode}
 % 
 %
-% We have special marks mechanism.  
 %
-% \begin{macro}{chaptermark}
-%   First, chaptercommands \emph{always} mark:
+% \begin{macro}{\chaptershorttitle}
+% We also keep the short title in a special macro:
 %    \begin{macrocode}
-\def\chaptermark#1{
-  \markboth{#1}{}}%
+\def\chaptershorttitle{}
 %    \end{macrocode}
 % \end{macro}
-%
-% \begin{macro}{\sectionmark}
-% Section commands never mark:
+% \begin{macro}{\chaptermark}
+%   We also quite redefine chaptermark:
 %    \begin{macrocode}
-\def\sectionmark#1{}%
+\def\chaptermark{}
 %    \end{macrocode}
+%   
 % \end{macro}
 % 
 %
@@ -592,18 +606,19 @@
 \def\@@chapter[#1]#2#3{%
   \vspace*{1.172in}
   {\centering
-  \def\chaptershorttitle{#1}%
+  \xdef\chaptershorttitle{#1}%
   \ifx\chaptershorttitle\@empty
-     \def\chaptershorttitle{#2}\fi
-   \chaptermark{\chaptershorttitle}%
+     \xdef\chaptershorttitle{#2}\fi
 %    \end{macrocode}
 % Now check whether we need to typeset the chapter number
 %    \begin{macrocode}
     \ifnostarch@chapter@starred
     \addcontentsline{toc}{chapter}{\chaptershorttitle}%
+    \xdef\chaptermark{}%
     \else
        \ifnum \c@secnumdepth > \m@ne
           \refstepcounter{chapter}%
+          \xdef\chaptermark{\@chapapp~\thechapter}%
           \typeout{\@chapapp\space\thechapter.}%
            \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}%
             {\fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
@@ -611,6 +626,7 @@
               \thechapter\par\nobreak\vskip16pt}
           \else
              \addcontentsline{toc}{chapter}{\chaptershorttitle}%
+             \xdef\chaptermark{}%
           \fi
      \fi 
      {\fontfamily{\dgdefault}\fontseries{bx}\fontsize{16pt}{16pt}\selectfont
@@ -676,7 +692,7 @@
 % \end{macro}
 % 
 % \begin{macro}{\subsection}
-%   Sections correspond to |HeadB| in our specs:
+%   Subections correspond to |HeadB| in our specs:
 %    \begin{macrocode}
 \renewcommand{\subsection}{\everypar{}%
   \@startsection{subsection}{2}{0pt}{14pt}{4pt}{%
@@ -685,13 +701,25 @@
 %    \end{macrocode}   
 % \end{macro}
 %
+%
+% \begin{macro}{\nostarch@subsubfont}
+%   Subsubsection are typeset with a special font expanded 110\%.
+%   Unfortunately standard |\@startsection| allows only switches.
+%   Fortunately, the code is simple to patch
+%    \begin{macrocode}
+\def\nostarch@subsubfont#1\endgroup{%
+    \fontfamily{\sfdefault}\fontseries{bc}\fontsize{10pt}{14pt}%
+    \selectfont\scalebox{2.1}[1]{\hspace{-0.9em}#1}\endgroup}
+%    \end{macrocode}
+%   
+% \end{macro}
+%
 % \begin{macro}{\subsubsection}
-%   Sections correspond to |HeadB| in our specs:
+%   Subsubsections correspond to |HeadC| in our specs:
 %    \begin{macrocode}
 \renewcommand{\subsubsection}{\everypar{}%
   \@startsection{subsubsection}{3}{0pt}{10pt}{2pt}{%
-    \fontfamily{\sfdefault}%
-    \fontseries{bc}\fontsize{10pt}{14pt}\selectfont}}%
+  \nostarch@subsubfont}}%
 %    \end{macrocode}   
 % \end{macro}
 %
