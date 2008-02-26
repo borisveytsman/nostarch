@@ -491,19 +491,10 @@
 %    \end{macrocode}
 %
 % On even pages we put page number and chapter title in footer. 
-% \begin{macro}{\nostarch@chapls}
-% There is a special letterspaced font for chapter title and number in
-% footer:
-%    \begin{macrocode}
-\sodef\nostarch@chapls{}{0.1em}{0.5em}{0.5em}
-%    \end{macrocode}
-% \end{macro}
-% 
 %    \begin{macrocode}
 \fancyfoot[RO]{\fontfamily{\sfdefault}\fontsize{9pt}{6pt}%
-  \fontseries{lc}\selectfont%
-  \expandafter\nostarch@chapls\expandafter{\chaptershorttitle}%
-  \hspace*{2em}\fontseries{bc}\selectfont\thepage}
+  \fontseries{lq}\selectfont\rightmark%
+  \hspace{2em}\fontseries{bc}\selectfont\thepage}
 \fancyfoot[LO]{}
 \fancyfoot[CO]{}
 %    \end{macrocode}
@@ -511,8 +502,8 @@
 % On even pages we put page number and chapter number in footer:
 %    \begin{macrocode}
 \fancyfoot[LE]{\fontfamily{\sfdefault}\fontseries{bc}\fontsize{9pt}{6pt}%
-  \selectfont\thepage\hspace*{2em}\fontseries{lc}\selectfont
-  \expandafter\nostarch@chapls\expandafter{\chaptermark}}
+  \selectfont\thepage\hspace{2em}\fontseries{lq}\selectfont%
+  \leftmark}
 \fancyfoot[RE]{}
 \fancyfoot[CE]{}
 %    \end{macrocode}
@@ -527,22 +518,13 @@
 \setcounter{secnumdepth}{0}
 %    \end{macrocode}
 % 
-%
-%
-% \begin{macro}{\chaptershorttitle}
-% We also keep the short title in a special macro:
+% \begin{macro}{\sectionmark}
+%   Our section commands do not mark:
 %    \begin{macrocode}
-\def\chaptershorttitle{}
-%    \end{macrocode}
+\def\sectionmark#1{}%
+%    \end{macrocode}   
 % \end{macro}
-% \begin{macro}{\chaptermark}
-%   We also quite redefine chaptermark:
-%    \begin{macrocode}
-\def\chaptermark{}
-%    \end{macrocode}
-%   
-% \end{macro}
-% 
+%
 %
 % Chapters, unlike the ones in~\cite{classes}, have \emph{two} obligatory
 % arguments. The second argument is the command to fill the ``circular
@@ -606,19 +588,19 @@
 \def\@@chapter[#1]#2#3{%
   \vspace*{1.172in}
   {\centering
-  \xdef\chaptershorttitle{#1}%
+  \def\chaptershorttitle{#1}%
   \ifx\chaptershorttitle\@empty
-     \xdef\chaptershorttitle{#2}\fi
+     \def\chaptershorttitle{#2}\fi
 %    \end{macrocode}
 % Now check whether we need to typeset the chapter number
 %    \begin{macrocode}
     \ifnostarch@chapter@starred
     \addcontentsline{toc}{chapter}{\chaptershorttitle}%
-    \xdef\chaptermark{}%
+    \markboth{}{\chaptershorttitle}%
     \else
        \ifnum \c@secnumdepth > \m@ne
           \refstepcounter{chapter}%
-          \xdef\chaptermark{\@chapapp~\thechapter}%
+          \markboth{\@chapapp~\thechapter}{\chaptershorttitle}%
           \typeout{\@chapapp\space\thechapter.}%
            \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}%
             {\fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
@@ -626,11 +608,11 @@
               \thechapter\par\nobreak\vskip16pt}
           \else
              \addcontentsline{toc}{chapter}{\chaptershorttitle}%
-             \xdef\chaptermark{}%
+             \markboth{}{\chaptershorttitle}%
           \fi
      \fi 
-     {\fontfamily{\dgdefault}\fontseries{bx}\fontsize{16pt}{16pt}\selectfont
-       \MakeLowercase{\textsc{#2}}\par\nobreak\vskip81pt}}%
+     {\fontfamily{\dgdefault}\fontseries{bq}\fontsize{16pt}{20pt}\selectfont
+       \MakeUppercase{#2}\par\nobreak\vskip81pt}}%
    \nostarch@firstparatrue
    \def\nostarch@chapart{#3}%
    \@afterheading}%
@@ -702,24 +684,13 @@
 % \end{macro}
 %
 %
-% \begin{macro}{\nostarch@subsubfont}
-%   Subsubsection are typeset with a special font expanded 110\%.
-%   Unfortunately standard |\@startsection| allows only switches.
-%   Fortunately, the code is simple to patch
-%    \begin{macrocode}
-\def\nostarch@subsubfont#1\endgroup{%
-    \fontfamily{\sfdefault}\fontseries{bc}\fontsize{10pt}{14pt}%
-    \selectfont\scalebox{2.1}[1]{\hspace{-0.9em}#1}\endgroup}
-%    \end{macrocode}
-%   
-% \end{macro}
-%
 % \begin{macro}{\subsubsection}
 %   Subsubsections correspond to |HeadC| in our specs:
 %    \begin{macrocode}
 \renewcommand{\subsubsection}{\everypar{}%
   \@startsection{subsubsection}{3}{0pt}{10pt}{2pt}{%
-  \nostarch@subsubfont}}%
+  \fontfamily{\sfdefault}\fontseries{bex}\fontsize{10pt}{14pt}%
+    \selectfont}}%
 %    \end{macrocode}   
 % \end{macro}
 %
