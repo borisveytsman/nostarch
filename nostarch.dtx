@@ -129,7 +129,6 @@
 % \item \progname{fancyhdr} package~\cite{Oostrum04:Fancyhdr},
 % \item \progname{booktabs} package~\cite{Fear05:Booktabs}.
 % \item \progname{graphics} package~\cite{Carlisle05:Graphics}.
-% \item \progname{soul} package~\cite{Franz03:Soul}
 % \end{enumerate}
 % These packages are called internally by |nostarch.cls|;  you do not
 % need to explicitly call them from your document.
@@ -316,7 +315,7 @@
 %
 % A bunch of packages:
 %    \begin{macrocode}
-\RequirePackage{ifpdf, fancyhdr, booktabs, graphicx, soul}
+\RequirePackage{ifpdf, fancyhdr, booktabs, graphicx}
 %    \end{macrocode}
 %
 % 
@@ -339,7 +338,7 @@
 % Otherwise we just use sans serif font for dogma.
 %    \begin{macrocode}
 \else
-  \newcommand{\dgdefault}{fdg}%
+  \newcommand{\dgdefault}{\sfdefault}%
 \fi
 %    \end{macrocode}
 %
