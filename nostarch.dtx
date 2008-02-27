@@ -209,8 +209,55 @@
 % The first paragraph after chapter start is typeset in larger size
 % font than the body font.  If this paragraph is too long, you may
 % need to manually change the font size back in the middle of it.  The
-% simplest way to do this is the combination |\par\noindent| in a
-% strategic place.
+% simplest way to do this is the combination
+% |\par\noindent\normalfont| in a strategic place.
+%
+%
+%
+%\subsection{Environments}
+%\label{sec:guide:lists}
+%
+%
+% \DescribeMacro{itemize}
+% \DescribeMacro{enumerate}
+% \DescribeMacro{description}
+% \DescribeMacro{note}
+% The class offers standard |itemize|, |enumerate| and |description|
+% environment.  There is an environment specific for it:  |note|.  It
+% is intended for ``asides'':
+% \begin{verbatim}
+% \begin{note}
+%   Do not forget to plug off the computer before doing any
+%   modifications! 
+% \end{note}
+% \end{verbatim}
+% The material in a |note| will be typeset in italics with bold
+% ``NOTE'' on the margin.
+%
+%
+%\subsection{Tables and Figures}
+%\label{sec:guide:floats}
+%
+% There are several things to keep in mind when using tables and
+% figures with the class.
+%
+% The tables and figures are not centered.  Neither are their
+% captions. The captions for figures go \emph{below} the figures, the
+% captions for tables go \emph{above} the tabular data.  
+%
+% If a caption for a table or figure turns out to be wider than the
+% body, you might want to split the caption into lines.  Remember,
+% however, that the mandatory argument to |\caption| becomes
+% ``robust'' in the \LaTeX{} parlance~\cite{Lamport94} only when there
+% is the optional one.  Therefore the correct way to split a caption
+% is the following:
+% \begin{verbatim}
+% \caption[A Long Caption With Lines To Split]{%
+%   A Long Caption\\ With Lines To Split}
+% \end{verbatim}
+% 
+%
+%
 %
 % \StopEventually{%
 % \clearpage
@@ -316,7 +363,7 @@
 %
 % A bunch of packages:
 %    \begin{macrocode}
-\RequirePackage{ifpdf, fancyhdr, booktabs, graphicx, caption}
+\RequirePackage{ifpdf, fancyhdr, fancyvrb, booktabs, graphicx, caption}
 %    \end{macrocode}
 %
 % 
@@ -832,7 +879,34 @@
 %    \end{macrocode}
 % \end{macro}
 %
-%\subsection{Tables And Figures}
+%
+%
+%\subsection{Footnotes}
+%\label{sec:footnotes}
+%
+% \begin{macro}{\footnoterule}
+%   We want one inch by 0.25 footnoterule:
+%    \begin{macrocode}
+\renewcommand\footnoterule{%
+  \kern-3\p@
+  \hrule height 0.25pt depth 0pt width 1in 
+  \kern4\p@}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\@makefntext}
+%   We do not indent the footnotes:
+%    \begin{macrocode}
+\renewcommand\@makefntext[1]{%
+    \parindent 0\p@%
+    \noindent
+    \@makefnmark#1}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%\subsection{Tables and Figures}
 %\label{sec:tbl_fig}
 %
 % \begin{macro}{\thefigure}
@@ -855,18 +929,97 @@
 % \begin{macro}{nostarchcaption}
 %   This is our captions format for tables and figures
 %    \begin{macrocode}
-\DeclareCaptionFormat{nostarchcaption}{\fontfamily{\sfdefault}%
+\DeclareCaptionFormat{nostarchformat}{\fontfamily{\sfdefault}%
   \fontsize{8pt}{9pt}\fontseries{h}\selectfont#1#2%
   \fontseries{k}\fontsize{8.5pt}{9pt}\selectfont#3}
 %    \end{macrocode}
 % \end{macro}
-%  And setting up formatting
+%  
+% \begin{macro}{nostarch}
+%   Our caption style:
 %    \begin{macrocode}
-\captionsetup[figure]{format=nostarchcaption,aboveskip=8pt,belowskip=8pt,
-singlelinecheck=off}
-\captionsetup[table]{format=nostarchcaption,aboveskip=0pt,belowskip=4pt,
-singlelinecheck=off}
+\DeclareCaptionStyle{nostarch}{format=nostarchformat,singlelinecheck=off}
+%    \end{macrocode}  
+% \end{macro}
+%
+%
+% The figure and table styles differ only by the skip amounts above
+% and below:
+%    \begin{macrocode}
+\captionsetup[figure]{style=nostarch,aboveskip=8pt,belowskip=8pt,}
+\captionsetup[table]{style=nostarch,aboveskip=0pt,belowskip=4pt,}
 %    \end{macrocode}
+%
+% \begin{macro}{\tbfont}
+%   This is the font used for table body:
+%    \begin{macrocode}
+\def\tbfont{%
+  \fontfamily{\sfdefault}\fontseries{k}\fontsize{8pt}{10pt}\selectfont}
+%    \end{macrocode} 
+% \end{macro}
+%
+% \begin{macro}{\thfont}
+%   Font for table headers:
+%    \begin{macrocode}
+\def\thfont{%
+  \fontfamily{\sfdefault}\fontseries{h}\fontsize{8pt}{10pt}\selectfont}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\heawyrulewidth}
+% \begin{macro}{\lightrulewidth}
+% \begin{macro}{\cmidrulewidth}
+%   Changing \progname{booktabs} defaluts:
+%    \begin{macrocode}
+\heavyrulewidth=3\p@
+\lightrulewidth=1.5\p@
+\cmidrulewidth=1.5\p@
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+%
+% \begin{macro}{\bottomrule}
+%   Our |\bottomrule| is thin:
+%    \begin{macrocode}
+\def\bottomrule{\noalign{\ifnum0=`}\fi
+  \@aboverulesep=\aboverulesep
+  \global\@belowrulesep=\belowbottomsep
+  \global\@thisruleclass=\@ne
+  \@ifnextchar[{\@BTrule}{\@BTrule[\lightrulewidth]}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\belowrulesep}
+% \begin{macro}{\belowbottomsep}
+% \begin{macro}{\abovetopsep}
+%   Again redefining \progname{booktabs}:
+%    \begin{macrocode}
+\belowrulesep=0.7ex
+\belowbottomsep=0.65pt
+\aboverulesep=0.7ex
+\abovetopsep=0.65pt
+%    \end{macrocode}
+%   
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%  
+%
+%
+%\subsection{Verbatim Customization}
+%\label{sec:verbatim}
+%
+% \begin{macro}{Code}
+%   This is for framed code:
+%    \begin{macrocode}
+\DefineVerbatimEnvironment{Code}{Verbatim}{frame=lines,framerule=0.25pt}
+%    \end{macrocode}
+%   
+% \end{macro}
 %
 %\subsection{End of Class}
 %\label{end}

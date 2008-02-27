@@ -1,5 +1,5 @@
 \documentclass[cfonts]{nostarch}
-\usepackage{lipsum,array}
+\usepackage{lipsum}
 \begin{document}
 
 \chapter[Morbi ac orci]{Morbi ac orci et nisl hendrerit
@@ -87,6 +87,12 @@ nibh sit amet augue tristique gravida.
   varius dui at turpis. Sed odio.
 \end{itemize}
 
+\begin{figure}[tp]
+  \includegraphics[width=3in]{vitruvian}
+  \caption{Pellentesque laoreet velit nec justo}
+  \label{fig:one}
+\end{figure}
+
 Donec vel augue. Morbi a turpis sed libero consequat porta. Quisque
 lacinia consequat odio. Sed vehicula sollicitudin purus. Vestibulum
 eget est. In hac habitasse platea dictumst. Sed blandit, tortor a
@@ -103,10 +109,7 @@ diam. Aenean sit amet purus.
   Vestibulum eu tellus. Integer eleifend suscipit urna. Fusce
   porttitor leo et odio. Vivamus vehicula justo a nisl. In rutrum,
   purus ut dictum auctor, dolor velit accumsan dolor, eu convallis
-  augue dui ac lectus. Nullam eleifend pellentesque ligula. Nam quis
-  magna. Donec elementum dapibus erat. Pellentesque vel ipsum nec orci
-  fermentum accumsan. Nunc porta magna eu neque.  Nam id erat eu mi
-  aliquet cursus. Morbi ut felis. Vestibulum in ipsum.
+  augue dui ac lectus. 
 \end{quote}
 
 Vestibulum at lectus. Vestibulum dapibus placerat magna. Suspendisse
@@ -121,6 +124,18 @@ imperdiet velit in tellus.
 \begin{quotation}
 \lipsum[40-41]  
 \end{quotation}
+\lipsum[63]
+\begin{Code}[commandchars=\\\[\]]
+\textit[/* S.C. Johnson, B.W. Kernighan, The Programming Language B, 1972 */]
+main( ) {
+   extrn a, b, c;
+   putchar(a); putchar(b); putchar(c); putchar('!*n');
+ }
+ a 'hell';
+ b 'o, w';
+ c 'orld';  
+\end{Code}
+
 
 Integer posuere, metus ac rhoncus auctor, mi tellus scelerisque nunc,
 venenatis elementum tortor lorem eu erat.  
@@ -135,25 +150,21 @@ condimentum orci at enim. Maecenas ut nunc. Vivamus pede. Integer vel
 purus vel mi mollis vestibulum. Sed laoreet ultricies nibh.
 Suspendisse non nisl quis ligula fermentum facilisis. 
 \end{description}
-Vestibulum sem nibh, porttitor et, fermentum a, ultricies id, augue.
+\lipsum[37]
 
-\begin{figure}[tp]
-  \includegraphics[width=3in]{vitruvian}
-  \caption{Pellentesque laoreet velit nec justo}
-  \label{fig:one}
-\end{figure}
 
 \begin{table}[tp]
   \caption[Sed blandit, tortor a auctor]{Sed blandit, tortor a auctor
-    imperdiet, wisi nibh ornare leo,\\ 
+    imperdiet, wisi nibh\\ ornare leo, 
     ac dictum nibh enim eu orci}
-  \begin{tabular}{ll>{\normalfont}l}
+  \tbfont
+  \begin{tabular}{lll}
     \toprule\let\normalfont=\bfseries%
-    Phasellus &  At Dui & Donec Commodo \\
+    \thfont Phasellus &  \thfont At Dui       & \thfont Donec Commodo \\
     \midrule    
-     Augue At Nunc & Nunc In  sapien & Et magna mollis \\
-     Sagittis &  Morbi eu elit &  Phasellus lacus\\
-     Donec a quam & Etiam pulvinar sapien & Sed nibh magna\\
+     Augue At Nunc    & Nunc In  sapien       & Et magna mollis \\
+     Sagittis         &  Morbi eu elit        &  Phasellus lacus\\
+     Donec a quam     & Etiam pulvinar sapien & Sed nibh magna\\
     \bottomrule
   \end{tabular}
 \label{tab:one}
