@@ -124,11 +124,12 @@
 % \item Font support packages \progname{nbaskerv}~\cite{NbaskervFont},
 % \progname{futurans}~\cite{FuturansFont},
 % \progname{dogma}~\cite{DogmaFont} and
-% \progname{thsmc}~\cite{ThsmcFont} 
-% \item \progname{ifpdf} package~\cite{Oberdiek06:Ifpdf},
-% \item \progname{fancyhdr} package~\cite{Oostrum04:Fancyhdr},
+% \progname{thsmc}~\cite{ThsmcFont}.
+% \item \progname{ifpdf} package~\cite{Oberdiek06:Ifpdf}.
+% \item \progname{fancyhdr} package~\cite{Oostrum04:Fancyhdr}.
 % \item \progname{booktabs} package~\cite{Fear05:Booktabs}.
 % \item \progname{graphics} package~\cite{Carlisle05:Graphics}.
+% \item \progname{caption} package~\cite{Sommerfeldt07:Caption}.
 % \end{enumerate}
 % These packages are called internally by |nostarch.cls|;  you do not
 % need to explicitly call them from your document.
@@ -315,7 +316,7 @@
 %
 % A bunch of packages:
 %    \begin{macrocode}
-\RequirePackage{ifpdf, fancyhdr, booktabs, graphicx}
+\RequirePackage{ifpdf, fancyhdr, booktabs, graphicx, caption}
 %    \end{macrocode}
 %
 % 
@@ -729,6 +730,110 @@
 %    \end{macrocode}
 % \end{macro}
 % 
+%
+% \begin{macro}{\@listi}
+% \begin{macro}{\@listI}
+%   This is the default list on the first level
+%    \begin{macrocode}
+\def\@listi{\leftmargin\leftmargini
+  \parsep0\p@\relax
+  \topsep6\p@\relax
+  \itemsep4\p@\relax}
+\let\@listI\@listi
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\@listii}
+% \begin{macro}{\@listiii}
+% \begin{macro}{\@listiv}
+% \begin{macro}{\@listv}
+% \begin{macro}{\@listvi}
+%   And the lists for the next levels:
+%    \begin{macrocode}
+\def\@listii{\leftmargin\leftmarginii
+  \labelwidth\leftmarginii
+  \advance\labelwidth-\labelsep
+  \parsep0\p@\relax
+  \topsep0\p@\relax
+  \itemsep0\p@\relax}
+\def\@listiii{\leftmargin\leftmarginiii
+  \labelwidth\leftmarginiii
+  \advance\labelwidth-\labelsep
+  \parsep0\p@\relax
+  \topsep0\p@\relax
+  \itemsep0\p@\relax}
+\def\@listiv{\leftmargin\leftmarginiv
+  \labelwidth\leftmarginiv
+  \advance\labelwidth-\labelsep
+  \parsep0\p@\relax
+  \topsep0\p@\relax
+  \itemsep0\p@\relax}
+\def\@listv{\leftmargin\leftmarginv
+  \labelwidth\leftmarginv
+  \advance\labelwidth-\labelsep
+  \parsep0\p@\relax
+  \topsep0\p@\relax
+  \itemsep0\p@\relax}
+\def\@listvi{\leftmargin\leftmarginvi
+  \labelwidth\leftmarginvi
+  \advance\labelwidth-\labelsep
+  \parsep0\p@\relax
+  \topsep0\p@\relax
+  \itemsep0\p@\relax}
+%    \end{macrocode}   
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{quotation}
+%   In |quotation| environment the paragraphs are indented.  We use
+%   9pt Roman for quotations:
+%    \begin{macrocode}
+\renewenvironment{quotation}{%
+  \list{}{\listparindent\parindent\relax
+    \itemindent\listparindent\relax
+    \rightmargin0.5in\relax
+    \leftmargin0.5in\relax}%
+    \item\fontsize{9pt}{11pt}\selectfont}{\endlist}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{quote}
+%   Quote is for short quotations without indentations:
+%    \begin{macrocode}
+\renewenvironment{quote}{%
+  \list{}{\listparindent0pt\relax
+    \itemindent\listparindent\relax
+    \rightmargin0.5in\relax
+    \leftmargin0.5in\relax}%
+    \item\fontsize{9pt}{11pt}\selectfont}{\endlist}
+%    \end{macrocode}   
+% \end{macro}
+%
+% \begin{macro}{note}
+%   Note is a special environment for asides.  It is in italics with
+%   the word ``NOTE'' on the margin:
+\newenvironment{note}{%  
+  \list{}{\listparindent0pt\relax
+    \topskip6\p@\relax
+    \itemindent-.3em\relax
+    \rightmargin0in\relax
+    \leftmargin0in\relax
+    \labelwidth0in\relax
+    \labelsep0in}%
+    \item\relax\makebox[0pt][r]{\fontfamily{%
+          \dgdefault}\fontseries{b}\fontsize{9pt}{11pt}\selectfont 
+        NOTE\hspace{2em}}\itshape}{\endlist}
+% \end{macro}
+%
+%\subsection{Tables And Figures}
+%\label{sec:tbl_fig}
+%
+%
 %
 %\subsection{End of Class}
 %\label{end}
