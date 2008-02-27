@@ -819,23 +819,54 @@
 %   the word ``NOTE'' on the margin:
 %    \begin{macrocode}
 \newenvironment{note}{%  
-  \list{}{\listparindent0pt\relax
-    \topskip6\p@\relax
-    \itemindent-.3em\relax
-    \rightmargin0in\relax
-    \leftmargin0in\relax
-    \labelwidth0in\relax
-    \labelsep0in}%
-    \item\relax\makebox[0pt][r]{\fontfamily{%
+  \list{\makebox[0pt][r]{\fontfamily{%
           \dgdefault}\fontseries{b}\fontsize{9pt}{11pt}\selectfont 
-        NOTE\hspace{2em}}\itshape}{\endlist}
+        NOTE\hspace{2em}}}{\listparindent0pt\relax
+    \topskip6\p@\relax
+    \itemindent0\p@\relax
+    \rightmargin0\p@\relax
+    \leftmargin0\p@\relax
+    \labelwidth0\p@\relax
+    \labelsep0\p@}%
+    \item\itshape}{\endlist}
 %    \end{macrocode}
 % \end{macro}
 %
 %\subsection{Tables And Figures}
 %\label{sec:tbl_fig}
 %
+% \begin{macro}{\thefigure}
+%   We want dash instead of dot between chapter number and figure
+%   number:
+%    \begin{macrocode}
+\renewcommand \thefigure
+     {\ifnum \c@chapter>\z@ \thechapter-\fi \@arabic\c@figure}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\thetable}
+%   We want dash instead of dot between chapter number and table
+%   number:
+%    \begin{macrocode}
+\renewcommand \thetable
+     {\ifnum \c@chapter>\z@ \thechapter-\fi \@arabic\c@table}
+%    \end{macrocode}
+% \end{macro}
 %
+% \begin{macro}{nostarchcaption}
+%   This is our captions format for tables and figures
+%    \begin{macrocode}
+\DeclareCaptionFormat{nostarchcaption}{\fontfamily{\sfdefault}%
+  \fontsize{8pt}{9pt}\fontseries{h}\selectfont#1#2%
+  \fontseries{k}\fontsize{8.5pt}{9pt}\selectfont#3}
+%    \end{macrocode}
+% \end{macro}
+%  And setting up formatting
+%    \begin{macrocode}
+\captionsetup[figure]{format=nostarchcaption,aboveskip=8pt,belowskip=8pt,
+singlelinecheck=off}
+\captionsetup[table]{format=nostarchcaption,aboveskip=0pt,belowskip=4pt,
+singlelinecheck=off}
+%    \end{macrocode}
 %
 %\subsection{End of Class}
 %\label{end}

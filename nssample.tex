@@ -1,5 +1,5 @@
 \documentclass[cfonts]{nostarch}
-\usepackage{lipsum}
+\usepackage{lipsum,array}
 \begin{document}
 
 \chapter[Morbi ac orci]{Morbi ac orci et nisl hendrerit
@@ -138,27 +138,24 @@ Suspendisse non nisl quis ligula fermentum facilisis.
 Vestibulum sem nibh, porttitor et, fermentum a, ultricies id, augue.
 
 \begin{figure}[tp]
-  \centering
   \includegraphics[width=3in]{vitruvian}
   \caption{Pellentesque laoreet velit nec justo}
   \label{fig:one}
 \end{figure}
 
 \begin{table}[tp]
-  \centering
-
-  \caption{Sed blandit, tortor a auctor imperdiet, wisi nibh ornare
-    leo, ac dictum nibh enim eu orci}
-  \begin{tabular}{lll}
-    \toprule
+  \caption[Sed blandit, tortor a auctor]{Sed blandit, tortor a auctor
+    imperdiet, wisi nibh ornare leo,\\ 
+    ac dictum nibh enim eu orci}
+  \begin{tabular}{ll>{\normalfont}l}
+    \toprule\let\normalfont=\bfseries%
     Phasellus &  At Dui & Donec Commodo \\
-    \midrule
+    \midrule    
      Augue At Nunc & Nunc In  sapien & Et magna mollis \\
      Sagittis &  Morbi eu elit &  Phasellus lacus\\
      Donec a quam & Etiam pulvinar sapien & Sed nibh magna\\
     \bottomrule
   \end{tabular}
-
 \label{tab:one}
 \end{table}
 
