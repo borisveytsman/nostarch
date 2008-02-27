@@ -130,6 +130,7 @@
 % \item \progname{booktabs} package~\cite{Fear05:Booktabs}.
 % \item \progname{graphics} package~\cite{Carlisle05:Graphics}.
 % \item \progname{caption} package~\cite{Sommerfeldt07:Caption}.
+% \item \progname{fancyvrb} package~\cite{VanZandt98:Fancyvrb}.
 % \end{enumerate}
 % These packages are called internally by |nostarch.cls|;  you do not
 % need to explicitly call them from your document.
@@ -256,7 +257,68 @@
 %   A Long Caption\\ With Lines To Split}
 % \end{verbatim}
 % 
+% Typesetting tables, unfortunately, is rarely done right, and
+% standard \LaTeX{} is not an exception.  The authors are urged to
+% read the introduction to \progname{booktabs}
+% package~\cite{Fear05:Booktabs}.  To summarize,
+% \begin{enumerate}
+% \item Never ever use vertical rules.
+% \item Never ever use double rules.
+% \item Use only |\toprule|, |\midrule| and |\bottomrule| for tables. 
+% \end{enumerate}
+% \DescribeMacro{\tbfont}
+% \DescribeMacro{\thfont}
+% \emph{No Starch Press} uses special fonts for table body and table
+% header.  Since there are too many tabular-like environments
+% (|tabular|, |tabbing|, |longtable|, \dots) we do not redefine them
+% switch on these fonts automatically, but rather provide two font
+% switching commands.  The command |\tbfont| should be used
+% \emph{before} tabular environment, and the command |\thfont| should
+% be used in all header cells.  Here is an example of a properly
+% done table layout:
+% \begin{verbatim}
+% \begin{table}
+%   \caption{Starch Content of Foods}
+%   \label{tab:starch}
+%   \tbfont
+%   \begin{tabular}{lr}
+%     \toprule
+%      \thfont Product        & \thfont Starch Content, \% \\ 
+%     \midrule
+%      Bran (wheat)           & 23.0\\
+%      Brown rice (raw)       & 80.0\\
+%      Brown bread (average)  & 41.3\\
+%      White bread (average)  & 46.7\\
+%     \bottomrule
+%   \end{tabular}
+% \end{table}
+% \end{verbatim}
+% 
+% \DescribeMacro{nostarch} 
+% You can add your own floats using, for example, \progname{float}
+% package.  When creating captions for them, use |style=nostarch| (see
+% \progname{caption} package
+% documentation~\cite{Sommerfeldt07:Caption}).
 %
+%
+%
+%\subsection{Code Fragments}
+%\label{sec:guide:code}
+%
+% \DescribeMacro{Code}
+% The class uses \progname{fancyvrb}
+% package~\cite{VanZandt98:Fancyvrb}.  Long code fragments should be
+% separated by rules;  the class defines verbatim-like |Code|
+% environment, which does exactly this:
+% \begin{verbatim}
+% \begin{Code}
+%   main() {
+%        printf("Hello, World\n");
+%   }
+% \end{Code}
+% \end{verbatim}
+% See the documentation of~\cite{VanZandt98:Fancyvrb} about many
+% features of this package.
 %
 %
 % \StopEventually{%
@@ -391,7 +453,7 @@
 %    \end{macrocode}
 %
 %
-% And switch to normalsize---just in case
+% And switch to normal size---just in case
 %    \begin{macrocode}
 \normalsize
 %    \end{macrocode}
@@ -485,8 +547,8 @@
 %
 % \begin{macro}{\headheight}
 % \begin{macro}{\headsep}
-%   We do not have headers in these books.  Fancyhdr sets headheight
-%   to 12pt, so we compensate it above inf |\topmargin|
+%   We do not have headers in these books.  Fancyhdr sets |headheight|
+%   to 12pt, so we compensate it above in |\topmargin|
 %    \begin{macrocode}
 \setlength\headheight{12pt}
 \setlength\headsep{0pt}
@@ -575,7 +637,7 @@
 %
 % Chapters, unlike the ones in~\cite{classes}, have \emph{two} obligatory
 % arguments. The second argument is the command to fill the ``circular
-% graphics''. Otherwise we follow the desgin in~\cite{classes}.  One
+% graphics''. Otherwise we follow the design in~\cite{classes}.  One
 % problem, however: we \emph{cannot} use |\secdef| because we have
 % three arguments, not two.
 %
@@ -589,7 +651,7 @@
 %
 % \begin{macro}{\ifnostarch@firstpara}
 %   And another macro to get special typesetting for the first
-%   paragraph after chaper begins:
+%   paragraph after chapter begins:
 %    \begin{macrocode}
 \newif\ifnostarch@firstpara
 \nostarch@firstparafalse
@@ -721,7 +783,7 @@
 % \end{macro}
 % 
 % \begin{macro}{\subsection}
-%   Subections correspond to |HeadB| in our specs:
+%   Subsections correspond to |HeadB| in our specs:
 %    \begin{macrocode}
 \renewcommand{\subsection}{\everypar{}%
   \@startsection{subsection}{2}{0pt}{14pt}{4pt}{%
@@ -885,7 +947,7 @@
 %\label{sec:footnotes}
 %
 % \begin{macro}{\footnoterule}
-%   We want one inch by 0.25 footnoterule:
+%   We want one inch by 0.25 footnote rule:
 %    \begin{macrocode}
 \renewcommand\footnoterule{%
   \kern-3\p@
@@ -970,7 +1032,7 @@
 % \begin{macro}{\heawyrulewidth}
 % \begin{macro}{\lightrulewidth}
 % \begin{macro}{\cmidrulewidth}
-%   Changing \progname{booktabs} defaluts:
+%   Changing \progname{booktabs} defaults:
 %    \begin{macrocode}
 \heavyrulewidth=3\p@
 \lightrulewidth=1.5\p@
