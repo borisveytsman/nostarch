@@ -20,7 +20,7 @@
 % derived file nostarch.cls
 %
 % \fi 
-% \CheckSum{581}
+% \CheckSum{0}
 %
 %
 %% \CharacterTable
@@ -494,11 +494,11 @@
 % \end{macro}
 %
 % \begin{macro}{\topmargin}
+% \changes{v0.2}{2008/03/03}{Moved down} 
 %   The top margin is 0.625''.  We use fake headers of 12pt:
 %    \begin{macrocode}
 \setlength\topmargin{0.625in}
 \addtolength\topmargin{-1in}
-\addtolength\topmargin{-\topskip}
 \addtolength\topmargin{-12pt}
 %    \end{macrocode}  
 % \end{macro}
@@ -507,7 +507,7 @@
 %   running head and foot. 
 %    \begin{macrocode}
 \setlength\textheight{8in}
-\addtolength{\textheight}{-0.167in}
+\addtolength{\textheight}{-0.207in}
 %    \end{macrocode}
 % Now we take care of the first line height:
 %    \begin{macrocode}
@@ -773,11 +773,9 @@
 %
 %
 % \begin{macro}{\section}
-%   Sections correspond to |HeadA| in our specs.  We use |\everypar{}|
-%   to deal with the special case when a section follows the first
-%   paragraph after chapter start.
+%   Sections correspond to |HeadA| in our specs.  
 %    \begin{macrocode}
-\renewcommand{\section}{\everypar{}%
+\renewcommand{\section}{%
   \@startsection{section}{1}{-1in}{16pt}{6pt}{%
     \fontfamily{\sfdefault}\fontseries{b}\fontsize{12pt}{16pt}\selectfont}}%
 %    \end{macrocode}   
@@ -786,7 +784,7 @@
 % \begin{macro}{\subsection}
 %   Subsections correspond to |HeadB| in our specs:
 %    \begin{macrocode}
-\renewcommand{\subsection}{\everypar{}%
+\renewcommand{\subsection}{%
   \@startsection{subsection}{2}{0pt}{14pt}{4pt}{%
     \fontfamily{\sfdefault}\fontshape{it}%
     \fontseries{bc}\fontsize{12pt}{17pt}\selectfont}}%
@@ -797,9 +795,9 @@
 % \begin{macro}{\subsubsection}
 %   Subsubsections correspond to |HeadC| in our specs:
 %    \begin{macrocode}
-\renewcommand{\subsubsection}{\everypar{}%
+\renewcommand{\subsubsection}{%
   \@startsection{subsubsection}{3}{0pt}{10pt}{2pt}{%
-  \fontfamily{\sfdefault}\fontseries{bex}\fontsize{10pt}{14pt}%
+  \fontfamily{\sfdefault}\fontseries{bp}\fontsize{10pt}{14pt}%
     \selectfont}}%
 %    \end{macrocode}   
 % \end{macro}
@@ -963,6 +961,7 @@
 %    \begin{macrocode}
 \renewcommand\@makefntext[1]{%
     \parindent 0\p@%
+    \RaggedRightParindent0\p@%
     \noindent
     \@makefnmark#1}
 %    \end{macrocode}
