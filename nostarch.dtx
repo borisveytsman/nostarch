@@ -132,6 +132,7 @@
 % \item \progname{graphics} package~\cite{Carlisle05:Graphics}.
 % \item \progname{caption} package~\cite{Sommerfeldt07:Caption}.
 % \item \progname{fancyvrb} package~\cite{VanZandt98:Fancyvrb}.
+% \item \progname{ragged2e} package~\cite{Schroeder03:Ragged2e}.
 % \end{enumerate}
 % These packages are called internally by |nostarch.cls|;  you do not
 % need to explicitly call them from your document.
@@ -429,6 +430,14 @@
 \RequirePackage{ifpdf, fancyhdr, fancyvrb, booktabs, graphicx, caption}
 %    \end{macrocode}
 %
+% We do not want the option |document| with \progname{ragged2e}: this
+% calls \progname{footmisc}, while we want our own footnotes:
+%    \begin{macrocode}
+\RequirePackage{ragged2e}
+\setlength\RaggedRightParindent{\parindent}
+\RaggedRight
+%    \end{macrocode}
+% 
 % 
 %
 %\subsection{Fonts}
@@ -569,7 +578,7 @@
 % \end{macro}
 %
 %
-%
+% 
 % 
 %
 %\subsection{Headers and Footers}
@@ -602,9 +611,9 @@
 %
 % On even pages we put page number and chapter title in footer. 
 %    \begin{macrocode}
-\fancyfoot[RO]{\fontfamily{\sfdefault}\fontsize{9pt}{6pt}%
+\fancyfoot[RO]{\fontfamily{\sfdefault}\fontsize{6pt}{6pt}%
   \fontseries{lq}\selectfont\rightmark%
-  \hspace{2em}\fontseries{bc}\selectfont\thepage}
+  \hspace{2em}\fontseries{bc}\fontsize{9pt}{6pt}\selectfont\thepage}
 \fancyfoot[LO]{}
 \fancyfoot[CO]{}
 %    \end{macrocode}
@@ -612,7 +621,8 @@
 % On even pages we put page number and chapter number in footer:
 %    \begin{macrocode}
 \fancyfoot[LE]{\fontfamily{\sfdefault}\fontseries{bc}\fontsize{9pt}{6pt}%
-  \selectfont\thepage\hspace{2em}\fontseries{lq}\selectfont%
+  \selectfont\thepage\hspace{2em}%
+  \fontseries{lq}\fontsize{6pt}{6pt}\selectfont%
   \leftmark}
 \fancyfoot[RE]{}
 \fancyfoot[CE]{}
@@ -693,10 +703,11 @@
 %
 %
 % \begin{macro}{\@@chapter}
+% \changes{v0.2}{2008/03/04}{Moved up} 
 %   The actual work is done by |\@@chapter| macro.
 %    \begin{macrocode}
 \def\@@chapter[#1]#2#3{%
-  \vspace*{1.172in}
+  \vspace*{0.622in}
   {\centering
   \def\chaptershorttitle{#1}%
   \ifx\chaptershorttitle\@empty
@@ -715,14 +726,14 @@
            \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}%
             {\fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
               \selectfont
-              \thechapter\par\nobreak\vskip16pt}
+              \thechapter\par\nobreak\vskip27pt}
           \else
              \addcontentsline{toc}{chapter}{\chaptershorttitle}%
              \markboth{}{\chaptershorttitle}%
           \fi
      \fi 
      {\fontfamily{\dgdefault}\fontseries{bq}\fontsize{16pt}{20pt}\selectfont
-       \MakeUppercase{#2}\par\nobreak\vskip81pt}}%
+       \MakeUppercase{#2}\par\nobreak\vskip74pt}}%
    \nostarch@firstparatrue
    \def\nostarch@chapart{#3}%
    \@afterheading}%
@@ -749,10 +760,14 @@
 %    \end{macrocode}
 % The first paragraph has a special font and artwork in the beginning:
 %    \begin{macrocode}
-       \makebox[0pt][r]{\raisebox{-0.5in}[0pt][0pt]{%
-          \nostarch@chapart\hspace{0.1in}}}%
-      \hangindent=0.364in
-      \hangafter=-3
+       \makebox[0pt][r]{\raisebox{-0.6in}[0pt][0pt]{%
+          \nostarch@chapart\hspace{0.11in}}}%
+      \parshape=5 
+      0.963in 3.622in 
+      0.913in 3.672in 
+      0.813in 3.772in 
+      0.563in 4.022in 
+      0in \textwidth 
       \fontsize{14pt}{16.5pt}\selectfont%
       \parskip=3pt
       \else
@@ -773,10 +788,11 @@
 %
 %
 % \begin{macro}{\section}
-%   Sections correspond to |HeadA| in our specs.  
+%   Sections correspond to |HeadA| in our specs.  We use |\everypar{}|
+%   in case section starts just after chapter start.
 %    \begin{macrocode}
-\renewcommand{\section}{%
-  \@startsection{section}{1}{-1in}{16pt}{6pt}{%
+\renewcommand{\section}{\everypar{}%
+  \@startsection{section}{1}{-0.25in}{16pt}{6pt}{%
     \fontfamily{\sfdefault}\fontseries{b}\fontsize{12pt}{16pt}\selectfont}}%
 %    \end{macrocode}   
 % \end{macro}
@@ -784,7 +800,7 @@
 % \begin{macro}{\subsection}
 %   Subsections correspond to |HeadB| in our specs:
 %    \begin{macrocode}
-\renewcommand{\subsection}{%
+\renewcommand{\subsection}{\everypar{}%
   \@startsection{subsection}{2}{0pt}{14pt}{4pt}{%
     \fontfamily{\sfdefault}\fontshape{it}%
     \fontseries{bc}\fontsize{12pt}{17pt}\selectfont}}%
@@ -795,7 +811,7 @@
 % \begin{macro}{\subsubsection}
 %   Subsubsections correspond to |HeadC| in our specs:
 %    \begin{macrocode}
-\renewcommand{\subsubsection}{%
+\renewcommand{\subsubsection}{\everypar{}%
   \@startsection{subsubsection}{3}{0pt}{10pt}{2pt}{%
   \fontfamily{\sfdefault}\fontseries{bp}\fontsize{10pt}{14pt}%
     \selectfont}}%
@@ -844,6 +860,8 @@
 %   This is the default list on the first level
 %    \begin{macrocode}
 \def\@listi{\leftmargin\leftmargini
+  \labelwidth\leftmargin\relax
+  \advance\labelwidth-\labelsep\relax
   \parsep0\p@\relax
   \topsep6\p@\relax
   \itemsep4\p@\relax}
@@ -895,6 +913,40 @@
 % \end{macro}
 % \end{macro}
 % \end{macro}
+%
+% \begin{macro}{itemize}
+% \changes{v0.2}{2008/03/03}{Flush left bullets} 
+%   We make bullets flushleft:
+%    \begin{macrocode}
+\def\itemize{%
+  \ifnum \@itemdepth >\thr@@\@toodeep\else
+    \advance\@itemdepth\@ne
+    \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
+    \expandafter
+    \list
+      \csname\@itemitem\endcsname
+      {\def\makelabel##1{##1}}%
+  \fi}
+%    \end{macrocode}
+%   
+% \end{macro}
+% 
+% \begin{macro}{enumerate}
+% \changes{v0.2}{2008/03/03}{Flush left numbers} 
+%   We make numbering flushleft:
+%    \begin{macrocode}
+\def\enumerate{%
+  \ifnum \@enumdepth >\thr@@\@toodeep\else
+    \advance\@enumdepth\@ne
+    \edef\@enumctr{enum\romannumeral\the\@enumdepth}%
+      \expandafter
+      \list
+        \csname label\@enumctr\endcsname
+        {\usecounter\@enumctr\def\makelabel##1{##1}}}%
+%    \end{macrocode}
+%   
+% \end{macro}
+% 
 %
 % \begin{macro}{quotation}
 %   In |quotation| environment the paragraphs are indented.  We use
@@ -992,8 +1044,7 @@
 %   This is our captions format for tables and figures
 %    \begin{macrocode}
 \DeclareCaptionFormat{nostarchformat}{\fontfamily{\sfdefault}%
-  \fontsize{8pt}{9pt}\fontseries{h}\selectfont#1#2%
-  \fontseries{k}\fontsize{8.5pt}{9pt}\selectfont#3}
+  \fontshape{it}\fontsize{8.5pt}{9pt}\fontseries{k}\selectfont\unskip#1#2#3}
 %    \end{macrocode}
 % \end{macro}
 %  
