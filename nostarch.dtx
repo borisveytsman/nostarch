@@ -577,7 +577,18 @@
 %    \end{macrocode}
 % \end{macro}
 %
-%
+% \begin{macro}{\widowpenalty}
+% \begin{macro}{\clubpenalty}
+%   We forbid widows and clubs.  To prevent too extended pages we use
+%   |\raggedbottom|:
+%    \begin{macrocode}
+\widowpenalty=10000
+\clubpenalty=10000
+\raggedbottom
+%    \end{macrocode}
+%   
+% \end{macro}
+% \end{macro}
 % 
 % 
 %
@@ -788,11 +799,12 @@
 %
 %
 % \begin{macro}{\section}
+% \changes{v0.3}{2008/03/09}{Changed indentation}
 %   Sections correspond to |HeadA| in our specs.  We use |\everypar{}|
 %   in case section starts just after chapter start.
 %    \begin{macrocode}
 \renewcommand{\section}{\everypar{}%
-  \@startsection{section}{1}{-0.25in}{16pt}{6pt}{%
+  \@startsection{section}{1}{-0.75in}{16pt}{6pt}{%
     \fontfamily{\sfdefault}\fontseries{b}\fontsize{12pt}{16pt}\selectfont}}%
 %    \end{macrocode}   
 % \end{macro}
