@@ -296,12 +296,6 @@
 % \end{table}
 % \end{verbatim}
 % 
-% \DescribeMacro{nostarch} 
-% You can add your own floats using, for example, \progname{float}
-% package.  When creating captions for them, use |style=nostarch| (see
-% \progname{caption} package
-% documentation~\cite{Sommerfeldt07:Caption}).
-%
 %
 %
 %\subsection{Code Fragments}
@@ -1013,10 +1007,39 @@
 %   We want one inch by 0.25 footnote rule:
 %    \begin{macrocode}
 \renewcommand\footnoterule{%
-  \kern-3\p@
+  \kern6\p@
   \hrule height 0.25pt depth 0pt width 1in 
-  \kern4\p@}
+  \kern0\p@}
 %    \end{macrocode}
+% \end{macro}
+% 
+% \begin{macro}{\@footnotetext}
+%   We want 4pt between footnotes.  Unfortunately the standard
+%   functions introduces |\@finalstrut|, which we do not need
+%   here\dots 
+%    \begin{macrocode}
+\long\def\@footnotetext#1{\insert\footins{%
+    \reset@font\footnotesize
+    \interlinepenalty\interfootnotelinepenalty
+    \splittopskip\footnotesep
+    \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+    \hsize\columnwidth \@parboxrestore
+    \protected@edef\@currentlabel{%
+       \csname p@footnote\endcsname\@thefnmark
+    }%
+    \color@begingroup
+      \@makefntext{%
+        \rule\z@{13.5pt}\ignorespaces#1}%
+    \color@endgroup}}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{footins}
+%   We make some space beetween footnotes:
+%    \begin{macrocode}
+\setlength{\skip\footins}{16\p@ \@plus 4\p@ \@minus 0\p@}
+%    \end{macrocode}
+%   
 % \end{macro}
 %
 %
@@ -1052,27 +1075,30 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{nostarchcaption}
-%   This is our captions format for tables and figures
+% \begin{macro}{nostarchfigfmt}
+%   This is our captions format for figures
 %    \begin{macrocode}
-\DeclareCaptionFormat{nostarchformat}{\fontfamily{\sfdefault}%
+\DeclareCaptionFormat{nostarchfigfmt}{\fontfamily{\sfdefault}%
   \fontshape{it}\fontsize{8.5pt}{9pt}\fontseries{k}\selectfont\unskip#1#2#3}
 %    \end{macrocode}
 % \end{macro}
-%  
-% \begin{macro}{nostarch}
-%   Our caption style:
+% \begin{macro}{nostarchtabfmt}
+%   This is our captions format for tables
 %    \begin{macrocode}
-\DeclareCaptionStyle{nostarch}{format=nostarchformat,singlelinecheck=off}
-%    \end{macrocode}  
+\DeclareCaptionFormat{nostarchtabfmt}{\fontfamily{\sfdefault}%
+  \fontshape{rm}\fontsize{8.5pt}{9pt}\fontseries{h}\selectfont\unskip#1#2%
+  \fontseries{k}\selectfont#3}
+%    \end{macrocode}
 % \end{macro}
+%  
 %
 %
-% The figure and table styles differ only by the skip amounts above
-% and below:
+% The figure and table styles:
 %    \begin{macrocode}
-\captionsetup[figure]{style=nostarch,aboveskip=8pt,belowskip=8pt,}
-\captionsetup[table]{style=nostarch,aboveskip=0pt,belowskip=4pt,}
+\captionsetup[figure]{format=nostarchfigfmt,singlelinecheck=off,
+  aboveskip=8pt,belowskip=8pt}
+\captionsetup[table]{format=nostarchtabfmt,singlelinecheck=off,
+  aboveskip=0pt,belowskip=4pt}
 %    \end{macrocode}
 %
 % \begin{macro}{\tbfont}
@@ -1142,6 +1168,7 @@
 %   This is for framed code:
 %    \begin{macrocode}
 \DefineVerbatimEnvironment{Code}{Verbatim}{frame=lines,framerule=0.25pt}
+\FV@AddToHook\FV@ListParameterHook{\vspace*{-6pt}}
 %    \end{macrocode}
 %   
 % \end{macro}
