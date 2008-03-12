@@ -565,7 +565,7 @@
 %    \begin{macrocode}
 \setlength{\footskip}{9in}
 \addtolength{\footskip}{-\textheight}
-\addtolength{\footskip}{0.167in}
+\addtolength{\footskip}{0.067in}
 \addtolength{\footskip}{\baselineskip}
 \addtolength{\footskip}{-1in}
 %    \end{macrocode}
@@ -573,6 +573,7 @@
 %
 % \begin{macro}{\widowpenalty}
 % \begin{macro}{\clubpenalty}
+% \changes{v0.2}{2008/03/11}{Changed settings} 
 %   We forbid widows and clubs.  To prevent too extended pages we use
 %   |\raggedbottom|:
 %    \begin{macrocode}
@@ -765,8 +766,8 @@
 %    \end{macrocode}
 % The first paragraph has a special font and artwork in the beginning:
 %    \begin{macrocode}
-       \makebox[0pt][r]{\raisebox{-0.6in}[0pt][0pt]{%
-          \nostarch@chapart\hspace{0.11in}}}%
+       \makebox[0pt][r]{\raisebox{-0.5in}[0pt][0pt]{%
+          \nostarch@chapart\hspace{0.21in}}}%
       \parshape=5 
       0.963in 3.622in 
       0.913in 3.672in 
@@ -988,13 +989,13 @@
   \list{\makebox[0pt][r]{\fontfamily{%
           \dgdefault}\fontseries{b}\fontsize{9pt}{11pt}\selectfont 
         NOTE\hspace{2em}}}{\listparindent0pt\relax
-    \topskip6\p@\relax
+    \topsep9\p@\relax
     \itemindent0\p@\relax
     \rightmargin0\p@\relax
     \leftmargin0\p@\relax
     \labelwidth0\p@\relax
     \labelsep0\p@}%
-    \item\itshape}{\endlist}
+    \item\itshape}{\vspace{-3pt}\endlist}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1004,6 +1005,7 @@
 %\label{sec:footnotes}
 %
 % \begin{macro}{\footnoterule}
+% \changes{v0.2}{2008/03/11}{Increased kern} 
 %   We want one inch by 0.25 footnote rule:
 %    \begin{macrocode}
 \renewcommand\footnoterule{%
@@ -1014,6 +1016,7 @@
 % \end{macro}
 % 
 % \begin{macro}{\@footnotetext}
+% \changes{v0.2}{2008/03/11}{Changed LaTeX default} 
 %   We want 4pt between footnotes.  Unfortunately the standard
 %   functions introduces |\@finalstrut|, which we do not need
 %   here\dots 
@@ -1034,7 +1037,8 @@
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{footins}
+% \begin{macro}{\footins}
+% \changes{v0.2}{2008/03/11}{Changed LaTeX defaults} 
 %   We make some space beetween footnotes:
 %    \begin{macrocode}
 \setlength{\skip\footins}{16\p@ \@plus 4\p@ \@minus 0\p@}
@@ -1077,12 +1081,14 @@
 %
 % \begin{macro}{nostarchfigfmt}
 %   This is our captions format for figures
+% \changes{v0.2}{2008/03/11}{Added style} 
 %    \begin{macrocode}
 \DeclareCaptionFormat{nostarchfigfmt}{\fontfamily{\sfdefault}%
   \fontshape{it}\fontsize{8.5pt}{9pt}\fontseries{k}\selectfont\unskip#1#2#3}
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{nostarchtabfmt}
+% \changes{v0.2}{2008/03/11}{Added style} 
 %   This is our captions format for tables
 %    \begin{macrocode}
 \DeclareCaptionFormat{nostarchtabfmt}{\fontfamily{\sfdefault}%
@@ -1168,7 +1174,13 @@
 %   This is for framed code:
 %    \begin{macrocode}
 \DefineVerbatimEnvironment{Code}{Verbatim}{frame=lines,framerule=0.25pt}
-\FV@AddToHook\FV@ListParameterHook{\vspace*{-6pt}}
+%    \end{macrocode}   
+% \end{macro}
+%
+% \begin{macro}{\FV@ListParameterHook}
+%   The skip before code is too large for us
+%    \begin{macrocode}
+\FV@AddToHook\FV@ListParameterHook{\vspace{-6pt}}
 %    \end{macrocode}
 %   
 % \end{macro}
