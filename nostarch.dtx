@@ -354,7 +354,7 @@
 \ProvidesFile{nostarch.dtx}
 %</gobble>
 %<class>\ProvidesClass{nostarch}
-[2008/03/12 v0.3 Typesetting books for No Starch Press]
+[2008/03/14 v0.4 Typesetting books for No Starch Press]
 %    \end{macrocode}
 %
 % And the driver code:
@@ -724,8 +724,6 @@
 %
 % \begin{macro}{\@@chapter}
 % \changes{v0.2}{2008/03/04}{Moved up} 
-% \changes{v0.3}{2008/03/12}{Added special treatment for the case of
-% empty chapter art} 
 %   The actual work is done by |\@@chapter| macro.
 %    \begin{macrocode}
 \def\@@chapter[#1]#2#3{%
@@ -733,16 +731,7 @@
   \def\chaptershorttitle{#1}%
   \ifx\chaptershorttitle\@empty
      \def\chaptershorttitle{#2}\fi
-%    \end{macrocode}
-% We use special typesetting for the first paragaph if there is
-% chapter art present:
-%    \begin{macrocode}
    \def\nostarch@chapart{#3}%
-   \ifx\nostarch@chapart\@empty
-      \nostarch@firstparafalse
-   \else
-      \nostarch@firstparatrue
-   \fi
   {\centering
 %    \end{macrocode}
 % Now check whether we need to typeset the chapter number
@@ -766,16 +755,17 @@
      \fi 
      {\fontfamily{\dgdefault}\fontseries{bq}\fontsize{16pt}{20pt}\selectfont
        \MakeUppercase{#2}\par}}%
-   \ifnostarch@firstpara
-      \nobreak\vskip74pt
-      \else\nobreak\vskip25pt
-   \fi
+   \ifx\nostarch@chapart\@empty\nobreak\vskip25pt%
+   \else\nobreak\vskip74pt\fi
+   \nostarch@firstparatrue
    \@afterheading}%
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\@afterheading}
 % \changes{v0.3}{2008/03/12}{Moved the circle art} 
+% \changes{v0.4}{2008/03/14}{Added special treatment for the case of
+% empty chapter art} 
 % We cannot use the standard |\@afterheading| since we want to put the
 % first paragraph in larger font and put there the artwork.  So we
 % take |\@afterheading| code and patch it:
@@ -795,14 +785,17 @@
 %    \end{macrocode}
 % The first paragraph has a special font and artwork in the beginning:
 %    \begin{macrocode}
-       \makebox[0pt][r]{\raisebox{-0.5in}[0pt][0pt]{%
-          \nostarch@chapart\hspace{0.21in}}}%
-      \parshape=5 
-      0.963in 3.622in 
-      0.913in 3.672in 
-      0.813in 3.772in 
-      0.563in 4.022in 
-      0in \textwidth 
+       \ifx\nostarch@chapart\@empty\relax
+       \else
+         \makebox[0pt][r]{\raisebox{-0.5in}[0pt][0pt]{%
+            \nostarch@chapart\hspace{0.21in}}}%
+        \parshape=5 
+        0.963in 3.622in 
+        0.913in 3.672in 
+        0.813in 3.772in 
+        0.563in 4.022in 
+        0in \textwidth 
+      \fi
       \fontsize{14pt}{16.5pt}\selectfont%
       \parskip=3pt
       \else
