@@ -354,7 +354,7 @@
 \ProvidesFile{nostarch.dtx}
 %</gobble>
 %<class>\ProvidesClass{nostarch}
-[2008/03/14 v0.4 Typesetting books for No Starch Press]
+[2008/03/16 v0.5 Typesetting books for No Starch Press]
 %    \end{macrocode}
 %
 % And the driver code:
@@ -682,7 +682,7 @@
 %
 % \begin{macro}{\ifnostarch@firstpara}
 %   And another macro to get special typesetting for the first
-%   paragraph after chapter begins:
+%   paragraph after a part or a chapter begins:
 %    \begin{macrocode}
 \newif\ifnostarch@firstpara
 \nostarch@firstparafalse
@@ -694,8 +694,26 @@
 %    \begin{macrocode}
 \def\nostarch@chapart{}
 %    \end{macrocode}
-%   
 % \end{macro}
+%
+% \begin{macro}{\part}
+%   Our parts differ from the ones in standard LaTeX since we use empy
+%   pagestyle rather than plain in part pages:
+%    \begin{macrocode}
+\renewcommand\part{%
+  \cleardoublepage
+  \thispagestyle{empty}%
+  \if@twocolumn
+    \onecolumn
+    \@tempswatrue
+  \else
+    \@tempswafalse
+  \fi
+  \null\vfil
+  \secdef\@part\@spart}
+%    \end{macrocode} 
+% \end{macro}
+% 
 %
 % \begin{macro}{\chapter}
 % First, we suppress floats, set up empty page style and delete
@@ -704,6 +722,7 @@
 %    \begin{macrocode}
 \def\chapter{%
   \cleardoublepage
+  \everypar{}%
   \thispagestyle{empty}%
   \global\@topnum\z@
   \@afterindentfalse
