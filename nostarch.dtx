@@ -137,6 +137,22 @@
 % These packages are called internally by |nostarch.cls|;  you do not
 % need to explicitly call them from your document.
 %
+%
+%
+%\subsection{Use of \progname{hyperref} Package}
+%\label{sec:hyperref}
+%
+% The books typeset by \emph{No Starch Press} can be sold either as
+% traditional printed and bound hard copies, or as PDF files.  If you,
+% the author, envisage the second possibility, you may want additional
+% possibilites provided by \progname{hyperref}
+% package~\cite{Rahtz06:Hyperref}, like ``clickable'' entries in the
+% table of context and index, etc.  Since this package must be loaded
+% last, |nostarch.cls| does not load it itself.  However, if the
+% package is loaded, |nostarch.cls| automatically sets the options
+% suitable for the books.  This package is highly recommended for the
+% books that are going to be distributed in an electronic form.
+%
 %\subsection{Invocation}
 %\label{sec:invocation}
 %
@@ -172,6 +188,73 @@
 % \end{verbatim}
 % 
 %
+%\subsection{Front Matter}
+%\label{sec:guide:frontmatter}
+%
+% \DescribeMacro{\mainmatter}
+% A book can be divided into three parts:  front matter, main matter
+% and back matter.  Main matter starts with the command
+% |\mainmatter|.  Normally this is the first command in the class.
+% Main matter contains half page, title page, copyright page, brief
+% contents, detailed contents, foreword(s) and other stuff which is
+% traditionally typeset on roman-numbered pages.  The commands in main
+% matter can be divides into \emph{declarations} and
+% \emph{directives.}  Declarations do not typeset anything.  Rather,
+% they up parameters for the typesetting.  Directives use them to
+% typeset the stuff.
+%
+% \DescribeMacro{\title} 
+% There are four declarations defined by |nostarch.cls|: |\title|,
+% |\author|, |\nostarchlogo| and |\nostarchlocation|.  The macro
+% |\title|, like the standard \LaTeX{} |\title|, takes either one or
+% two arguments.  The mandatory argument sets the title of the book.
+% If the optional argument is present, it sets the ``short title'',
+% used, for example, in the half title page.  For example, you can say
+% either:
+% \begin{verbatim}
+% \title{The Life of Pantagruel}
+% \end{verbatim}
+% or
+% \begin{verbatim}
+% \title[The Life of Pantagruel]{The Horrible and Terrifying Deeds and
+% Words of the Very Renowned Pantagruel King of the Dipsodes, Kin of
+% the Great Giant Gargantua}
+% \end{verbatim}
+% 
+% \DescribeMacro{\author}
+% The command |\author| has just one argument, which is the list of
+% authors, separated by commas and (for the last author) the word
+% ``and''.  Do not use the command |\and| defined in the standard
+% \LaTeX.  For example, say
+% \begin{verbatim}
+% \author{Hans Bethe}
+% \end{verbatim}
+% or
+% \begin{verbatim}
+% \author{Ralph Alpher, Hans Bethe and George Gamow}
+% \end{verbatim}
+% 
+% \DescribeMacro{\nostarchlogo} 
+% Due to copyright reasons the logo of \emph{No Starch Press} is not
+% distribuded with the package.  You should get the logo as a graphics
+% file from the publishers and put in the directory where \LaTeX{} can
+% find it (for example, the directory with the other sources of your
+% book).  The command |\nostarchlogo| has one argument: the name of
+% the file, for example
+% \begin{verbatim}
+% \nostarchlogo{biglogo.pdf}
+% \end{verbatim}
+% The file will be automatically scaled to the proper size.
+%
+% \DescribeMacro{\nostarchlocation}
+% \emph{No Starch Press} books are usually published in San
+% Francisco.  If you need to change this setting, use
+% |\nostarchlocation| declaration, for example
+% \begin{verbatim}
+% \nostarchlocation{San Francisco;  London; Tokyo}
+% \end{verbatim}
+% 
+%
 %\subsection{Chapters and Sections}
 %\label{sec:guide:sections}
 %
@@ -181,7 +264,7 @@
 % \emph{No Starch Press} books have chapters, sections, subsections and
 % subsubsections.  The chapters are usually numbered, but sections ande
 % below are not.  The commands for sections are the same as in the
-% standard \LaTeX: |\section|\marg{short title}\oarg{long title}, for
+% standard \LaTeX: |\section|\oarg{short title}\marg{long title}, for
 % example
 % \begin{verbatim}
 % \section[Building Lego Fire Track]{How To Build A Lego Fire Track 
@@ -702,18 +785,64 @@
 %    \begin{macrocode}
 \renewcommand\part{%
   \cleardoublepage
+  \everypar{}%
+  \markboth{}{}%
+  \def\nostarch@chapart{}%
   \thispagestyle{empty}%
-  \if@twocolumn
-    \onecolumn
-    \@tempswatrue
-  \else
-    \@tempswafalse
-  \fi
-  \null\vfil
+  \null\vskip1.175in%
   \secdef\@part\@spart}
 %    \end{macrocode} 
 % \end{macro}
 % 
+% \begin{macro}{\@part}
+%   This code is used when we have a numbered part.
+%    \begin{macrocode}
+\def\@part[#1]#2{%
+    \ifnum \c@secnumdepth >-2\relax
+      \refstepcounter{part}%
+      \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+    \else
+      \addcontentsline{toc}{part}{#1}%
+    \fi
+    {\centering
+     \interlinepenalty \@M
+     \normalfont
+     \ifnum \c@secnumdepth >-2\relax
+       \fontfamily{\sfdefault}\fontsize{80pt}{80pt}\fontseries{bc}\selectfont
+       \MakeUppercase{\partname\nobreakspace\thepart}%
+       \par
+       \vskip 8\p@
+     \fi
+     \fontfamily{fdg}\fontsize{16pt}{16pt}\fontseries{bq}\selectfont
+     \MakeUppercase{#2}\par}%
+    \@endpart}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@spart}
+%   This is used for starred parts (probably not something we are
+%   going to encounter\dots)
+%    \begin{macrocode}
+\def\@spart#1{%
+  \addcontentsline{toc}{part}{#1}%
+    {\centering
+      \fontfamily{fdg}\fontsize{16pt}{16pt}\fontseries{bq}\selectfont
+     \MakeUppercase{#1}\par}%
+    \@endpart}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@endpart}
+%   When part is finished, we change the settings of the first paragraph:
+%    \begin{macrocode}
+\def\@endpart{%
+  \@afterindentfalse
+  \vskip25\p@%
+   \nostarch@firstparatrue
+   \@afterheading}    
+%    \end{macrocode}
+%   
+% \end{macro}
 %
 % \begin{macro}{\chapter}
 % First, we suppress floats, set up empty page style and delete
@@ -766,7 +895,7 @@
            \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}%
             {\fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
               \selectfont
-              \thechapter\par\nobreak\vskip27pt}
+              \thechapter\par\nobreak\vskip27pt}%
           \else
              \addcontentsline{toc}{chapter}{\chaptershorttitle}%
              \markboth{}{\chaptershorttitle}%
