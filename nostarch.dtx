@@ -78,6 +78,7 @@
 % \clearpage
 %
 % \changes{v0.1}{2008/02/27}{First fully functional version} 
+% \changes{v0.5}{2008/03/19}{Documentation update} 
 %
 %
 %\section{Introduction}
@@ -207,18 +208,9 @@
 % There are five declarations defined by |nostarch.cls|: |\title|,
 % |\subtitle|, 
 % |\author|, |\nostarchlogo| and |\nostarchlocation|.  The macro
-% |\title|, like the standard \LaTeX{} |\title|, takes either one or
-% two arguments.  The mandatory argument sets the title of the book.
-% If the optional argument is present, it sets the ``short title'',
-% used, for example, in the half title page.  For example, you can say
-% either |\title|\texttt{\{The life of Pantagruel\}}
-% or
-% \begin{verbatim}
-% \title[The Life of Pantagruel]{The Horrible and Terrifying Deeds and
-% Words of the Very Renowned Pantagruel King of the Dipsodes, Kin of
-% the Great Giant Gargantua}
-% \end{verbatim}
-% 
+% |\title|, like the standard \LaTeX{} |\title|, sets the title of the
+% book, for example |\title|\texttt{\{The book about everything\}}.
+%
 % \DescribeMacro{\subtitle}
 % The macro |\subtitle| takes one argument and sets up the subtitle of
 % your book, for example |\subtitle|\texttt{\{A Guide For
@@ -250,7 +242,7 @@
 % Now let us discuss directives.
 %
 % \DescribeMacro{\makehalftitle}
-% The command |\makehalftitlepage| creates \emph{half title page.}
+% The command |\makehalftitle| creates \emph{half title page.}
 % This is normally the first page of the book.
 %
 % \DescribeMacro{\maketitle}
@@ -291,7 +283,7 @@
 % art''.  For front matter entries the circle art is absent.  Thus the
 % second mandatory argument must be empty:
 % \begin{verbatim}
-% \chapter*{Foreword by R.E.~Viewer}{}
+% \chapter*{Foreword by R. E.~Viewer}{}
 % \end{verbatim}
 % 
 %
@@ -356,7 +348,7 @@
 %
 % \DescribeMacro{\part}
 % Sometimes larger books are separated into parts.  The command
-% |\part|\marg{Title} is used to typeset paerts.
+% |\part|\marg{Title} is used to typeset parts.
 %
 %\subsection{Environments}
 %\label{sec:guide:lists}
@@ -485,7 +477,7 @@
 \ProvidesFile{nostarch.dtx}
 %</gobble>
 %<class>\ProvidesClass{nostarch}
-[2008/03/16 v0.5 Typesetting books for No Starch Press]
+[2008/03/19 v0.5 Typesetting books for No Starch Press]
 %    \end{macrocode}
 %
 % And the driver code:
@@ -780,6 +772,113 @@
 %    \end{macrocode}
 % 
 %
+%\subsection{Front Matter}
+%\label{sec:frontmatter}
+%
+%
+% \begin{macro}{\subtitle}
+% \changes{v0.5}{2008/03/19}{Introduced the macro} 
+%   We use subtitle of the book\dots
+%    \begin{macrocode}
+\newcommand{\subtitle}[1]{\gdef\@subtitle{#1}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@subtitle}
+% \changes{v0.5}{2008/03/19}{Introduced the macro} 
+%   \dots With empty default:
+%    \begin{macrocode}
+\def\@subtitle{}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\nostarchlogo}
+% \changes{v0.5}{2008/03/19}{Introduced the macro} 
+%   The logotype of the publisher:
+%    \begin{macrocode}
+\newcommand{\nostarchlogo}[1]{\gdef\@nostarchlogo{#1}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@nostarchlogo}
+% \changes{v0.5}{2008/03/19}{Introduced the macro} 
+%   The default it empty:
+%    \begin{macrocode}
+\def\@nostarchlogo{}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\nostarchlocation}
+% \changes{v0.5}{2008/03/19}{Introduced the macro} 
+%   Similarly for location:
+%    \begin{macrocode}
+\newcommand{\nostarchlocation}[1]{\gdef\@nostarchlocation{#1}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@nostarchlocation}
+% \changes{v0.5}{2008/03/19}{Introduced the macro} 
+%   The default is SF:
+%    \begin{macrocode}
+\def\@nostarchlocation{San Francisco}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\makehalftitle}
+% \changes{v0.5}{2008/03/19}{Introduced the macro} 
+%   Now we are ready to typeset the half title page.  It is flushed
+%   right, cannot be to the left of the page center and must be 0.25''
+%   indented from the right:
+%    \begin{macrocode}
+\def\makehalftitle{%
+  \clearpage
+  {\pagestyle{empty}\cleardoublepage}%
+  \thispagestyle{empty}%
+  \null\vskip1.175in%
+  \leavevmode\noindent\hspace{1.8125in}%
+    \begin{minipage}[t]{2.5625in}%
+    \flushright 
+    \fontfamily{\sfdefault}\fontseries{b}%
+    \fontsize{12\p@}{13\p@}\selectfont
+    \MakeUppercase{\@title}%
+  \end{minipage}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{maketitle}
+% \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
+% Now the main title page:
+%    \begin{macrocode}
+\def\maketitle{%
+  \clearpage
+  {\pagestyle{empty}\cleardoublepage}%
+  \thispagestyle{empty}%
+  \bgroup
+  \addtolength{\oddsidemargin}{-0.5in}%
+  \setlength\textwidth{5.625in}%
+  \centering
+  \null\vskip1.175in%
+  {\fontfamily{fdg}\fontseries{bq}\fontsize{36\p@}{37\p@}\selectfont
+    \MakeUppercase{\@title}\par}%
+  \if\@subtitle\@empty\relax\else
+     {\null\vskip15\p@%
+     \fontfamily{fdg}\fontseries{bq}\fontsize{24\p@}{25\p@}\selectfont
+    \@subtitle\par}%
+  \fi
+  \vfill
+  {\fontfamily{\sfdefault}\fontseries{h}\fontsize{18\p@}{22\p@}\selectfont
+    by \@author\par}
+  \vfill
+  \if\@nostarchlogo\@empty\relax\else
+    \includegraphics[height=1in]{\@nostarchlogo}\par
+  \fi
+  \vfill
+  \normalfont\@nostarchlocation\par
+  \clearpage
+  \egroup}
+%    \end{macrocode}
+% 
+%  
+% \end{macro}
+%
 %
 %\subsection{Sectioning}
 %\label{sec:sectioning}
@@ -828,11 +927,14 @@
 % \end{macro}
 %
 % \begin{macro}{\part}
+% \changes{v0.5}{2008/03/16}{Changed LaTeX default} 
 %   Our parts differ from the ones in standard LaTeX since we use empy
-%   pagestyle rather than plain in part pages:
+%   pagestyle rather than plain in part pages.  The trick with
+%   |\cleardoublepage| is from~\cite{Oostrum04:Fancyhdr}
 %    \begin{macrocode}
 \renewcommand\part{%
-  \cleardoublepage
+  \clearpage
+  {\pagestyle{empty}\cleardoublepage}%
   \everypar{}%
   \markboth{}{}%
   \def\nostarch@chapart{}%
@@ -843,6 +945,7 @@
 % \end{macro}
 % 
 % \begin{macro}{\@part}
+% \changes{v0.5}{2008/03/16}{Changed LaTeX default} 
 %   This code is used when we have a numbered part.
 %    \begin{macrocode}
 \def\@part[#1]#2{%
@@ -868,6 +971,7 @@
 % \end{macro}
 %
 % \begin{macro}{\@spart}
+% \changes{v0.5}{2008/03/16}{Changed LaTeX default} 
 %   This is used for starred parts (probably not something we are
 %   going to encounter\dots)
 %    \begin{macrocode}
@@ -881,6 +985,7 @@
 % \end{macro}
 %
 % \begin{macro}{\@endpart}
+% \changes{v0.5}{2008/03/16}{Changed LaTeX default} 
 %   When part is finished, we change the settings of the first paragraph:
 %    \begin{macrocode}
 \def\@endpart{%
@@ -898,7 +1003,8 @@
 % starred:
 %    \begin{macrocode}
 \def\chapter{%
-  \cleardoublepage
+  \clearpage
+  {\pagestyle{empty}\cleardoublepage}%
   \everypar{}%
   \thispagestyle{empty}%
   \global\@topnum\z@
