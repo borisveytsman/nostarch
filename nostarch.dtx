@@ -258,7 +258,9 @@
 % and rather sets up the typographic style for arbitrary contents.
 % For this purpose the environment |copyrigthtpage| is used.  So just
 % put the information provided by the publisher between
-% |\begin{copyrightpage}| and |\end{copyrightpage}|.
+% |\begin{copyrightpage}| and |\end{copyrightpage}|.  Use
+% |\textbf{\sffamily title}| for the title of the book on the
+% copyright line.
 %
 % \DescribeMacro{cipblock}
 % One of important parts of the copyright page is \emph{CIP block.}
@@ -266,8 +268,13 @@
 % Publication, by the way).  Again, the contents of this field will be
 % provied by the publishers;  you just need to put them inside
 % |cipblock| environment, i.e. between |\begin{cipblock}| and
-% |\end{cipblock}|. 
+% |\end{cipblock}|.  To make your life easier, this block is typeset
+% verbatim, so line ends and spaces are typeset as is.
 %
+%
+% \DescribeMacro{dedicationpage}
+% Dedications, if any, are included in the special dedication page,
+% for which a special environment |dedicationpage| is provided.  
 %
 % \DescribeMacro{\brieftableofcontents}
 % \DescribeMacro{\tableofcontents}
@@ -868,15 +875,45 @@
     by \@author\par}
   \vfill
   \if\@nostarchlogo\@empty\relax\else
-    \includegraphics[height=1in]{\@nostarchlogo}\par
+    \includegraphics[height=1.08in]{\@nostarchlogo}\par
   \fi
   \vfill
   \normalfont\@nostarchlocation\par
   \clearpage
   \egroup}
 %    \end{macrocode}
-% 
-%  
+% \end{macro}
+%
+% \begin{macro}{copyrightpage}
+% \changes{v0.5}{2008/03/19}{Introduced the macro} 
+%   This is the page copyright data:
+%    \begin{macrocode}
+\newenvironment{copyrightpage}{%
+  \clearpage
+  \bgroup
+  \thispagestyle{empty}%
+  \addtolength{\oddsidemargin}{-1in}%
+  \addtolength{\evensidemargin}{-1in}%
+  \setlength\textwidth{5.625in}%
+  \setlength{\parindent}{\z@}%
+  \setlength{\parskip}{8\p@}%
+  \normalfont\fontsize{8\p@}{10\p@}\selectfont}{%
+  \clearpage\egroup}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{cipblock}
+% \changes{v0.5}{2008/03/19}{Introduced the macro} 
+%   CIP block is supposed to be in typewriter font.  So we use
+%   verbatim:
+%    \begin{macrocode}
+\newenvironment{cipblock}{%
+  \leavevmode\par\normalfont\fontsize{8\p@}{10\p@}\selectfont
+  \textit{Library of Congress Cataloging-in-Publication Data}\par%
+  \ttfamily\@vobeyspaces\obeylines
+  \parindent\z@\parfillskip\@flushglue\parskip\z@skip}{\par\vskip8pt\relax}
+%    \end{macrocode}
+%   
 % \end{macro}
 %
 %
