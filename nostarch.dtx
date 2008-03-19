@@ -204,16 +204,14 @@
 % typeset the stuff.
 %
 % \DescribeMacro{\title} 
-% There are four declarations defined by |nostarch.cls|: |\title|,
+% There are five declarations defined by |nostarch.cls|: |\title|,
+% |\subtitle|, 
 % |\author|, |\nostarchlogo| and |\nostarchlocation|.  The macro
 % |\title|, like the standard \LaTeX{} |\title|, takes either one or
 % two arguments.  The mandatory argument sets the title of the book.
 % If the optional argument is present, it sets the ``short title'',
 % used, for example, in the half title page.  For example, you can say
-% either:
-% \begin{verbatim}
-% \title{The Life of Pantagruel}
-% \end{verbatim}
+% either |\title|\texttt{\{The life of Pantagruel\}}
 % or
 % \begin{verbatim}
 % \title[The Life of Pantagruel]{The Horrible and Terrifying Deeds and
@@ -221,18 +219,17 @@
 % the Great Giant Gargantua}
 % \end{verbatim}
 % 
+% \DescribeMacro{\subtitle}
+% The macro |\subtitle| takes one argument and sets up the subtitle of
+% your book, for example |\subtitle|\texttt{\{A Guide For
+% Perplexed\}}. 
+%
 % \DescribeMacro{\author}
 % The command |\author| has just one argument, which is the list of
 % authors, separated by commas and (for the last author) the word
 % ``and''.  Do not use the command |\and| defined in the standard
-% \LaTeX.  For example, say
-% \begin{verbatim}
-% \author{Hans Bethe}
-% \end{verbatim}
-% or
-% \begin{verbatim}
-% \author{Ralph Alpher, Hans Bethe and George Gamow}
-% \end{verbatim}
+% \LaTeX.  For example,
+% |\author|\texttt{\{Ralph Alpher, Hans Bethe and George Gamow\}}.
 % 
 % \DescribeMacro{\nostarchlogo} 
 % Due to copyright reasons the logo of \emph{No Starch Press} is not
@@ -240,22 +237,74 @@
 % file from the publishers and put in the directory where \LaTeX{} can
 % find it (for example, the directory with the other sources of your
 % book).  The command |\nostarchlogo| has one argument: the name of
-% the file, for example
-% \begin{verbatim}
-% \nostarchlogo{biglogo.pdf}
-% \end{verbatim}
+% the file, for example, |\nostarchlogo{biglogo.pdf}|.
 % The file will be automatically scaled to the proper size.
 %
 % \DescribeMacro{\nostarchlocation}
 % \emph{No Starch Press} books are usually published in San
 % Francisco.  If you need to change this setting, use
-% |\nostarchlocation| declaration, for example
+% |\nostarchlocation| declaration, for example,
+% |\nostarchlocation|\texttt{\{San Francisco;  London; Tokyo\}}.
+% 
+%
+% Now let us discuss directives.
+%
+% \DescribeMacro{\makehalftitle}
+% The command |\makehalftitlepage| creates \emph{half title page.}
+% This is normally the first page of the book.
+%
+% \DescribeMacro{\maketitle}
+% The command |\maketitle| creates \emph{title page.}  It uses logo
+% and full title of the book.
+%
+% \DescribeMacro{copyrightpage} 
+% The copyright page is the \emph{verso} of the title page.  It has
+% information about copyright, edition history, the credits of the
+% people who helped you to make the book, CIP information, etc.  The
+% exact contents of the copyright page differ from book to book.
+% Therefore the class does not try to create this page automatically,
+% and rather sets up the typographic style for arbitrary contents.
+% For this purpose the environment |copyrigthtpage| is used.  So just
+% put the information provided by the publisher between
+% |\begin{copyrightpage}| and |\end{copyrightpage}|.
+%
+% \DescribeMacro{cipblock}
+% One of important parts of the copyright page is \emph{CIP block.}
+% It contains catalogue data for your book (CIP means Cataloguing in
+% Publication, by the way).  Again, the contents of this field will be
+% provied by the publishers;  you just need to put them inside
+% |cipblock| environment, i.e. between |\begin{cipblock}| and
+% |\end{cipblock}|. 
+%
+%
+% \DescribeMacro{\brieftableofcontents}
+% \DescribeMacro{\tableofcontents}
+% The standard \LaTeX{} provides just one table of contents.  This
+% class uses two tables:  brief contents and contents in detail.  They
+% are correspondingly typeset by the commands |\brieftableofcontents|
+% and |\tableofcontents|. 
+% 
+%
+% Forewords and similar front matter materials are unnumbered
+% chapters.  As discussed in Section~\ref{sec:guide:sections}, in our
+% class chapters have two mandatory arguments:  the title and ``circle
+% art''.  For front matter entries the circle art is absent.  Thus the
+% second mandatory argument must be empty:
 % \begin{verbatim}
-% \nostarchlocation{San Francisco;  London; Tokyo}
+% \chapter*{Foreword by R.E.~Viewer}{}
 % \end{verbatim}
 % 
 %
-%\subsection{Chapters and Sections}
+%\subsection{Main Matter}
+%\label{sec:guide:mainmatter}
+%
+% \DescribeMacro{\mainmatter}
+% The command |\mainmatter| finishes the front matter and starts the
+% main matter of the book.  The main matter is divided into chapters,
+% sections, subsections, etc.  They are discussed below.
+%
+%
+%\subsection{Parts, Chapters and Sections}
 %\label{sec:guide:sections}
 %
 % \DescribeMacro{\section}
@@ -298,17 +347,16 @@
 % simplest way to do this is the combination
 % |\par\noindent\normalfont| in a strategic place.
 %
-% You can have special chapters that do not have artwork and large
-% font for the first paragraph.  To achieve this just leave the last
+% You can have special chapters that do not have artwork.  To achieve
+% this just leave the last 
 % argument to |\chapter| empty:
-% \begin{verbatim}
-% \chapter{Foreword}{}
-% \end{verbatim}
+% |\chapter{Foreword}{}|
 % or
-% \begin{verbatim}
-% \chapter*{Foreword}{}
-% \end{verbatim}
+% |\chapter*{Foreword}{}|.
 %
+% \DescribeMacro{\part}
+% Sometimes larger books are separated into parts.  The command
+% |\part|\marg{Title} is used to typeset paerts.
 %
 %\subsection{Environments}
 %\label{sec:guide:lists}
