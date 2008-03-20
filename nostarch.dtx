@@ -290,7 +290,7 @@
 % art''.  For front matter entries the circle art is absent.  Thus the
 % second mandatory argument must be empty:
 % \begin{verbatim}
-% \chapter*{Foreword by R. E.~Viewer}{}
+% \chapter*[Foreword by R. E.~Viewer]{Foreword}{}
 % \end{verbatim}
 % 
 %
@@ -855,18 +855,20 @@
 % Now the main title page:
 %    \begin{macrocode}
 \def\maketitle{%
+  \bgroup
   \clearpage
   {\pagestyle{empty}\cleardoublepage}%
   \thispagestyle{empty}%
-  \bgroup
-  \addtolength{\oddsidemargin}{-0.5in}%
-  \setlength\textwidth{5.625in}%
+  \list{}{\leftmargin-1in\rightmargin\z@\labelwidth\z@%
+    \labelsep\z@\listparindent\z@\parsep\z@\itemsep\z@%
+    \topsep\z@\partopsep\z@}%
+  \item\relax
   \centering
   \null\vskip1.175in%
   {\fontfamily{fdg}\fontseries{bq}\fontsize{36\p@}{37\p@}\selectfont
     \MakeUppercase{\@title}\par}%
   \if\@subtitle\@empty\relax\else
-     {\null\vskip15\p@%
+     {\null\vskip25\p@%
      \fontfamily{fdg}\fontseries{bq}\fontsize{24\p@}{25\p@}\selectfont
     \@subtitle\par}%
   \fi
@@ -879,8 +881,9 @@
   \fi
   \vfill
   \normalfont\@nostarchlocation\par
-  \clearpage
-  \egroup}
+  \endlist
+  \egroup
+  \clearpage}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -891,14 +894,15 @@
 \newenvironment{copyrightpage}{%
   \clearpage
   \bgroup
+  \list{}{\leftmargin-1in\rightmargin\z@\labelwidth\z@%
+    \labelsep\z@\listparindent\z@\parsep8\p@\itemsep\z@%
+    \topsep\z@\partopsep\z@}%
+  \item\relax  
   \thispagestyle{empty}%
-  \addtolength{\oddsidemargin}{-1in}%
-  \addtolength{\evensidemargin}{-1in}%
-  \setlength\textwidth{5.625in}%
-  \setlength{\parindent}{\z@}%
-  \setlength{\parskip}{8\p@}%
   \normalfont\fontsize{8\p@}{10\p@}\selectfont}{%
-  \clearpage\egroup}
+  \endlist
+  \egroup
+  \clearpage}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -912,10 +916,175 @@
   \textit{Library of Congress Cataloging-in-Publication Data}\par%
   \ttfamily\@vobeyspaces\obeylines
   \parindent\z@\parfillskip\@flushglue\parskip\z@skip}{\par\vskip8pt\relax}
+%    \end{macrocode}   
+% \end{macro}
+%
+%
+% \begin{macro}{dedicationpage}
+% \changes{v0.5}{2008/03/19}{Introduced the macro} 
+%   Dedication is centered:
+%    \begin{macrocode}
+\newenvironment{dedicationpage}{%
+  \clearpage
+  {\pagestyle{empty}\cleardoublepage}%
+  \thispagestyle{empty}%
+  \null\vskip1.175in%
+  \centering\normalfont}{\clearpage}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%\subsection{Tables of Contents}
+%\label{sec:toc}
+%
+% Standard \LaTeX{} has just one table of contents.  We have two.  The
+% table of brief contents will have the extension |tbc|, while the
+% standard table of contents will have the standard extension |toc|. 
+%
+% \begin{macro}{\briefcontentsname}
+%   We want to define |\briefcontentsname| at begin of the
+%   document---just in case 
+%    \begin{macrocode}
+\AtBeginDocument{\gdef\briefcontentsname{Brief Contents}}
 %    \end{macrocode}
 %   
 % \end{macro}
 %
+% \begin{macro}{\contentsname}
+%   Same with |\contentsname|
+%    \begin{macrocode}
+\AtBeginDocument{\gdef\contentsname{Contents in Detail}}
+%    \end{macrocode}
+%   
+% \end{macro}
+%
+%
+% \begin{macro}{\brieftableofcontents}
+% \changes{v0.5}{2008/03/19}{Introduced macro} 
+%   This is the new macro:
+%    \begin{macrocode}
+\newcommand\brieftableofcontents{%
+  \clearpage
+  {\pagestyle{empty}\cleardoublepage}%
+  \bgroup
+  \thispagestyle{empty}%
+  \markboth{}{\briefcontentsname}%
+  \null\vskip1.175in%
+  \list{}{\leftmargin-1in\rightmargin\z@\labelwidth\z@%
+    \labelsep\z@\listparindent\z@\parsep\z@\itemsep\z@%
+    \topsep\z@\partopsep\z@}%
+  \item\relax  
+    {\centering
+      \fontfamily{fdg}\fontseries{bq}\fontsize{16\p@}{18\p@}\selectfont
+      \MakeUppercase{\briefcontentsname}\par}\vskip16pt%
+  \@starttoc{tbc}%
+  \egroup}
+%    \end{macrocode}
+%   
+% \end{macro}
+% \begin{macro}{\tableofcontents}
+% \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
+%   This is the new macro:
+%    \begin{macrocode}
+\renewcommand\tableofcontents{%
+  \clearpage
+  {\pagestyle{empty}\cleardoublepage}%
+  \bgroup
+  \thispagestyle{empty}%
+  \markboth{}{\contentsname}%
+  \null\vskip1.175in%
+  \list{}{\leftmargin-1in\rightmargin\z@\labelwidth\z@%
+    \labelsep\z@\listparindent\z@\parsep\z@\itemsep\z@%
+    \topsep\z@\partopsep\z@}%
+  \item\relax  
+    {\centering
+      \fontfamily{fdg}\fontseries{bq}\fontsize{16\p@}{18\p@}\selectfont
+      \MakeUppercase{\contentsname}\par}\vskip18pt%
+  \@starttoc{toc}%
+  \egroup}
+%    \end{macrocode}
+%   
+% \end{macro}
+%
+% \begin{macro}{\l@part}
+% \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
+%   This is how we typeset parts in the table of contents
+%    \begin{macrocode}
+\renewcommand*\l@part[2]{%
+  \ifnum \c@tocdepth >-2\relax
+    \addpenalty{-\@highpenalty}%
+    \addvspace{28\p@}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      {\leavevmode
+       \fontfamily{\sfdefault}\fontseries{b}\fontsize{12\p@}{14\p@}\selectfont
+       #1}\par
+       \nobreak
+         \global\@nobreaktrue
+         \everypar{\global\@nobreakfalse\everypar{}}%
+    \endgroup
+  \fi}
+%    \end{macrocode}   
+% \end{macro}
+% \begin{macro}{\l@chapter}
+% \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
+%   This is how we typeset chapters in the table of contents
+%    \begin{macrocode}
+\renewcommand*\l@chapter[2]{%
+  \ifnum \c@tocdepth >\m@ne
+    \addpenalty{-\@highpenalty}%
+    \vskip 20\p@
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode 
+      \fontfamily{\sfdefault}\fontseries{b}\fontsize{10\p@}{12\p@}\selectfont
+      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+      \vskip4\p@\penalty\@highpenalty
+    \endgroup
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\l@section}
+% \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
+%   This is how we typeset sections in the table of contents
+%    \begin{macrocode}
+\renewcommand{\l@section}[2]{\@dottedtocline{1}{\z@}{0.25in}{%
+\fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#1}{%
+\fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#2}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\l@subsection}
+% \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
+%   This is how we typeset subsections in the table of contents
+%    \begin{macrocode}
+\renewcommand{\l@subsection}[2]{\@dottedtocline{2}{0.5in}{0.75in}{%
+\fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#1}{%
+\fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#2}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+%\subsection{Main Matter}
+%\label{sec:mainmatter}
+%
+% \begin{macro}{\mainmatter}
+% \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
+%   We redefine |\mainmatter| to take care of that blank verso
+%   page\dots
+%    \begin{macrocode}
+\renewcommand\mainmatter{%
+  \clearpage
+  {\thispagestyle{empty}\cleardoublepage}%
+  \@mainmattertrue
+  \pagenumbering{arabic}}
+%    \end{macrocode}
+%   
+% \end{macro}
 %
 %\subsection{Sectioning}
 %\label{sec:sectioning}
@@ -988,9 +1157,12 @@
 \def\@part[#1]#2{%
     \ifnum \c@secnumdepth >-2\relax
       \refstepcounter{part}%
-      \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+      \addcontentsline{toc}{part}{\MakeUppercase{\partname} 
+        \thepart\protect\linebreak\MakeUppercase{#1}}%
+      \addcontentsline{tbc}{part}{\thepart\protect\break#1}%
     \else
-      \addcontentsline{toc}{part}{#1}%
+      \addcontentsline{toc}{part}{\MakeUppercase{#1}}%
+      \addcontentsline{tbc}{part}{\MakeUppercase{#1}}%
     \fi
     {\centering
      \interlinepenalty \@M
@@ -1013,7 +1185,8 @@
 %   going to encounter\dots)
 %    \begin{macrocode}
 \def\@spart#1{%
-  \addcontentsline{toc}{part}{#1}%
+  \addcontentsline{toc}{part}{\MakeUppercase{#1}}%
+  \addcontentsline{tbc}{part}{#1}%
     {\centering
       \fontfamily{fdg}\fontsize{16pt}{16pt}\fontseries{bq}\selectfont
      \MakeUppercase{#1}\par}%
@@ -1047,9 +1220,17 @@
   \global\@topnum\z@
   \@afterindentfalse
   \@ifnextchar*{%
-    \nostarch@chapter@starredtrue}{\nostarch@chapter@starredfalse}%
-  \@chapter}%
+    \nostarch@chapter@starredtrue\@schapter}{%
+      \nostarch@chapter@starredfalse\@chapter}}
 %    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@schapter}
+%   This just gobbles star in starred chapters:
+%    \begin{macrocode}
+\def\@schapter#1{\@chapter}
+%    \end{macrocode}
+%   
 % \end{macro}
 %
 % \begin{macro}{\@chapter}
@@ -1076,19 +1257,25 @@
 % Now check whether we need to typeset the chapter number
 %    \begin{macrocode}
     \ifnostarch@chapter@starred
-    \addcontentsline{toc}{chapter}{\chaptershorttitle}%
-    \markboth{}{\chaptershorttitle}%
+      \addcontentsline{toc}{chapter}{\MakeUppercase{\chaptershorttitle}}%
+      \addcontentsline{tbc}{chapter}{\chaptershorttitle}%
+      \markboth{}{\chaptershorttitle}%
     \else
        \ifnum \c@secnumdepth > \m@ne
           \refstepcounter{chapter}%
           \markboth{\@chapapp~\thechapter}{\chaptershorttitle}%
           \typeout{\@chapapp\space\thechapter.}%
-           \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}#1}%
+           \addcontentsline{toc}{chapter}{\thechapter%
+           \protect\break\MakeUppercase{\chaptershorttitle}}%
+           \addcontentsline{tbc}{chapter}{\protect\numberline{\thechapter}%
+           \chaptershorttitle}%
             {\fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
               \selectfont
               \thechapter\par\nobreak\vskip27pt}%
           \else
-             \addcontentsline{toc}{chapter}{\chaptershorttitle}%
+             \addcontentsline{toc}{chapter}{%
+               \MakeUppercase{\chaptershorttitle}}%
+             \addcontentsline{tbc}{chapter}{\chaptershorttitle}%
              \markboth{}{\chaptershorttitle}%
           \fi
      \fi 
