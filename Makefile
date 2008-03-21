@@ -34,6 +34,7 @@ all:  ${PDF}
 	pdflatex $<
 	- bibtex $*
 	pdflatex $<
+	pdflatex $<
 	while ( grep -q '^LaTeX Warning: Label(s) may have changed' $*.log) \
 	do pdflatex $<; done
 
@@ -44,9 +45,9 @@ all:  ${PDF}
 
 clean:
 	$(RM)  $(PACKAGE).cls *.log *.aux \
-	*.glo *.idx *.toc \
+	*.glo *.idx *.toc *.tbc \
 	*.ilg *.ind *.out *.lof \
-	*.lot *.bbl *.blg *.gls \
+	*.lot *.bbl *.blg *.gls *.sty \
 	*.dvi *.ps *.thm *.tgz *.zip
 
 distclean: clean

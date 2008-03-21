@@ -2,9 +2,10 @@
 \usepackage{lipsum}
 \hyphenation{ve-sti-bu-lum sene-c-tus rut-rum con-sec-te-tu-er
   elei-fend no-num-my li-be-ro}
-
-%\usepackage[bookmarks=false]{hyperref}
+\usepackage{natbib}
+\usepackage{nshyper}
 \begin{document}
+
 
 \frontmatter
 
@@ -107,7 +108,7 @@ Or was I a worm---too low crawling for death?\\
 
 \tableofcontents
 
-\chapter*[Foreword by R.~E.~Viewer]{Foreword}{}
+\chapter*[Foreword by R.~E.~Viewer]{Foreword}
 
 \lipsum[48-60]
 
@@ -126,7 +127,9 @@ December 2007
 \lipsum[77-78]
 
 \chapter[Morbi ac orci]{Morbi ac orci et nisl hendrerit
-  mollis}{\circleartfile{1eurogr}} 
+  mollis}
+
+\chapterartfile{1eurogr}
 
 
 Fusce adipiscing justo nec ante. Nullam in enim.  Pellentesque felis
@@ -168,7 +171,9 @@ Pellentesque cursus luctus mauris\footnote{\lipsum[3]}.
 \lipsum[36-38]
 
 
-\chapter{Proin vel urna}{\circleartfile{100euroit}}
+\chapter{Proin vel urna}
+
+\chapterartfile{100euroit}
 
 Aenean imperdiet\footnote{Quisque aliquam ipsum sed turpis}.
 Vestibulum ante ipsum pri\-m\-is in faucibus orci luctus et ultrices
@@ -322,7 +327,9 @@ consectetuer. Aenean pulvinar erat vitae mi.
 \part{Curabitur vitae}
 
 \chapter[Curabitur vitae lectus]{Curabitur vitae lectus sit amet
-  turpis pretium condimentum}{\circleartfile{100euroie}}
+  turpis pretium condimentum}
+
+\chapterart{\includegraphics[width=1.264in]{100euroie}}
 
 
 
@@ -332,5 +339,11 @@ consectetuer. Aenean pulvinar erat vitae mi.
   ac dictum nibh enim eu orci}
 
 \lipsum[94-98]
+
+\backmatter
+
+\nocite{*}
+\bibliographystyle{plainnat}
+\bibliography{tex}
 
 \end{document}

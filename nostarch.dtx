@@ -79,6 +79,7 @@
 %
 % \changes{v0.1}{2008/02/27}{First fully functional version} 
 % \changes{v0.5}{2008/03/19}{Documentation update} 
+% \changes{v0.6}{2008/03/21}{Documentation update} 
 %
 %
 %\section{Introduction}
@@ -138,6 +139,30 @@
 % These packages are called internally by |nostarch.cls|;  you do not
 % need to explicitly call them from your document.
 %
+%
+%\subsection{Use of \progname{hyperref} Package}
+%\label{sec:guide:hyperref}
+%
+% The books typeset by \emph{No Starch Press} can be sold either as
+% traditional printed and bound hard copies, or as PDF files.  If you,
+% the author, envisage the second possibility, you may want additional
+% possibilites provided by \progname{hyperref}
+% package~\cite{Rahtz06:Hyperref}, like ``clickable'' entries in the
+% table of context and index, etc.  The provided package |nshyper.sty|
+% adds the functionality of \progname{hyperref} to the class.  This
+% package is highly recommended for the books that are going to be
+% distributed in an electronic form.
+%
+% To use the package, just add the line |\uspackage{nshyper}| to your
+% preamble.  This package should be loaded last since it redefines
+% internals of many other packages.  Note that a direct call of
+% \progname{hyperref} by |\usepackage{hyperref}| will not work since
+% \progname{nshyper} patches hyperref to work with our class.
+% 
+%
+% 
+%
+%
 %\subsection{Invocation}
 %\label{sec:invocation}
 %
@@ -176,11 +201,11 @@
 %\subsection{Front Matter}
 %\label{sec:guide:frontmatter}
 %
-% \DescribeMacro{\mainmatter}
+% \DescribeMacro{\frontmatter}
 % A book can be divided into three parts:  front matter, main matter
-% and back matter.  Main matter starts with the command
-% |\mainmatter|.  Normally this is the first command in the class.
-% Main matter contains half page, title page, copyright page, brief
+% and back matter.  Front matter starts with the command
+% |\frontmatter|.  Normally this is the first command in the class.
+% Front matter contains half page, title page, copyright page, brief
 % contents, detailed contents, foreword(s) and other stuff which is
 % traditionally typeset on roman-numbered pages.  The commands in main
 % matter can be divides into \emph{declarations} and
@@ -269,14 +294,13 @@
 % 
 %
 % Forewords and similar front matter materials are unnumbered
-% chapters.  As discussed in Section~\ref{sec:guide:sections}, in our
-% class chapters have two mandatory arguments:  the title and ``circle
-% art''.  For front matter entries the circle art is absent.  Thus the
-% second mandatory argument must be empty:
-% \begin{verbatim}
-% \chapter*[Foreword by R. E.~Viewer]{Foreword}{}
-% \end{verbatim}
+% chapters: |\chapter*[Foreword by R. E.~Viewer]{Foreword}|.
 % 
+%
+% Front matter with its formal parts like copyright page, CIP
+% information, etc., can be daunting, especially for novice authors.
+% Feel free to use the sample enclosed and ask the publisher for
+% advice. 
 %
 %\subsection{Main Matter}
 %\label{sec:guide:mainmatter}
@@ -290,36 +314,44 @@
 %\subsection{Parts, Chapters and Sections}
 %\label{sec:guide:sections}
 %
+% \DescribeMacro{\chapter}
 % \DescribeMacro{\section}
 % \DescribeMacro{\subsection}
 % \DescribeMacro{\subsubsection}
 % \emph{No Starch Press} books have chapters, sections, subsections and
 % subsubsections.  The chapters are usually numbered, but sections ande
-% below are not.  The commands for sections are the same as in the
-% standard \LaTeX: |\section|\oarg{short title}\marg{long title}, for
-% example
+% below are not.  The commands for them are the same as in the
+% standard \LaTeX: |\chapter|\oarg{short title}\marg{long title},
+% |\section|\oarg{short title}\marg{long title}, etc. For
+% example:
 % \begin{verbatim}
 % \section[Building Lego Fire Track]{How To Build A Lego Fire Track 
 %    And Why It Is Fun}
 % \end{verbatim}
-%  
-% \DescribeMacro{\chapter}
-% The command for chapter is, however, different from the standard
-% \LaTeX:  it has two mandatory arguments and may have one optional
-% argument: |\chapter|\oarg{short title}\marg{long
-% title}\marg{artwork}.  The reason is, \emph{No Starch Press} books
-% use  ``circular art'' for chapter openings.  The second mandatory
-% argument specifies this art.  In the simplest case it is an external
-% graphics file, for example:
+% The ``starred'' forms |\chapter*|, |\section*| etc. are used when
+% the corresponding division has no number (like unnumbered chapters in
+% the front matter).  Since our sections, subsections and
+% subsusbsections are unnumbered anyway, this form has meaning only
+% for chapters (but can be used for other divisions as well).
+%
+% \DescribeMacro{\chapterart}
+% \DescribeMacro{\chapterartfile}
+% \emph{No Starch Press} books use  ``circular art'' for chapter
+% openings (except for unnumbered chapters in the front matter).  The
+% command |\chapterart| should be issued immediately 
+% after |\chapter| command and before the first paragraph.  Its
+% argument is the artwork used for the current chapter:
+% |\chapterart|\marg{\LaTeX{} commands}.  In the
+% simplest case it is just inclusion of an external graphics file, for
+% example: 
 % \begin{verbatim}
-% \chapter[Building Lego Fire Track]{How To Build A Lego Fire Track 
-%    And Why It Is Fun}{\includegraphics[width=1.264in]{firetrack.jpg}}
+% \chapterart{\includegraphics[width=1.264in]{firetrack.jpg}}
 % \end{verbatim}
-% \DescribeMacro{\circleartfile}
 % Actually, this simplest case is so ubiquitous, that there is a
-% special command |\circleartfile|\marg{filename} for it, for example
+% special command |\chapterartfile|\marg{filename} for it, so the
+% previous example can be simplified as
 % \begin{verbatim}
-% \chapter{Building Lego Fire Track}{\circleartfile{firetrack.jpg}}
+% \chapterartfile{firetrack.jpg}
 % \end{verbatim}
 % However, you can use instead any \LaTeX{} commands  to produce
 % the artwork.  Rememer that it must be $1.264''\times1.222''$.
@@ -330,12 +362,6 @@
 % simplest way to do this is the combination
 % |\par\noindent\normalfont| in a strategic place.
 %
-% You can have special chapters that do not have artwork.  To achieve
-% this just leave the last 
-% argument to |\chapter| empty:
-% |\chapter{Foreword}{}|
-% or
-% |\chapter*{Foreword}{}|.
 %
 % \DescribeMacro{\part}
 % Sometimes larger books are separated into parts.  The command
@@ -468,7 +494,8 @@
 \ProvidesFile{nostarch.dtx}
 %</gobble>
 %<class>\ProvidesClass{nostarch}
-[2008/03/19 v0.5 Typesetting books for No Starch Press]
+%<nshyper>\ProvidesPackage{nshyper}
+[2008/03/21 v0.6 Typesetting books for No Starch Press]
 %    \end{macrocode}
 %
 % And the driver code:
@@ -560,7 +587,16 @@
 \RaggedRight
 %    \end{macrocode}
 % 
-% 
+%
+% \begin{macro}{\@nshyperpreamble}
+%   This is the preamble to bibliography and index commands used when
+%   \progname{nshyper} is loaded.  Normally it is empty. 
+%    \begin{macrocode}
+\def\@nshyperpreamble{}
+%    \end{macrocode}
+%   
+% \end{macro}
+%
 %
 %\subsection{Fonts}
 %\label{sec:fonts}
@@ -1118,8 +1154,24 @@
   \@mainmattertrue
   \pagenumbering{arabic}}
 %    \end{macrocode}
-%   
 % \end{macro}
+%
+%
+%\subsection{Back Matter}
+%\label{sec:backmatter}
+%
+% \begin{macro}{\backmatter}
+% \changes{v0.6}{2008/03/21}{Changed LaTeX default} 
+%   We redefine |\backmatter| to take care of that blank verso
+%   page\dots
+%    \begin{macrocode}
+\renewcommand\backmatter{%
+  \clearpage
+  {\thispagestyle{empty}\cleardoublepage}%
+  \@mainmatterfalse}
+%    \end{macrocode}
+% \end{macro}
+%
 %
 %\subsection{Sectioning}
 %\label{sec:sectioning}
@@ -1143,29 +1195,33 @@
 % problem, however: we \emph{cannot} use |\secdef| because we have
 % three arguments, not two.
 %
-% \begin{macro}{\ifnostarch@chapter@starred}
-% We introduce a switch to check whether we are at a starred chapter:
-%    \begin{macrocode}
-\newif\ifnostarch@chapter@starred
-\nostarch@chapter@starredfalse
-%    \end{macrocode}
-% \end{macro}
 %
-% \begin{macro}{\ifnostarch@firstpara}
-%   And another macro to get special typesetting for the first
+% \begin{macro}{\if@firstpara}
+%   We intorduece a macro to get special typesetting for the first
 %   paragraph after a part or a chapter begins:
 %    \begin{macrocode}
-\newif\ifnostarch@firstpara
-\nostarch@firstparafalse
+\newif\if@firstpara
+\@firstparafalse
 %    \end{macrocode}   
 % \end{macro}
 %
-% \begin{macro}{\nostarch@chapart}
+% \begin{macro}{\@chapterart}
 %   We also keep track of the current artwork for chapter start:
 %    \begin{macrocode}
-\def\nostarch@chapart{}
+\def\@chapterart{}
 %    \end{macrocode}
 % \end{macro}
+%
+% \begin{macro}{\secdef}
+% \changes{v0.6}{2008/03/21}{Changed LaTeX default} 
+%   The standard \LaTeX{} secdef assumes that starred commands have no
+%   optional argument.  This is not right for us:
+%    \begin{macrocode}
+\def\secdef#1#2{\@ifstar{\@dblarg{#2}}{\@dblarg{#1}}}
+%    \end{macrocode}
+%   
+% \end{macro}
+%
 %
 % \begin{macro}{\part}
 % \changes{v0.5}{2008/03/16}{Changed LaTeX default} 
@@ -1178,7 +1234,7 @@
   {\pagestyle{empty}\cleardoublepage}%
   \everypar{}%
   \markboth{}{}%
-  \def\nostarch@chapart{}%
+  \def\@chapterart{}%
   \thispagestyle{empty}%
   \null\vskip1.175in%
   \secdef\@part\@spart}
@@ -1219,12 +1275,12 @@
 %   This is used for starred parts (probably not something we are
 %   going to encounter\dots)
 %    \begin{macrocode}
-\def\@spart#1{%
+\def\@spart[#1]#2{%
   \addcontentsline{toc}{part}{\MakeUppercase{#1}}%
   \addcontentsline{tbc}{bpart}{\MakeUppercase{#1}}%
     {\centering
       \fontfamily{\dgdefault}\fontsize{16pt}{16pt}\fontseries{br}\selectfont
-     \MakeUppercase{#1}\par}%
+     \MakeUppercase{#2}\par}%
     \@endpart}
 %    \end{macrocode}
 % \end{macro}
@@ -1236,13 +1292,14 @@
 \def\@endpart{%
   \@afterindentfalse
   \vskip25\p@%
-   \nostarch@firstparatrue
+   \@firstparatrue
    \@afterheading}    
 %    \end{macrocode}
 %   
 % \end{macro}
 %
 % \begin{macro}{\chapter}
+% \changes{v0.6}{2008/03/21}{Reverted to standard interface} 
 % First, we suppress floats, set up empty page style and delete
 % indentation after the chapter.  Then we check whether the chapter is
 % starred:
@@ -1254,72 +1311,59 @@
   \thispagestyle{empty}%
   \global\@topnum\z@
   \@afterindentfalse
-  \@ifnextchar*{%
-    \nostarch@chapter@starredtrue\@schapter}{%
-      \nostarch@chapter@starredfalse\@chapter}}
+  \gdef\@chapterart{}%
+  \secdef\@chapter\@schapter}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\@chapter}
+% \changes{v0.2}{2008/03/04}{Moved up} 
+% \changes{v0.6}{2008/03/21}{Reverted to standard interface} 
+%   The actual work is done by |\@chapter| macro.
+%    \begin{macrocode}
+\def\@chapter[#1]#2{%
+  \vspace*{0.622in}
+  {\centering
+    \ifnum \c@secnumdepth > \m@ne
+      \refstepcounter{chapter}%
+      \markboth{\@chapapp~\thechapter}{#1}%
+      \typeout{\@chapapp\space\thechapter.}%
+      \addcontentsline{toc}{chapter}{\thechapter%
+        \protect\linebreak\penalty\@highpenalty
+        \MakeUppercase{#1}}%
+      \addcontentsline{tbc}{bchapter}{%
+        \chaptername~\thechapter:~#1}%
+      {\fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
+        \selectfont
+        \thechapter\par\nobreak\vskip27pt}%
+    \else
+       \addcontentsline{toc}{chapter}{%
+         \MakeUppercase{#1}}%
+       \addcontentsline{tbc}{bchapter}{#1}%
+       \markboth{#1}{#1}%
+    \fi
+    {\fontfamily{\dgdefault}\fontseries{br}\fontsize{16pt}{20pt}\selectfont
+      \MakeUppercase{#2}\par}}\nobreak\vskip25pt\relax%
+   \@firstparatrue
+   \@afterheading}%
 %    \end{macrocode}
 % \end{macro}
 %
 % \begin{macro}{\@schapter}
-%   This just gobbles star in starred chapters:
+% \changes{v0.6}{2008/03/21}{Reverted to standard interface} 
+%   This is used when we have a starred chapter:
 %    \begin{macrocode}
-\def\@schapter#1{\@chapter}
-%    \end{macrocode}
-%   
-% \end{macro}
-%
-% \begin{macro}{\@chapter}
-%   Now we check whether there is an optional argument:
-%    \begin{macrocode}
-\def\@chapter{%
-  \@ifnextchar[{\@@chapter}{\@@chapter[]}}%
-%    \end{macrocode}
-% \end{macro}
-%
-%
-% \begin{macro}{\@@chapter}
-% \changes{v0.2}{2008/03/04}{Moved up} 
-%   The actual work is done by |\@@chapter| macro.
-%    \begin{macrocode}
-\def\@@chapter[#1]#2#3{%
+\def\@schapter[#1]#2{%
   \vspace*{0.622in}
-  \def\chaptershorttitle{#1}%
-  \ifx\chaptershorttitle\@empty
-     \def\chaptershorttitle{#2}\fi
-   \def\nostarch@chapart{#3}%
   {\centering
-%    \end{macrocode}
-% Now check whether we need to typeset the chapter number
-%    \begin{macrocode}
-    \ifnostarch@chapter@starred
-      \addcontentsline{toc}{chapter}{\MakeUppercase{\chaptershorttitle}}%
-      \addcontentsline{tbc}{bchapter}{\chaptershorttitle}%
-      \markboth{\chaptershorttitle}{\chaptershorttitle}%
-    \else
-       \ifnum \c@secnumdepth > \m@ne
-          \refstepcounter{chapter}%
-          \markboth{\@chapapp~\thechapter}{\chaptershorttitle}%
-          \typeout{\@chapapp\space\thechapter.}%
-           \addcontentsline{toc}{chapter}{\thechapter%
-           \protect\linebreak\penalty\@highpenalty
-           \MakeUppercase{\chaptershorttitle}}%
-           \addcontentsline{tbc}{bchapter}{%
-             \chaptername~\thechapter:~\chaptershorttitle}%
-            {\fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
-              \selectfont
-              \thechapter\par\nobreak\vskip27pt}%
-          \else
-             \addcontentsline{toc}{chapter}{%
-               \MakeUppercase{\chaptershorttitle}}%
-             \addcontentsline{tbc}{bchapter}{\chaptershorttitle}%
-             \markboth{\chaptershorttitle}{\chaptershorttitle}%
-          \fi
-     \fi 
-     {\fontfamily{\dgdefault}\fontseries{br}\fontsize{16pt}{20pt}\selectfont
-       \MakeUppercase{#2}\par}}%
-   \ifx\nostarch@chapart\@empty\nobreak\vskip25pt%
-   \else\nobreak\vskip74pt\fi
-   \nostarch@firstparatrue
+    \addcontentsline{toc}{chapter}{%
+      \MakeUppercase{#1}}%
+    \addcontentsline{tbc}{bchapter}{#1}%
+    \markboth{#1}{#1}%
+    {\fontfamily{\dgdefault}\fontseries{br}\fontsize{16pt}{20pt}\selectfont
+      \MakeUppercase{#2}\par}}\nobreak\vskip25pt\relax%
+   \@firstparatrue
    \@afterheading}%
 %    \end{macrocode}
 % \end{macro}
@@ -1343,14 +1387,15 @@
       \clubpenalty \@clubpenalty
       \everypar{}%
     \fi
-      \ifnostarch@firstpara
+      \if@firstpara
 %    \end{macrocode}
 % The first paragraph has a special font and artwork in the beginning:
 %    \begin{macrocode}
-       \ifx\nostarch@chapart\@empty\relax
+       \ifx\@chapterart\@empty%
        \else
+         \rule{\z@}{49\p@}%
          \makebox[0pt][r]{\raisebox{-0.5in}[0pt][0pt]{%
-            \nostarch@chapart\hspace{0.21in}}}%
+            \@chapterart\hspace{0.21in}}}%
         \parshape=5 
         0.963in 3.622in 
         0.913in 3.672in 
@@ -1364,14 +1409,24 @@
         \parskip=0pt
         \normalsize\selectfont
        \fi
-    \nostarch@firstparafalse}}%
+    \@firstparafalse}}%
 %    \end{macrocode}
 % \end{macro}
 %
-% \begin{macro}{\circleartfile}
-%   This is just a shorthand for |\includegraphics| for chapter beginning:
+% \begin{macro}{\chapterart}
+% \changes{v0.6}{2008/03/21}{Introduced the command} 
+%   This creates the chapterart:
 %    \begin{macrocode}
-\newcommand{\circleartfile}[1]{\includegraphics[width=1.264in]{#1}}%
+\newcommand{\chapterart}[1]{\gdef\@chapterart{#1}}%
+%    \end{macrocode}   
+% \end{macro}
+%
+% \begin{macro}{\chapterartfile}
+% \changes{v0.6}{2008/03/21}{Introduced the command} 
+%   The simplified version of |\chapterart|:
+%    \begin{macrocode}
+\newcommand{\chapterartfile}[1]{\gdef\@chapterart{%
+    \includegraphics[width=1.264in]{#1}}}%
 %    \end{macrocode}
 %   
 % \end{macro}
@@ -1533,7 +1588,8 @@
       \expandafter
       \list
         \csname label\@enumctr\endcsname
-        {\usecounter\@enumctr\def\makelabel##1{##1}}}%
+        {\usecounter\@enumctr\def\makelabel##1{##1}}%
+        \fi}
 %    \end{macrocode}
 %   
 % \end{macro}
@@ -1765,9 +1821,57 @@
 %   The skip before code is too large for us
 %    \begin{macrocode}
 \FV@AddToHook\FV@ListParameterHook{\vspace{-6pt}}
+%    \end{macrocode}   
+% \end{macro}
+%
+%
+%\subsection{Bibliography}
+%\label{sec:biblio}
+%
+% \begin{macro}{\bibsection}
+%   We actually use chapter for bibliographic sections, but here we
+%   try to be nice to \progname{natbib}:
+%    \begin{macrocode}
+\AtBeginDocument{
+  \def\bibsection{%
+    \@nshyperpreamble
+    \vspace*{0.622in}%
+    \addcontentsline{toc}{chapter}{\MakeUppercase{\bibname}}%
+    \addcontentsline{tbc}{bchapter}{\bibname}%
+    {\centering
+      {\fontfamily{\dgdefault}\fontseries{br}\fontsize{16pt}{20pt}\selectfont
+        \MakeUppercase{\bibname}\par}}\nobreak\vskip25pt\relax%
+    \@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}}}%
 %    \end{macrocode}
 %   
 % \end{macro}
+%
+%
+% \begin{macro}{\bibliography}
+%   We want bibliography to be in the table of contents:
+%    \begin{macrocode}
+\renewenvironment{thebibliography}[1]{%
+  \bibsection
+      \list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \@openbib@code
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+%    \end{macrocode}
+%   
+% \end{macro}
+%
 %
 %\subsection{End of Class}
 %\label{end}
@@ -1776,6 +1880,59 @@
 %    \begin{macrocode}
 %</class>
 %    \end{macrocode}
+%
+%\subsection{Dealing with \progname{hyperref}}
+%\label{sec:hyperref}
+%
+% First, we load \progname{hyperref} with right options.  I do not
+% know why bookmarks do not work, but this is important to switch off:
+%    \begin{macrocode}
+%<*nshyper>
+\RequirePackage[breaklinks,colorlinks,linkcolor=black,
+  citecolor=black,pagecolor=black,urlcolor=black,
+  bookmarks=false]{hyperref}
+%    \end{macrocode}
+% 
+% \progname{hyperref} expects the starred parts and chapters to have
+% only one argument---but we have two!
+%    \begin{macrocode}
+\AtBeginDocument{%
+  \def\@schapter[#1]#2{%
+    \H@old@schapter[#1]{#2}%
+    \begingroup
+    \let\@mkboth\@gobbletwo
+    \Hy@GlobalStepCount\Hy@linkcounter
+    \xdef\@currentHref{\Hy@chapapp*.\the\Hy@linkcounter}%
+    \Hy@raisedlink{\hyper@anchorstart{\@currentHref}\hyper@anchorend}%
+    \endgroup}%
+  \def\@spart[#1]#2{%
+    \H@old@spart[#1]{#2}%
+    \Hy@GlobalStepCount\Hy@linkcounter
+    \xdef\@currentHref{part*.\the\Hy@linkcounter}%
+    \Hy@raisedlink{\hyper@anchorstart{\@currentHref}\hyper@anchorend}}}%
+%    \end{macrocode}
+% We change the preamble for bibliography and index:
+%    \begin{macrocode}
+\def\@nshyperpreamble{%
+  \begingroup
+  \let\@mkboth\@gobbletwo
+  \Hy@GlobalStepCount\Hy@linkcounter
+  \xdef\@currentHref{\Hy@chapapp*.\the\Hy@linkcounter}%
+  \Hy@raisedlink{\hyper@anchorstart{\@currentHref}\hyper@anchorend}%
+  \endgroup}
+%    \end{macrocode}
+% 
+% We can add information about the file to the pdf metadata as well:
+%    \begin{macrocode}
+\let\ns@old@maketitle\maketitle
+\def\maketitle{%
+  \hypersetup{pdfauthor=\@author, pdftitle=\@title}%
+  \ns@old@maketitle}
+%</nshyper> 
+%    \end{macrocode}
+% 
+% 
+%
 %
 %\Finale
 %\clearpage
