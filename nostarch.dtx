@@ -843,6 +843,7 @@
   \clearpage
   {\pagestyle{empty}\cleardoublepage}%
   \thispagestyle{empty}%
+  \bgroup
   \list{}{\leftmargin-1in\rightmargin\z@\labelwidth\z@%
     \labelsep\z@\listparindent\z@\parsep\z@\itemsep\z@%
     \topsep\z@\partopsep\z@}%
@@ -867,7 +868,7 @@
   \normalfont\@nostarchlocation\par
   \endlist
   \egroup
-  \clearpage}
+  \clearpage\egroup}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -962,6 +963,7 @@
       \fontfamily{\dgdefault}\fontseries{bs}\fontsize{16\p@}{18\p@}\selectfont
       \MakeUppercase{\briefcontentsname}\par}\vskip16pt%
   \@starttoc{tbc}%
+  \endlist
   \egroup}
 %    \end{macrocode}
 %   
@@ -985,6 +987,7 @@
       \fontfamily{\dgdefault}\fontseries{bs}\fontsize{16\p@}{18\p@}\selectfont
       \MakeUppercase{\contentsname}\par}\vskip18pt%
   \@starttoc{toc}%
+  \endlist
   \egroup}
 %    \end{macrocode}
 %   
