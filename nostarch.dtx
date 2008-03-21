@@ -849,15 +849,15 @@
   \item\relax
   \centering
   \null\vskip1.175in%
-  {\fontfamily{\dgdefault}\fontseries{br}\fontsize{36\p@}{37\p@}\selectfont
+  {\fontfamily{\dgdefault}\fontseries{bk}\fontsize{36\p@}{37\p@}\selectfont
     \MakeUppercase{\@title}\par}%
   \if\@subtitle\@empty\relax\else
      {\null\vskip25\p@%
-     \fontfamily{\dgdefault}\fontseries{br}\fontsize{24\p@}{25\p@}\selectfont
+     \fontfamily{\dgdefault}\fontseries{bq}\fontsize{24\p@}{25\p@}\selectfont
     \@subtitle\par}%
   \fi
   \vfill
-  {\fontfamily{\sfdefault}\fontseries{h}\fontsize{18\p@}{22\p@}\selectfont
+  {\fontfamily{\sfdefault}\fontseries{hq}\fontsize{18\p@}{22\p@}\selectfont
     by \@author\par}
   \vfill
   \if\@nostarchlogo\@empty\relax\else
@@ -959,7 +959,7 @@
     \topsep\z@\partopsep\z@}%
   \item\relax  
     {\centering
-      \fontfamily{\dgdefault}\fontseries{br}\fontsize{16\p@}{18\p@}\selectfont
+      \fontfamily{\dgdefault}\fontseries{bs}\fontsize{16\p@}{18\p@}\selectfont
       \MakeUppercase{\briefcontentsname}\par}\vskip16pt%
   \@starttoc{tbc}%
   \egroup}
@@ -982,7 +982,7 @@
     \topsep\z@\partopsep\z@}%
   \item\relax  
     {\centering
-      \fontfamily{\dgdefault}\fontseries{br}\fontsize{16\p@}{18\p@}\selectfont
+      \fontfamily{\dgdefault}\fontseries{bs}\fontsize{16\p@}{18\p@}\selectfont
       \MakeUppercase{\contentsname}\par}\vskip18pt%
   \@starttoc{toc}%
   \egroup}
@@ -1002,7 +1002,7 @@
       \parindent \z@ \rightskip \@pnumwidth
       \parfillskip -\@pnumwidth
       {\leavevmode
-       \fontfamily{\sfdefault}\fontseries{b}\fontsize{12\p@}{14\p@}\selectfont
+       \fontfamily{\sfdefault}\fontseries{bq}\fontsize{12\p@}{14\p@}\selectfont
        #1}\par
        \nobreak
          \global\@nobreaktrue
@@ -1024,7 +1024,7 @@
       \parindent \z@ \rightskip \@pnumwidth
       \parfillskip -\@pnumwidth
       \leavevmode 
-      \fontfamily{\sfdefault}\fontseries{b}\fontsize{10\p@}{12\p@}\selectfont
+      \fontfamily{\sfdefault}\fontseries{bq}\fontsize{10\p@}{12\p@}\selectfont
       #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
       \vskip4\p@\penalty\@highpenalty
     \endgroup
@@ -1046,9 +1046,57 @@
 % \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
 %   This is how we typeset subsections in the table of contents
 %    \begin{macrocode}
-\renewcommand{\l@subsection}[2]{\@dottedtocline{2}{0.5in}{0.75in}{%
+\renewcommand{\l@subsection}[2]{\@dottedtocline{2}{0.5in}{0.25in}{%
 \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#1}{%
 \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#2}}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\l@bpart}
+% \changes{v0.5}{2008/03/21}{Introduced macro} 
+%   There is a special formatting of parts in the brief table of
+%   contents: 
+%    \begin{macrocode}
+\newcommand*\l@bpart[2]{%
+  \ifnum \c@tocdepth >-2\relax
+    \addpenalty{-\@highpenalty}%
+    \addvspace{14\p@}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      {\leavevmode
+       \fontfamily{\sfdefault}\fontseries{h}\fontsize{9\p@}{14\p@}\selectfont
+       #1}\par\vskip7\p@%
+       \nobreak
+         \global\@nobreaktrue
+         \everypar{\global\@nobreakfalse\everypar{}}%
+    \endgroup
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\l@bchapter}
+% \changes{v0.5}{2008/03/21}{Introduced macro} 
+%   There is a special formatting of chapters in the brief table of
+%   contents: 
+%    \begin{macrocode}
+\newcommand*\l@bchapter[2]{%
+  \ifnum \c@tocdepth >\m@ne
+    \addpenalty{-\@highpenalty}%
+    \setlength\@tempdima{1.5em}%
+    \begingroup
+      \parindent \z@ \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode 
+      \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{14\p@}\selectfont
+      #1\nobreak\leaders\hbox{$\m@th
+        \mkern \@dotsep mu\hbox{.}\mkern \@dotsep
+        mu$}\hfill
+      \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+      \penalty\@highpenalty
+    \endgroup
+  \fi}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1142,11 +1190,11 @@
     \ifnum \c@secnumdepth >-2\relax
       \refstepcounter{part}%
       \addcontentsline{toc}{part}{\MakeUppercase{\partname} 
-        \thepart\protect\linebreak\MakeUppercase{#1}}%
-      \addcontentsline{tbc}{part}{\thepart\protect\break#1}%
+        \thepart\protect\linebreak\penalty\@highpenalty\MakeUppercase{#1}}%
+      \addcontentsline{tbc}{bpart}{\MakeUppercase{\partname~\thepart: #1}}%
     \else
       \addcontentsline{toc}{part}{\MakeUppercase{#1}}%
-      \addcontentsline{tbc}{part}{\MakeUppercase{#1}}%
+      \addcontentsline{tbc}{bpart}{\MakeUppercase{#1}}%
     \fi
     {\centering
      \interlinepenalty \@M
@@ -1170,7 +1218,7 @@
 %    \begin{macrocode}
 \def\@spart#1{%
   \addcontentsline{toc}{part}{\MakeUppercase{#1}}%
-  \addcontentsline{tbc}{part}{#1}%
+  \addcontentsline{tbc}{bpart}{\MakeUppercase{#1}}%
     {\centering
       \fontfamily{\dgdefault}\fontsize{16pt}{16pt}\fontseries{br}\selectfont
      \MakeUppercase{#1}\par}%
@@ -1242,25 +1290,26 @@
 %    \begin{macrocode}
     \ifnostarch@chapter@starred
       \addcontentsline{toc}{chapter}{\MakeUppercase{\chaptershorttitle}}%
-      \addcontentsline{tbc}{chapter}{\chaptershorttitle}%
-      \markboth{}{\chaptershorttitle}%
+      \addcontentsline{tbc}{bchapter}{\chaptershorttitle}%
+      \markboth{\chaptershorttitle}{\chaptershorttitle}%
     \else
        \ifnum \c@secnumdepth > \m@ne
           \refstepcounter{chapter}%
           \markboth{\@chapapp~\thechapter}{\chaptershorttitle}%
           \typeout{\@chapapp\space\thechapter.}%
            \addcontentsline{toc}{chapter}{\thechapter%
-           \protect\break\MakeUppercase{\chaptershorttitle}}%
-           \addcontentsline{tbc}{chapter}{\protect\numberline{\thechapter}%
-           \chaptershorttitle}%
+           \protect\linebreak\penalty\@highpenalty
+           \MakeUppercase{\chaptershorttitle}}%
+           \addcontentsline{tbc}{bchapter}{%
+             \chaptername~\thechapter:~\chaptershorttitle}%
             {\fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
               \selectfont
               \thechapter\par\nobreak\vskip27pt}%
           \else
              \addcontentsline{toc}{chapter}{%
                \MakeUppercase{\chaptershorttitle}}%
-             \addcontentsline{tbc}{chapter}{\chaptershorttitle}%
-             \markboth{}{\chaptershorttitle}%
+             \addcontentsline{tbc}{bchapter}{\chaptershorttitle}%
+             \markboth{\chaptershorttitle}{\chaptershorttitle}%
           \fi
      \fi 
      {\fontfamily{\dgdefault}\fontseries{br}\fontsize{16pt}{20pt}\selectfont
