@@ -138,22 +138,6 @@
 % These packages are called internally by |nostarch.cls|;  you do not
 % need to explicitly call them from your document.
 %
-%
-%
-%\subsection{Use of \progname{hyperref} Package}
-%\label{sec:hyperref}
-%
-% The books typeset by \emph{No Starch Press} can be sold either as
-% traditional printed and bound hard copies, or as PDF files.  If you,
-% the author, envisage the second possibility, you may want additional
-% possibilites provided by \progname{hyperref}
-% package~\cite{Rahtz06:Hyperref}, like ``clickable'' entries in the
-% table of context and index, etc.  Since this package must be loaded
-% last, |nostarch.cls| does not load it itself.  However, if the
-% package is loaded, |nostarch.cls| automatically sets the options
-% suitable for the books.  This package is highly recommended for the
-% books that are going to be distributed in an electronic form.
-%
 %\subsection{Invocation}
 %\label{sec:invocation}
 %
@@ -865,11 +849,11 @@
   \item\relax
   \centering
   \null\vskip1.175in%
-  {\fontfamily{fdg}\fontseries{bq}\fontsize{36\p@}{37\p@}\selectfont
+  {\fontfamily{\dgdefault}\fontseries{br}\fontsize{36\p@}{37\p@}\selectfont
     \MakeUppercase{\@title}\par}%
   \if\@subtitle\@empty\relax\else
      {\null\vskip25\p@%
-     \fontfamily{fdg}\fontseries{bq}\fontsize{24\p@}{25\p@}\selectfont
+     \fontfamily{\dgdefault}\fontseries{br}\fontsize{24\p@}{25\p@}\selectfont
     \@subtitle\par}%
   \fi
   \vfill
@@ -975,7 +959,7 @@
     \topsep\z@\partopsep\z@}%
   \item\relax  
     {\centering
-      \fontfamily{fdg}\fontseries{bq}\fontsize{16\p@}{18\p@}\selectfont
+      \fontfamily{\dgdefault}\fontseries{br}\fontsize{16\p@}{18\p@}\selectfont
       \MakeUppercase{\briefcontentsname}\par}\vskip16pt%
   \@starttoc{tbc}%
   \egroup}
@@ -998,7 +982,7 @@
     \topsep\z@\partopsep\z@}%
   \item\relax  
     {\centering
-      \fontfamily{fdg}\fontseries{bq}\fontsize{16\p@}{18\p@}\selectfont
+      \fontfamily{\dgdefault}\fontseries{br}\fontsize{16\p@}{18\p@}\selectfont
       \MakeUppercase{\contentsname}\par}\vskip18pt%
   \@starttoc{toc}%
   \egroup}
@@ -1173,7 +1157,7 @@
        \par
        \vskip 8\p@
      \fi
-     \fontfamily{fdg}\fontsize{16pt}{16pt}\fontseries{bq}\selectfont
+     \fontfamily{\dgdefault}\fontsize{16pt}{16pt}\fontseries{br}\selectfont
      \MakeUppercase{#2}\par}%
     \@endpart}
 %    \end{macrocode}
@@ -1188,7 +1172,7 @@
   \addcontentsline{toc}{part}{\MakeUppercase{#1}}%
   \addcontentsline{tbc}{part}{#1}%
     {\centering
-      \fontfamily{fdg}\fontsize{16pt}{16pt}\fontseries{bq}\selectfont
+      \fontfamily{\dgdefault}\fontsize{16pt}{16pt}\fontseries{br}\selectfont
      \MakeUppercase{#1}\par}%
     \@endpart}
 %    \end{macrocode}
@@ -1279,7 +1263,7 @@
              \markboth{}{\chaptershorttitle}%
           \fi
      \fi 
-     {\fontfamily{\dgdefault}\fontseries{bq}\fontsize{16pt}{20pt}\selectfont
+     {\fontfamily{\dgdefault}\fontseries{br}\fontsize{16pt}{20pt}\selectfont
        \MakeUppercase{#2}\par}}%
    \ifx\nostarch@chapart\@empty\nobreak\vskip25pt%
    \else\nobreak\vskip74pt\fi
