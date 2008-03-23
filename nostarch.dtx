@@ -504,7 +504,9 @@
 %</gobble>
 %<class>\ProvidesClass{nostarch}
 %<nshyper>\ProvidesPackage{nshyper}
-[2008/03/21 v0.6 Typesetting books for No Starch Press]
+%<*!ist>
+[2008/03/23 v0.6 Typesetting books for No Starch Press]
+%</!ist>
 %    \end{macrocode}
 %
 % And the driver code:
@@ -525,7 +527,7 @@
 %</gobble> 
 %<*class>
 %    \end{macrocode}
-%
+%   
 %
 %\subsection{Options}
 %\label{sec:options}
@@ -585,7 +587,8 @@
 %
 % A bunch of packages:
 %    \begin{macrocode}
-\RequirePackage{ifpdf, fancyhdr, fancyvrb, booktabs, graphicx, caption}
+\RequirePackage{ifpdf, fancyhdr, fancyvrb, booktabs, graphicx,
+  caption, makeidx}
 %    \end{macrocode}
 %
 % We do not want the option |document| with \progname{ragged2e}: this
@@ -597,11 +600,11 @@
 %    \end{macrocode}
 % 
 %
-% \begin{macro}{\@nshyperpreamble}
+% \begin{macro}{\@nschapterpreamble}
 %   This is the preamble to bibliography and index commands used when
 %   \progname{nshyper} is loaded.  Normally it is empty. 
 %    \begin{macrocode}
-\def\@nshyperpreamble{}
+\def\@nschapterpreamble{}
 %    \end{macrocode}
 %   
 % \end{macro}
@@ -1102,7 +1105,7 @@
 %
 %
 % \begin{macro}{\l@bpart}
-% \changes{v0.5}{2008/03/21}{Introduced macro} 
+% \changes{v0.6}{2008/03/21}{Introduced macro} 
 %   There is a special formatting of parts in the brief table of
 %   contents: 
 %    \begin{macrocode}
@@ -1125,7 +1128,7 @@
 % \end{macro}
 %
 % \begin{macro}{\l@bchapter}
-% \changes{v0.5}{2008/03/21}{Introduced macro} 
+% \changes{v0.6}{2008/03/21}{Introduced macro} 
 %   There is a special formatting of chapters in the brief table of
 %   contents: 
 %    \begin{macrocode}
@@ -1153,7 +1156,7 @@
 %\label{sec:mainmatter}
 %
 % \begin{macro}{\mainmatter}
-% \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
+% \changes{v0.6}{2008/03/19}{Changed LaTeX default} 
 %   We redefine |\mainmatter| to take care of that blank verso
 %   page\dots
 %    \begin{macrocode}
@@ -1838,12 +1841,20 @@
 %\label{sec:biblio}
 %
 % \begin{macro}{\bibsection}
+% \changes{v0.6}{2008/03/22}{Introduced the macro} 
 %   We actually use chapter for bibliographic sections, but here we
 %   try to be nice to \progname{natbib}:
 %    \begin{macrocode}
 \AtBeginDocument{
   \def\bibsection{%
-    \@nshyperpreamble
+    \clearpage
+    {\pagestyle{empty}\cleardoublepage}%
+    \everypar{}%
+    \thispagestyle{empty}%
+    \global\@topnum\z@
+    \@afterindentfalse
+    \gdef\@chapterart{}%
+    \@nschapterpreamble
     \vspace*{0.622in}%
     \addcontentsline{toc}{chapter}{\MakeUppercase{\bibname}}%
     \addcontentsline{tbc}{bchapter}{\bibname}%
@@ -1856,7 +1867,8 @@
 % \end{macro}
 %
 %
-% \begin{macro}{\bibliography}
+% \begin{macro}{thebibliography}
+% \changes{v0.6}{2008/03/22}{Introduced the macro} 
 %   We want bibliography to be in the table of contents:
 %    \begin{macrocode}
 \renewenvironment{thebibliography}[1]{%
@@ -1881,6 +1893,171 @@
 %   
 % \end{macro}
 %
+%\subsection{Index}
+%\label{sec:index}
+% \begin{macro}{theindex}
+% \changes{v0.6}{2008/03/22}{Introduced the macro} 
+%  We want our index to be in the table of contents too:
+%    \begin{macrocode}
+\renewenvironment{theindex}{%
+  \clearpage
+  {\pagestyle{empty}\cleardoublepage}%
+  \everypar{}%
+  \thispagestyle{empty}%
+  \global\@topnum\z@
+  \@afterindentfalse
+  \gdef\@chapterart{}%
+  \if@twocolumn
+  \@restonecolfalse
+  \else
+  \@restonecoltrue
+  \fi
+  \twocolumn[%
+  \@nschapterpreamble
+  \vspace*{0.622in}%
+  \addcontentsline{toc}{chapter}{\MakeUppercase{\indexname}}%
+  \addcontentsline{tbc}{bchapter}{\indexname}%
+  {\centering
+    {\fontfamily{\dgdefault}\fontseries{br}%
+      \fontsize{16pt}{20pt}\selectfont
+      \MakeUppercase{\indexname}\par}}%
+  \nobreak\vskip25pt\relax]%
+  \@mkboth{\MakeUppercase\indexname}%
+  {\MakeUppercase\indexname}%
+  \parindent\z@
+  \parskip\z@ \@plus .3\p@\relax
+  \columnseprule \z@
+  \columnsep 0.25in%
+  \let\item\@idxitem}
+{\if@restonecol\onecolumn\else\clearpage\fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@idxitem}
+% \changes{v0.6}{2008/03/22}{Changed default} 
+%   This is how we format level 1 index entries:
+%    \begin{macrocode}
+\renewcommand\@idxitem{%
+  \par\hangindent0.45in\normalfont\fontsize{9.5\p@}{11.5\p@}\selectfont
+  \raggedright}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\subitem}
+% \changes{v0.6}{2008/03/22}{Changed default} 
+%   Level 2 entries:
+%    \begin{macrocode}
+\renewcommand\subitem{\@idxitem \hspace*{0.15in}}
+%    \end{macrocode}   
+% \end{macro}
+% \begin{macro}{\subsubitem}
+% \changes{v0.6}{2008/03/22}{Changed default} 
+%   Level 3 entries:
+%    \begin{macrocode}
+\renewcommand\subsubitem{\@idxitem \hspace*{0.3in}}
+%    \end{macrocode}   
+% \end{macro}
+% \begin{macro}{\indexspace}
+% \changes{v0.6}{2008/03/22}{Changed default} 
+%   The space between the groups
+%    \begin{macrocode}
+\renewcommand\indexspace{\par \vskip 14\p@\relax}
+%    \end{macrocode}   
+% \end{macro}
+% \begin{macro}{\indexgroup}
+% \changes{v0.6}{2008/03/22}{Introduced the macro} 
+%   When an index starts a new letter, we call this macro:
+%    \begin{macrocode}
+\newcommand\indexgroup[1]{{\fontfamily{\sfdefault}%
+    \fontseries{bc}\fontsize{11\p@}{13\p@}\selectfont#1}\par\vskip4\p@}
+%    \end{macrocode}   
+% \end{macro}
+%
+%
+%
+%\subsection{Update Page and Colophon}
+%\label{sec:update_colophon}
+%
+% \begin{macro}{\updatesname}
+% \changes{v0.6}{2008/03/22}{Introduced the macro} 
+%   Just the name for updates:
+%    \begin{macrocode}
+\def\updatesname{Updates}
+%    \end{macrocode}
+%   
+% \end{macro}
+%
+%
+% \begin{macro}{\updatespage}
+% \changes{v0.6}{2008/03/22}{Introduced the macro} 
+%   This is the command that start update page.  It looks like
+%   chapter, but it does not mark the pages or appear in the tables of
+%   contents:
+%    \begin{macrocode}
+\newcommand\updatespage{%
+  \clearpage
+  {\pagestyle{empty}\cleardoublepage}%
+  \everypar{}%
+  \thispagestyle{empty}%
+  \global\@topnum\z@
+  \gdef\@chapterart{}%
+  \vspace*{1.875in}%
+  {\centering
+    \fontfamily{\dgdefault}\fontseries{br}%
+    \fontsize{16pt}{20pt}\selectfont
+    \MakeUppercase{\updatesname}\par\nobreak\vskip40\p@}%
+  \@nobreaktrue
+  \everypar{%
+    \if@nobreak
+    \@nobreakfalse
+    \clubpenalty \@M
+    \setbox\z@\lastbox
+    \else
+    \clubpenalty \@clubpenalty
+    \everypar{}%
+    \fi}}
+%    \end{macrocode}   
+% \end{macro}
+%
+%
+% \begin{macro}{\colophonname}
+% \changes{v0.6}{2008/03/22}{Introduced the macro} 
+%   Just the name for colophon:
+%    \begin{macrocode}
+\def\colophonname{Colophon}
+%    \end{macrocode}%   
+% \end{macro}
+%
+%
+% \begin{macro}{\colophon}
+%   Colophon does not start a separate page:
+% \changes{v0.6}{2008/03/22}{Introduced the macro} 
+%    \begin{macrocode}
+\newcommand\colophon{%
+  \everypar{}%
+  \global\@topnum\z@
+  \gdef\@chapterart{}%
+  \vspace*{0.875in}%
+  {\centering
+    \fontfamily{\dgdefault}\fontseries{br}%
+    \fontsize{16pt}{20pt}\selectfont
+    \MakeUppercase{\colophonname}\par\nobreak\vskip40\p@}%
+  \@nobreaktrue
+  \everypar{%
+    \if@nobreak
+    \@nobreakfalse
+    \clubpenalty \@M
+    \setbox\z@\lastbox
+    \else
+    \clubpenalty \@clubpenalty
+    \everypar{}%
+    \fi}\par
+    The fonts used in \emph{\@title} are New Baskerville, Futura, The
+    Sans Mono Condensed and Dogma.  The book was typeset with
+    \LaTeXe{} package 
+    \texttt{nostarch} by Boris Veytsman
+    \emph{(\csname ver@nostarch.cls\endcsname).}\par} 
+%    \end{macrocode}   
+% \end{macro}
 %
 %\subsection{End of Class}
 %\label{end}
@@ -1893,12 +2070,13 @@
 %\subsection{Dealing with \progname{hyperref}}
 %\label{sec:hyperref}
 %
+% \changes{v0.6}{2008/03/22}{Introduced package \progname{nshyper}} 
 % First, we load \progname{hyperref} with right options.  I do not
 % know why bookmarks do not work, but this is important to switch off:
 %    \begin{macrocode}
 %<*nshyper>
 \RequirePackage[breaklinks,colorlinks,linkcolor=black,
-  citecolor=black,pagecolor=black,urlcolor=black,
+  citecolor=black,pagecolor=black,urlcolor=black,hyperindex,
   bookmarks=false]{hyperref}
 %    \end{macrocode}
 % 
@@ -1908,12 +2086,7 @@
 \AtBeginDocument{%
   \def\@schapter[#1]#2{%
     \H@old@schapter[#1]{#2}%
-    \begingroup
-    \let\@mkboth\@gobbletwo
-    \Hy@GlobalStepCount\Hy@linkcounter
-    \xdef\@currentHref{\Hy@chapapp*.\the\Hy@linkcounter}%
-    \Hy@raisedlink{\hyper@anchorstart{\@currentHref}\hyper@anchorend}%
-    \endgroup}%
+  \@nschapterpreamble}%
   \def\@spart[#1]#2{%
     \H@old@spart[#1]{#2}%
     \Hy@GlobalStepCount\Hy@linkcounter
@@ -1922,7 +2095,7 @@
 %    \end{macrocode}
 % We change the preamble for bibliography and index:
 %    \begin{macrocode}
-\def\@nshyperpreamble{%
+\def\@nschapterpreamble{%
   \begingroup
   \let\@mkboth\@gobbletwo
   \Hy@GlobalStepCount\Hy@linkcounter
@@ -1940,7 +2113,24 @@
 %</nshyper> 
 %    \end{macrocode}
 % 
-% 
+%
+%\subsection{\progname{MakeIndex} Style File}
+%\label{sec:makeindex}
+% \changes{v0.6}{2008/03/23}{Added \progname{MakeIndex} style} 
+%
+% These lines will produce some warnings when
+% running Makeindex as they try to cover two different
+% versions of the program:
+%    \begin{macrocode}
+%<*ist>
+lethead_prefix   "\\indexgroup{"
+lethead_suffix   "}\\nopagebreak\n"
+lethead_flag       1
+heading_prefix   "\\indexgroup{"
+heading_suffix   "}\\nopagebreak\n"
+headings_flag       1
+%</ist>
+%    \end{macrocode}
 %
 %
 %\Finale
