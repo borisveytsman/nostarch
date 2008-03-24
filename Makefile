@@ -48,7 +48,7 @@ clean:
 	$(RM)  $(PACKAGE).cls *.log *.aux \
 	*.glo *.idx *.toc *.tbc \
 	*.ilg *.ind *.out *.lof \
-	*.lot *.bbl *.blg *.gls *.sty \
+	*.lot *.bbl *.blg *.gls *.sty *.ist \
 	*.dvi *.ps *.thm *.tgz *.zip
 
 distclean: clean
