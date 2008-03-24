@@ -96,10 +96,13 @@
 % The installation of the class follows the usual
 % practice~\cite{TeXFAQ} for \LaTeX{} packages:
 % \begin{enumerate}
-% \item Run \progname{latex} on |nostarch.ins|.  This will produce the file
-% |nostarch.cls|.
-% \item Put the files |nostarch.cls| and |nostarch.bst| to
-% the places where \LaTeX{} and Bib\TeX{} can find them (see
+% \item Run \progname{latex} on |nostarch.ins|.  This will produce the
+% following files:
+% \LaTeX{} class |nostarch.cls|, \LaTeX{} style |nshyper.sty| and
+% MakeIndex style |nostarch.ist|.
+% \item Put the files |nostarch.cls|, |nshypher.sty| and
+% |nostarch.ist| to
+% the places where \LaTeX{} and MakeIndex can find them (see
 % \cite{TeXFAQ} or the documentation for your \TeX{}
 % system).\label{item:install} 
 % \item Update the database of file names.  Again, see \cite{TeXFAQ}
@@ -140,26 +143,6 @@
 % need to explicitly call them from your document.
 %
 %
-%\subsection{Use of \progname{hyperref} Package}
-%\label{sec:guide:hyperref}
-%
-% The books typeset by \emph{No Starch Press} can be sold either as
-% traditional printed and bound hard copies, or as PDF files.  If you,
-% the author, envisage the second possibility, you may want additional
-% possibilites provided by \progname{hyperref}
-% package~\cite{Rahtz06:Hyperref}, like ``clickable'' entries in the
-% table of context and index, etc.  The provided package |nshyper.sty|
-% adds the functionality of \progname{hyperref} to the class.  This
-% package is highly recommended for the books that are going to be
-% distributed in an electronic form.
-%
-% To use the package, just add the line |\uspackage{nshyper}| to your
-% preamble.  This package should be loaded last since it redefines
-% internals of many other packages.  Note that a direct call of
-% \progname{hyperref} by |\usepackage{hyperref}| will not work since
-% \progname{nshyper} patches hyperref to work with our class.
-% 
-%
 % 
 %
 %
@@ -197,6 +180,26 @@
 %   -T 7in,9.25in
 % \end{verbatim}
 % 
+%\subsection{Use of \progname{hyperref} Package}
+%\label{sec:guide:hyperref}
+%
+% The books typeset by \emph{No Starch Press} can be sold either as
+% traditional printed and bound hard copies, or as PDF files.  If you,
+% the author, envisage the second possibility, you may want additional
+% possibilites provided by \progname{hyperref}
+% package~\cite{Rahtz06:Hyperref}, like ``clickable'' entries in the
+% table of context and index, etc.  The provided package |nshyper.sty|
+% adds the functionality of \progname{hyperref} to the class.  This
+% package is highly recommended for the books that are going to be
+% distributed in an electronic form.
+%
+% To use the package, just add the line |\uspackage{nshyper}| to your
+% preamble.  This package should be loaded last since it redefines
+% internals of many other packages.  Note that a direct call of
+% \progname{hyperref} by |\usepackage{hyperref}| will not work since
+% \progname{nshyper} patches hyperref to work with our class.
+% 
+%
 %
 %\subsection{Front Matter}
 %\label{sec:guide:frontmatter}
@@ -212,6 +215,12 @@
 % \emph{directives.}  Declarations do not typeset anything.  Rather,
 % they up parameters for the typesetting.  Directives use them to
 % typeset the stuff.
+%
+%
+%\subsubsection{Front Matter Declarations}
+%\label{sec:guide:decls}
+%
+%
 %
 % \DescribeMacro{\title} 
 % There are five declarations defined by |nostarch.cls|: |\title|,
@@ -248,7 +257,11 @@
 % |\nostarchlocation|\texttt{\{San Francisco;  London; Tokyo\}}.
 % 
 %
-% Now let us discuss directives.
+%
+%\subsubsection{Front Matter Directives}
+%\label{sec:guide:directives}
+%
+%
 %
 % \DescribeMacro{\makehalftitle}
 % The command |\makehalftitle| creates \emph{half title page.}
@@ -311,7 +324,7 @@
 % sections, subsections, etc.  They are discussed below.
 %
 %
-%\subsection{Parts, Chapters and Sections}
+%\subsubsection{Parts, Chapters and Sections}
 %\label{sec:guide:sections}
 %
 % \DescribeMacro{\chapter}
@@ -367,7 +380,7 @@
 % Sometimes larger books are separated into parts.  The command
 % |\part|\marg{Title} is used to typeset parts.
 %
-%\subsection{Environments}
+%\subsubsection{Environments}
 %\label{sec:guide:lists}
 %
 %
@@ -388,7 +401,7 @@
 % ``NOTE'' on the margin.
 %
 %
-%\subsection{Tables and Figures}
+%\subsubsection{Tables and Figures}
 %\label{sec:guide:floats}
 %
 % There are several things to keep in mind when using tables and
@@ -452,7 +465,7 @@
 % 
 %
 %
-%\subsection{Code Fragments}
+%\subsubsection{Code Fragments}
 %\label{sec:guide:code}
 %
 % \DescribeMacro{Code}
@@ -478,6 +491,75 @@
 % \DescribeMacro{\backmatter}
 %  Back matter includes bibliography, index, update page, colophon and
 %  other material.  It starts with the command |\backmatter|.
+%
+%
+%
+%\subsubsection{Bibliography}
+%\label{sec:guide:bibliography}
+% 
+% \emph{No Starch Press} at present has no special style for
+% bibliography, so the authors have a relative freedom to choose one.
+% However, it would be a good idea to use the \progname{natbib}
+% package~\cite{Daly07:Natbib}.  This class should work with
+% \progname{natbib}.
+%
+% No support for per chapter bibliography lists is provided by the
+% package. 
+%
+%
+%\subsubsection{Index}
+%\label{sec:guide:index}
+%
+% The books published by \emph{No Starch Press} usually have index.
+% This package provides special style file |nostarch.ist| for index
+% formatting.
+%
+%
+% \DescribeMacro{\makeindex} 
+% \DescribeMacro{\printindex} 
+% To create index:
+% \begin{enumerate}
+%
+% \item Put in the preamble of your
+% document the command |\makeindex|. 
+% \item In the body of your document use |\index| commands as
+% described in~\cite{Lamport94}.
+% \item Put in the Back Matter the command |\printindex| at the place
+% you want the index to be printed.
+% \item After a \progname{latex} run \progname{makeindex} with the
+% style |nostarch.ist|.  In a Unix system the corresponding command is
+% \begin{verbatim}
+% makeindex -s nostarch.ist mydocument
+% \end{verbatim}
+% or, in a more verbose way
+% \begin{verbatim}
+% makeindex -s nostarch.ist -o mydocument.ind mydocument.idx
+% \end{verbatim}
+% (here we assume that your main file is |mydocument.tex|).  
+%
+% Refer to the documentation of your \TeX{} system for the way to run
+% \progname{makeindex} on your computer.
+% \end{enumerate}
+% 
+%
+%\subsubsection{Updates and Colophon}
+%\label{sec:guide:updates}
+%
+% \DescribeMacro{\updatespage}
+% \emph{No Starch Press} books usually have updates page, which lists
+% the Web address for updates, errata, etc.  The command
+% |\updatespage| starts such page.  You are free to choose any text
+% there.  Note that if you use the package
+% \progname{nshypher}~\cite{sec:guide:hyperref}, then the command
+% |\url|\marg{URL} becomes a hyperlink in the electronic edition.
+%
+%
+% \DescribeMacro{\colophon}
+% The last part of Back Matter is usually a \emph{colophon} which
+% describes how the book was printed and typeset.  The command
+% |\colophon| starts this part and prints some standard information
+% about your fonts and \LaTeX{} package.  You may want to add some
+% information after this command.
 %
 %
 % \StopEventually{%
@@ -975,10 +1057,9 @@
 % standard table of contents will have the standard extension |toc|. 
 %
 % \begin{macro}{\briefcontentsname}
-%   We want to define |\briefcontentsname| at begin of the
-%   document---just in case 
+%   The name for brief contents
 %    \begin{macrocode}
-\AtBeginDocument{\gdef\briefcontentsname{Brief Contents}}
+\def\briefcontentsname{Brief Contents}
 %    \end{macrocode}
 %   
 % \end{macro}
@@ -986,9 +1067,16 @@
 % \begin{macro}{\contentsname}
 %   Same with |\contentsname|
 %    \begin{macrocode}
-\AtBeginDocument{\gdef\contentsname{Contents in Detail}}
+\def\contentsname{Contents in Detail}%
 %    \end{macrocode}
-%   
+%  Special treatment if \progname{babel} is used:
+%    \begin{macrocode}
+\AtBeginDocument{\@ifpackageloaded{babel}{%
+  \addto\captionsenglish{%
+    \renewcommand{\contentsname}%
+    {Contents in Detail}}}{}}
+%    \end{macrocode}
+%  
 % \end{macro}
 %
 %
@@ -1209,7 +1297,7 @@
 %
 %
 % \begin{macro}{\if@firstpara}
-%   We intorduece a macro to get special typesetting for the first
+%   We introduce a macro to get special typesetting for the first
 %   paragraph after a part or a chapter begins:
 %    \begin{macrocode}
 \newif\if@firstpara
@@ -1226,7 +1314,7 @@
 %
 % \begin{macro}{\secdef}
 % \changes{v0.6}{2008/03/21}{Changed LaTeX default} 
-%   The standard \LaTeX{} secdef assumes that starred commands have no
+%   The standard \LaTeX{} |secdef| assumes that starred commands have no
 %   optional argument.  This is not right for us:
 %    \begin{macrocode}
 \def\secdef#1#2{\@ifstar{\@dblarg{#2}}{\@dblarg{#1}}}
@@ -1237,7 +1325,7 @@
 %
 % \begin{macro}{\part}
 % \changes{v0.5}{2008/03/16}{Changed LaTeX default} 
-%   Our parts differ from the ones in standard LaTeX since we use empy
+%   Our parts differ from the ones in standard LaTeX since we use empty
 %   pagestyle rather than plain in part pages.  The trick with
 %   |\cleardoublepage| is from~\cite{Oostrum04:Fancyhdr}
 %    \begin{macrocode}
@@ -1691,7 +1779,7 @@
 %
 % \begin{macro}{\footins}
 % \changes{v0.3}{2008/03/11}{Changed LaTeX defaults} 
-%   We make some space beetween footnotes:
+%   We make some space between footnotes:
 %    \begin{macrocode}
 \setlength{\skip\footins}{16\p@ \@plus 4\p@ \@minus 0\p@}
 %    \end{macrocode}
