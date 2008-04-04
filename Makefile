@@ -33,9 +33,10 @@ all:  ${PDF}
 %.pdf:  %.tex   $(PACKAGE).cls
 	pdflatex $<
 	- bibtex $*
-	pdflatex $<
 	- makeindex -s $(PACKAGE).ist -o $*.ind $*.idx
 	pdflatex $<
+	pdflatex $<
+	- makeindex -s $(PACKAGE).ist -o $*.ind $*.idx
 	while ( grep -q '^LaTeX Warning: Label(s) may have changed' $*.log) \
 	do pdflatex $<; done
 
