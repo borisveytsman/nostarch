@@ -593,7 +593,7 @@
 %<class>\ProvidesClass{nostarch}
 %<nshyper>\ProvidesPackage{nshyper}
 %<*!ist>
-[2008/04/04 v0.7 Typesetting books for No Starch Press]
+[2008/04/07 v0.8 Typesetting books for No Starch Press]
 %</!ist>
 %    \end{macrocode}
 %
@@ -1094,6 +1094,7 @@
 % \begin{macro}{\brieftableofcontents}
 % \changes{v0.5}{2008/03/19}{Introduced macro} 
 % \changes{v0.7}{2008/04/04}{Changed dimensions} 
+% \changes{v0.8}{2008/04/07}{Changed dimensions} 
 %   This is the new macro:
 %    \begin{macrocode}
 \newcommand\brieftableofcontents{%
@@ -1103,7 +1104,7 @@
   \thispagestyle{empty}%
   \markboth{}{\briefcontentsname}%
   \null\vskip0.925in%
-  \list{}{\leftmargin-0.8in\rightmargin0.2in\labelwidth\z@%
+  \list{}{\leftmargin-1.0in\rightmargin0.4in\labelwidth\z@%
     \labelsep\z@\listparindent\z@\parsep\z@\itemsep\z@%
     \topsep\z@\partopsep\z@}%
   \item\relax  
@@ -1119,6 +1120,7 @@
 % \begin{macro}{\tableofcontents}
 % \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
 % \changes{v0.7}{2008/04/04}{Changed dimensions} 
+% \changes{v0.8}{2008/04/07}{Changed dimensions} 
 %   This is the new macro:
 %    \begin{macrocode}
 \renewcommand\tableofcontents{%
@@ -1128,7 +1130,7 @@
   \thispagestyle{empty}%
   \markboth{}{\contentsname}%
   \null\vskip0.175in%
-  \list{}{\leftmargin-0.7in\rightmargin0.3in\labelwidth\z@%
+  \list{}{\leftmargin-1.0in\rightmargin0.6in\labelwidth\z@%
     \labelsep\z@\listparindent\z@\parsep\z@\itemsep\z@%
     \topsep\z@\partopsep\z@}%
   \item\relax  
@@ -1143,10 +1145,11 @@
 %
 % \begin{macro}{\@dotsep}
 % \changes{v0.7}{2008/04/04}{Changed LaTeX default} 
+% \changes{v0.8}{2008/04/07}{Tightened dots} 
 %  Standard \LaTeX{} provides 4.5 for the distance between dots.  We
 %  will make this tighter:
 %    \begin{macrocode}
-\renewcommand\@dotsep{2.5}
+\renewcommand\@dotsep{1.5}
 %    \end{macrocode}
 %  
 % \end{macro}
