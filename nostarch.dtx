@@ -20,7 +20,7 @@
 % derived file nostarch.cls
 %
 % \fi 
-% \CheckSum{0}
+% \CheckSum{1640}
 %
 %
 %% \CharacterTable
@@ -483,7 +483,7 @@
 % the books.  
 %
 % \DescribeMacro{Code}
-% For short code fragments the  \progname{fancyvrb}
+% For short unformatted code fragments the  \progname{fancyvrb}
 % package~\cite{VanZandt98:Fancyvrb} facilities are recommended.  This
 % package is automatically automatically loaded by the class.  Long code
 % fragments should be 
@@ -520,6 +520,13 @@
 % |\lstlistoflistings|). 
 % \end{enumerate}
 % 
+% To make the code typeset with |\verb| command and |verbatim|-like
+% environments visually blend with the code produced by
+% \progname{listings} package, we set |fancyvrb=true| in the class.
+% If you do not use \progname{listings} and prefer the ``old'' look
+% and feel of verbatim constructs, put |\lstset{fancyvrb=false}| in
+% the preamble of your document.
+%
 % It should be noted that the authors are recommended \emph{not} to
 % use |\texttt| or |\tt| for inline code fragments.  The proper way to
 % add inline code is |\verb| or |\lstinline| from the
@@ -2006,7 +2013,7 @@
 %    \end{macrocode}   
 % \end{macro}
 %
-% We also enable verbatim footnotes:
+% We also enable verbatim footnotes.
 %    \begin{macrocode}
 \VerbatimFootnotes
 %    \end{macrocode}
@@ -2019,6 +2026,11 @@
 % And make the code to be in typewriter font:
 %    \begin{macrocode}
 \lstset{basicstyle=\ttfamily}
+%    \end{macrocode}
+% 
+% We want verbatim code to bend with listings:
+%    \begin{macrocode}
+\lstset{fancyvrb=true}
 %    \end{macrocode}
 % 
 %
