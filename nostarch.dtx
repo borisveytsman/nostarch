@@ -81,6 +81,8 @@
 % \changes{v0.5}{2008/03/19}{Documentation update} 
 % \changes{v0.6}{2008/03/21}{Documentation update} 
 % \changes{v1.0}{2008/04/07}{First public release} 
+% \changes{v1.1}{2008/05/24}{Added interface to listings package and
+% upquote package.  Updated documentation} 
 %
 %
 %\section{Introduction}
@@ -138,13 +140,15 @@
 % \progname{futurans}~\cite{FuturansFont},
 % \progname{dogma}~\cite{DogmaFont} and
 % \progname{thsmc}~\cite{ThsmcFont}.
-% \item \progname{ifpdf} package~\cite{Oberdiek06:Ifpdf}.
-% \item \progname{fancyhdr} package~\cite{Oostrum04:Fancyhdr}.
 % \item \progname{booktabs} package~\cite{Fear05:Booktabs}.
-% \item \progname{graphics} package~\cite{Carlisle05:Graphics}.
 % \item \progname{caption} package~\cite{Sommerfeldt07:Caption}.
+% \item \progname{fancyhdr} package~\cite{Oostrum04:Fancyhdr}.
 % \item \progname{fancyvrb} package~\cite{VanZandt98:Fancyvrb}.
+% \item \progname{graphics} package~\cite{Carlisle05:Graphics}.
+% \item \progname{ifpdf} package~\cite{Oberdiek06:Ifpdf}.
+% \item \progname{listings} package~\cite{Heinz07:Listings}.
 % \item \progname{ragged2e} package~\cite{Schroeder03:Ragged2e}.
+% \item \progname{upquote} package~\cite{Covington03:Upquote}.
 % \end{enumerate}
 % These packages are called internally by |nostarch.cls|;  you do not
 % need to explicitly call them from your document.
@@ -475,9 +479,14 @@
 %\subsubsection{Code Fragments}
 %\label{sec:guide:code}
 %
+% The class provides two facilities for including code fragments in
+% the books.  
+%
 % \DescribeMacro{Code}
-% The class uses \progname{fancyvrb}
-% package~\cite{VanZandt98:Fancyvrb}.  Long code fragments should be
+% For short code fragments the  \progname{fancyvrb}
+% package~\cite{VanZandt98:Fancyvrb} facilities are recommended.  This
+% package is automatically automatically loaded by the class.  Long code
+% fragments should be 
 % separated by rules;  the class defines verbatim-like |Code|
 % environment, which does exactly this:
 % \begin{verbatim}
@@ -490,6 +499,32 @@
 % See the documentation of~\cite{VanZandt98:Fancyvrb} about many
 % features of this package.
 %
+% For longer code fragments the \progname{listings}
+% package~\cite{Heinz07:Listings} is more appropriate.  It is also
+% automatically loaded.  This package provides a number of useful
+% features, well describe in its manual.  We will briefly mention
+% several of them, which might be of interest for the authors of
+% \emph{No Starch Press}:
+% \begin{enumerate}
+% \item Automatic code formatting according to the rules of the chosen
+% program language (for example, |\lstset{language=C}| or
+% |\lstset{language=Lisp}|).
+% \item A rich set of different frames:  ruled code with
+% |frame=lines|, boxed code with |frame=single| etc.
+% \item An option to add captions to the listings (the class
+% automatically formats the captions according to the style of
+% \emph{No Starch Press}).
+% \item An option to make a listing floating.
+% \item An option to automatically number code lines.
+% \item An option to add list of listings (with the command
+% |\lstlistoflistings|). 
+% \end{enumerate}
+% 
+% It should be noted that the authors are recommended \emph{not} to
+% use |\texttt| or |\tt| for inline code fragments.  The proper way to
+% add inline code is |\verb| or |\lstinline| from the
+% \progname{listings} package.  The difference is obvious, for
+% example, in quote characters.
 %
 %
 %\subsection{Back Matter}
@@ -677,7 +712,7 @@
 % A bunch of packages:
 %    \begin{macrocode}
 \RequirePackage{ifpdf, fancyhdr, fancyvrb, booktabs, graphicx,
-  caption, makeidx}
+  listings, caption, makeidx, upquote}
 %    \end{macrocode}
 %
 % We do not want the option |document| with \progname{ragged2e}: this
@@ -764,6 +799,7 @@
 % \begin{macro}{\topmargin}
 % \changes{v0.2}{2008/03/03}{Moved down} 
 % \changes{v0.7}{2008/04/04}{Changed dimensions} 
+% \changes{v1.1}{2008/05/24}{Made shorter} 
 %   The top margin is 0.625''.  We use fake headers of 12pt:
 %    \begin{macrocode}
 \setlength\topmargin{0.625in}
@@ -776,7 +812,7 @@
 %   running head and foot. 
 %    \begin{macrocode}
 \setlength\textheight{8in}
-\addtolength{\textheight}{-0.14in}
+\addtolength{\textheight}{-0.207in}
 %    \end{macrocode}
 % Now we take care of the first line height:
 %    \begin{macrocode}
@@ -1821,18 +1857,20 @@
 %
 %
 % \begin{macro}{\@makefntext}
+% \changes{v1.1}{2008/05/24}{Added space between footnote mark and
+% footnote text} 
 %   We do not indent the footnotes:
 %    \begin{macrocode}
 \renewcommand\@makefntext[1]{%
     \parindent 0\p@%
     \RaggedRightParindent0\p@%
     \noindent
-    \@makefnmark#1}
+    \@makefnmark\space#1}
 %    \end{macrocode}
 % \end{macro}
 %
 %
-%\subsection{Tables and Figures}
+%\subsection{Tables,  Figures and Listings}
 %\label{sec:tbl_fig}
 %
 % \begin{macro}{\thefigure}
@@ -1851,9 +1889,17 @@
      {\ifnum \c@chapter>\z@ \thechapter-\fi \@arabic\c@table}
 %    \end{macrocode}
 % \end{macro}
+% \begin{macro}{\thelistings}
+%   And the same for listings:
+%    \begin{macrocode}
+\renewcommand \thelstlisting
+     {\ifnum \c@chapter>\z@ \thechapter-\fi \@arabic\c@lstlisting}
+%    \end{macrocode}
+% \end{macro}
+% 
 %
 % \begin{macro}{nostarchfigfmt}
-%   This is our captions format for figures
+%   This is our captions format for figures and listings
 % \changes{v0.3}{2008/03/11}{Added style} 
 %    \begin{macrocode}
 \DeclareCaptionFormat{nostarchfigfmt}{\fontfamily{\sfdefault}%
@@ -1872,9 +1918,11 @@
 %  
 %
 %
-% The figure and table styles:
+% The figure, listing and and table styles:
 %    \begin{macrocode}
 \captionsetup[figure]{format=nostarchfigfmt,singlelinecheck=off,
+  aboveskip=8pt,belowskip=8pt}
+\captionsetup[lstlisting]{format=nostarchfigfmt,singlelinecheck=off,
   aboveskip=8pt,belowskip=8pt}
 \captionsetup[table]{format=nostarchtabfmt,singlelinecheck=off,
   aboveskip=0pt,belowskip=4pt}
@@ -1940,7 +1988,7 @@
 %  
 %
 %
-%\subsection{Verbatim Customization}
+%\subsection{Verbatim and Listings Customization}
 %\label{sec:verbatim}
 %
 % \begin{macro}{Code}
@@ -1963,6 +2011,17 @@
 \VerbatimFootnotes
 %    \end{macrocode}
 % 
+% We set up captions with \progname{captions}:
+%    \begin{macrocode}
+\lstset{captionpos=b}
+%    \end{macrocode}
+% 
+% And make the code to be in typewriter font:
+%    \begin{macrocode}
+\lstset{basicstyle=\ttfamily}
+%    \end{macrocode}
+% 
+%
 %
 %\subsection{Bibliography}
 %\label{sec:biblio}
