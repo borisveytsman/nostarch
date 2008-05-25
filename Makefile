@@ -59,7 +59,10 @@ distclean: clean
 # Archive for the distribution. Includes typeset documentation
 #
 archive:  all clean
-	tar -czvf $(PACKAGE).tgz --exclude '*~' --exclude '*.tgz' --exclude '*.zip'  --exclude CVS .
+	tar -czvf $(PACKAGE).tgz  --exclude 'debug*' \
+	--exclude '*~' --exclude '*.tgz' --exclude '*.zip'  --exclude CVS .
+
 
 zip:  all clean
-	zip -r  $(PACKAGE).zip * -x '*~' -x '*.tgz' -x '*.zip' -x CVS -x 'CVS/*'
+	zip -r  $(PACKAGE).zip * \
+	-x 'debug*' -x '*~' -x '*.tgz' -x '*.zip' -x CVS -x 'CVS/*'
