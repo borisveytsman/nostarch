@@ -520,10 +520,9 @@
 % |\lstlistoflistings|). 
 % \end{enumerate}
 % 
-% To make the code typeset with |\verb| command and |verbatim|-like
-% environments visually blend with the code produced by
-% \progname{listings} package, you may want to  set |fancyvrb=true| in
-% the preamble of your document.
+% To make the code in |\verb| commands and |verbatim|-like
+% environments be typeset with the \progname{listings} package, you
+% may want to  set |fancyvrb=true| in the preamble of your document.
 %
 % It should be noted that the authors are recommended \emph{not} to
 % use |\texttt| or |\tt| for inline code fragments.  The proper way to
@@ -2023,7 +2022,7 @@
 % 
 % And make the code to be in typewriter font:
 %    \begin{macrocode}
-\lstset{basicstyle=\ttfamily}
+\lstset{basicstyle=\ttfamily,columns=fullflexible}
 %    \end{macrocode}
 % 
 %
