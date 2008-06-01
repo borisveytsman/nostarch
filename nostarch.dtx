@@ -633,7 +633,7 @@
 %<class>\ProvidesClass{nostarch}
 %<nshyper>\ProvidesPackage{nshyper}
 %<*!ist>
-[2008/05/24 v1.1 Typesetting books for No Starch Press]
+[2008/06/01 v1.2 Typesetting books for No Starch Press]
 %</!ist>
 %    \end{macrocode}
 %
@@ -1164,6 +1164,7 @@
 % \changes{v0.7}{2008/04/04}{Changed dimensions} 
 % \changes{v0.8}{2008/04/07}{Changed dimensions} 
 % \changes{v1.1}{2008/05/24}{Added toc name to the verso footers} 
+% \changes{v1.2}{2008/06/01}{Added toc name to the verso footers} 
 %   This is the new macro:
 %    \begin{macrocode}
 \renewcommand\tableofcontents{%
@@ -1171,7 +1172,7 @@
   {\pagestyle{empty}\cleardoublepage}%
   \bgroup
   \thispagestyle{empty}%
-  \markboth{\briefcontentsname}{\contentsname}%
+  \markboth{\contentsname}{\contentsname}%
   \null\vskip0.175in%
   \list{}{\leftmargin-1.0in\rightmargin0.6in\labelwidth\z@%
     \labelsep\z@\listparindent\z@\parsep\z@\itemsep\z@%
@@ -1252,9 +1253,10 @@
 % \begin{macro}{\l@subsection}
 % \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
 % \changes{v1.1}{2008/05/24}{Changed numwidth} 
+% \changes{v1.2}{2008/06/01}{Changed numwidth again} 
 %   This is how we typeset subsections in the table of contents
 %    \begin{macrocode}
-\renewcommand{\l@subsection}[2]{\@dottedtocline{2}{0.5in}{0.35in}{%
+\renewcommand{\l@subsection}[2]{\@dottedtocline{2}{0.5in}{0.5in}{%
 \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#1}{%
 \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#2}}
 %    \end{macrocode}
@@ -1818,13 +1820,14 @@
 %\label{sec:footnotes}
 %
 % \begin{macro}{\footnoterule}
-% \changes{v0.3}{2008/03/11}{Increased kern} 
+% \changes{v0.3}{2008/03/11}{Increased kern above the rule} 
+% \changes{v1.1}{2008/06/01}{Increased kern below the rule} 
 %   We want one inch by 0.25 footnote rule:
 %    \begin{macrocode}
 \renewcommand\footnoterule{%
   \kern6\p@
   \hrule height 0.25pt depth 0pt width 1in 
-  \kern0\p@}
+  \kern2\p@}
 %    \end{macrocode}
 % \end{macro}
 % 
