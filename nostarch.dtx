@@ -20,7 +20,7 @@
 % derived file nostarch.cls
 %
 % \fi 
-% \CheckSum{1639}
+% \CheckSum{1665}
 %
 %
 %% \CharacterTable
@@ -316,6 +316,17 @@
 % are correspondingly typeset by the commands |\brieftableofcontents|
 % and |\tableofcontents|. 
 % 
+%
+% \DescribeMacro{\sectionnumberwidth}
+% \DescribeMacro{\subsectionnumberwidth}
+% In most books by \emph{No Starch Press} sections and subsections are
+% unnumbered.  However, sometimes the books use numbered sections or
+% subsections.  In these cases you may want to adjust the widths left
+% for section and subsection numbers in the detailed table of
+% contents.  They are set by
+% |\sectionnumberwidth| and |\subsectionnumberwidth|, and can be
+% changed with the usual |\setlength| command.
+%
 %
 % Forewords and similar front matter materials are unnumbered
 % chapters: |\chapter*[Foreword by R. E.~Viewer]{Foreword}|.
@@ -633,7 +644,7 @@
 %<class>\ProvidesClass{nostarch}
 %<nshyper>\ProvidesPackage{nshyper}
 %<*!ist>
-[2008/06/01 v1.2 Typesetting books for No Starch Press]
+[2008/06/06 v1.3 Typesetting books for No Starch Press]
 %</!ist>
 %    \end{macrocode}
 %
@@ -1240,13 +1251,37 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\sectionnumberwidth}
+% \changes{v1.3}{2008/06/06}{Introduced the length} 
+%   The number width for sections.  Normally the width of |10.10\space|
+%    \begin{macrocode}
+\newlength{\sectionnumberwidth}
+\settowidth{\sectionnumberwidth}{%
+  \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont
+  10.10\space}
+%    \end{macrocode}   
+% \end{macro}
+% \begin{macro}{\subsectionnumberwidth}
+% \changes{v1.3}{2008/06/06}{Introduced the length} 
+%   The number width for subsections.  Normally the width of
+%   |10.10.10\space| 
+%    \begin{macrocode}
+\newlength{\subsectionnumberwidth}
+\settowidth{\subsectionnumberwidth}{%
+  \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont
+  10.10.10\space}
+%    \end{macrocode}   
+% \end{macro}
+%
 % \begin{macro}{\l@section}
 % \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
+% \changes{v1.3}{2008/06/06}{Made number width user settable} 
 %   This is how we typeset sections in the table of contents
 %    \begin{macrocode}
-\renewcommand{\l@section}[2]{\@dottedtocline{1}{\z@}{0.25in}{%
-\fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#1}{%
-\fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#2}}
+\renewcommand{\l@section}[2]{\@dottedtocline{1}{\z@}{%
+    \sectionnumberwidth}{%
+    \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#1}{%
+    \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#2}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1254,11 +1289,13 @@
 % \changes{v0.5}{2008/03/19}{Changed LaTeX default} 
 % \changes{v1.1}{2008/05/24}{Changed numwidth} 
 % \changes{v1.2}{2008/06/01}{Changed numwidth again} 
+% \changes{v1.3}{2008/06/06}{Made number width user settable} 
 %   This is how we typeset subsections in the table of contents
 %    \begin{macrocode}
-\renewcommand{\l@subsection}[2]{\@dottedtocline{2}{0.5in}{0.5in}{%
-\fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#1}{%
-\fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#2}}
+\renewcommand{\l@subsection}[2]{\@dottedtocline{2}{0.5in}%
+  {\subsectionnumberwidth}{%
+    \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#1}{%
+    \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#2}}
 %    \end{macrocode}
 % \end{macro}
 %
