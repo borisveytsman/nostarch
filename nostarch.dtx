@@ -20,7 +20,7 @@
 % derived file nostarch.cls
 %
 % \fi 
-% \CheckSum{1665}
+% \CheckSum{0}
 %
 %
 %% \CharacterTable
@@ -1253,23 +1253,23 @@
 %
 % \begin{macro}{\sectionnumberwidth}
 % \changes{v1.3}{2008/06/06}{Introduced the length} 
-%   The number width for sections.  Normally the width of |10.10\space|
+%   The number width for sections.  Normally the width of |99.99|
 %    \begin{macrocode}
 \newlength{\sectionnumberwidth}
 \settowidth{\sectionnumberwidth}{%
   \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont
-  10.10\space}
+  99.99}
 %    \end{macrocode}   
 % \end{macro}
 % \begin{macro}{\subsectionnumberwidth}
 % \changes{v1.3}{2008/06/06}{Introduced the length} 
 %   The number width for subsections.  Normally the width of
-%   |10.10.10\space| 
+%   |99.99.99| 
 %    \begin{macrocode}
 \newlength{\subsectionnumberwidth}
 \settowidth{\subsectionnumberwidth}{%
   \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont
-  10.10.10\space}
+  99.99.99}
 %    \end{macrocode}   
 % \end{macro}
 %
@@ -1530,33 +1530,37 @@
 % \begin{macro}{\@chapter}
 % \changes{v0.2}{2008/03/04}{Moved up} 
 % \changes{v0.6}{2008/03/21}{Reverted to standard interface} 
+% \changes{v1.3}{2008/06/06}{Corrected a stupid mistake: put
+% refstepcounter out of a group}
 %   The actual work is done by |\@chapter| macro.
 %    \begin{macrocode}
 \def\@chapter[#1]#2{%
   \vspace*{0.622in}
+  \ifnum \c@secnumdepth > \m@ne
+  \refstepcounter{chapter}%
+  \typeout{Chapter:\thechapter\space\@currentlabel}%
+  \markboth{\@chapapp~\thechapter}{#1}%
+  \typeout{\@chapapp\space\thechapter.}%
+  \addcontentsline{toc}{chapter}{\thechapter%
+    \protect\linebreak\penalty\@highpenalty
+    \MakeUppercase{#1}}%
+  \addcontentsline{tbc}{bchapter}{%
+    \chaptername~\thechapter:~#1}%
   {\centering
-    \ifnum \c@secnumdepth > \m@ne
-      \refstepcounter{chapter}%
-      \markboth{\@chapapp~\thechapter}{#1}%
-      \typeout{\@chapapp\space\thechapter.}%
-      \addcontentsline{toc}{chapter}{\thechapter%
-        \protect\linebreak\penalty\@highpenalty
-        \MakeUppercase{#1}}%
-      \addcontentsline{tbc}{bchapter}{%
-        \chaptername~\thechapter:~#1}%
-      {\fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
-        \selectfont
-        \thechapter\par\nobreak\vskip27pt}%
-    \else
-       \addcontentsline{toc}{chapter}{%
-         \MakeUppercase{#1}}%
-       \addcontentsline{tbc}{bchapter}{#1}%
-       \markboth{#1}{#1}%
-    \fi
-    {\fontfamily{\dgdefault}\fontseries{br}\fontsize{16pt}{20pt}\selectfont
-      \MakeUppercase{#2}\par}}\nobreak\vskip25pt\relax%
-   \@firstparatrue
-   \@afterheading}%
+    \fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
+    \selectfont
+    \thechapter\par\nobreak\vskip27pt}%
+  \else
+  \addcontentsline{toc}{chapter}{%
+    \MakeUppercase{#1}}%
+  \addcontentsline{tbc}{bchapter}{#1}%
+  \markboth{#1}{#1}%
+  \fi
+  {\centering
+    \fontfamily{\dgdefault}\fontseries{br}\fontsize{16pt}{20pt}\selectfont
+    \MakeUppercase{#2}\par}\nobreak\vskip25pt\relax%
+  \@firstparatrue
+  \@afterheading}%
 %    \end{macrocode}
 % \end{macro}
 %
