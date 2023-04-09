@@ -686,7 +686,7 @@
 %<class>\ProvidesClass{nostarch}
 %<nshyper>\ProvidesPackage{nshyper}
 %<*!ist>
-[2023/03/30 v2.0 Typesetting books for No Starch Press]
+[2023/04/08 v2.1 Typesetting books for No Starch Press]
 %</!ist>
 %    \end{macrocode}
 %
@@ -786,7 +786,7 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 \RequirePackage{iftex, ifpdf, fancyhdr, fancyvrb, booktabs, graphicx,
   listings, caption, makeidx, upquote, pifont,
   textcomp, xcolor, lmodern, nameref, float, amssymb, etoolbox,
-  setspace, marginnote}
+  setspace, marginnote, url}
 \RequirePackage[framemethod=TikZ]{mdframed}
 \RequirePackage{soul}
 \RequirePackage[T1]{fontenc}  
@@ -2509,7 +2509,7 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 %    \end{macrocode}
 % \end{macro}
 %
-%\subsection{Verbatim and Listings Customization}
+%\subsection{Verbatim, url and Listings Customization}
 %\label{sec:verbatim}
 %
 % \begin{macro}{Code}
@@ -2640,6 +2640,67 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 }
 %    \end{macrocode}
 %
+% Urls are typeset in italics, with upper tilde, and according to the
+% following rules: URLs should break \emph{before} periods,
+% underscores, equal signs, ampersands, and hyphens but \emph{after}
+% colons, slashes and hash marks.  
+% \begin{macro}{\UrlFont}
+% \changes{v2.1}{2023/04/08}{Redefined macro}
+% Urls are in italic
+%    \begin{macrocode}
+\def\UrlFont{\itshape}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\UrlTildeSpecial}
+% \changes{v2.1}{2023/04/08}{Redefined macro}
+%    \begin{macrocode}
+\def\UrlTildeSpecial{\do\~{\raise.2ex\hbox{\m@th$\scriptstyle\sim$}}}
+\let\Url@force@Tilde\UrlTildeSpecial
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\UrlBreaks}
+% \changes{v2.1}{2023/04/08}{Redefined macro}
+% Breaks after colons, slashes, hash marks.  Colons are defined in
+% \cs{UrlBigBreaks}, so we need the other signs.  We also add some
+% other signs here
+%    \begin{macrocode}
+\def\UrlBreaks{\do\#\do\\\do\/\do\>\do\]\do\)\do\}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\UrlSpecials}
+% \changes{v2.1}{2023/04/08}{Redefined macro}
+% We add to macro special treatment of the chars with breaking URLs
+% \emph{before} them
+%    \begin{macrocode}
+\g@addto@macro{\UrlSpecials}{%
+  \do\.{\penalty\UrlBreakPenalty\mathchar46\relax}%
+  \do\_{\penalty\UrlBreakPenalty\mathchar95\relax}%
+  \do\={\penalty\UrlBreakPenalty\mathchar61\relax}%
+  \do\&{\penalty\UrlBreakPenalty\mathchar38\relax}%
+  \do\-{\penalty\UrlBreakPenalty\mathchar45\relax}%
+  \do\!{\penalty\UrlBreakPenalty\mathchar33\relax}%
+  \do\?{\penalty\UrlBreakPenalty\mathchar63\relax}%
+  \do\|{\penalty\UrlBreakPenalty\mathchar124\relax}%
+  \do\,{\penalty\UrlBreakPenalty\mathchar44\relax}%
+  \do\;{\penalty\UrlBreakPenalty\mathchar59\relax}%
+  \do\@{\penalty\UrlBreakPenalty\mathchar64\relax}%
+  \do\'{\penalty\UrlBreakPenalty\mathchar39\relax}%
+  \do\+{\penalty\UrlBreakPenalty\mathchar43\relax}%
+  \do\<{\penalty\UrlBreakPenalty\mathchar60\relax}%
+  \do\[{\penalty\UrlBreakPenalty\mathchar91\relax}%
+  \do\({\penalty\UrlBreakPenalty\mathchar40\relax}%
+  \do\{{\penalty\UrlBreakPenalty\mathchar123\relax}%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\UrlNoBreaks}
+% \changes{v2.1}{2023/04/08}{Redefined macro}
+% We allow breaks in urls after brackets
+%    \begin{macrocode}
+\def\UrlNoBreaks{}
+%    \end{macrocode}
+% \end{macro}
 %
 %\subsection{Margin notes}
 %\label{sec:margins}
