@@ -1,7 +1,6 @@
 % \iffalse
-% $Id$
 %
-% Copyright 2008-2020, Boris Veytsman
+% Copyright 2008-2023, Boris Veytsman
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either
 % version 1.3 of this license or (at your option) any 
@@ -63,7 +62,7 @@
 % \GetFileInfo{nostarch.dtx}
 % \newcommand{\progname}[1]{\textsf{#1}}
 % \title{\LaTeX{} Style For \emph{No Starch Press}
-%   \thanks{\copyright 2020, Boris Veytsman}}
+%   \thanks{\copyright 2008--2023, Boris Veytsman}}
 % \author{Boris Veytsman\thanks{%
 % \href{mailto:borisv@lk.net}{\texttt{borisv@lk.net}},
 % \href{mailto:boris@varphi.com}{\texttt{boris@varphi.com}}}} 
@@ -83,7 +82,9 @@
 % \changes{v1.0}{2008/04/07}{First public release} 
 % \changes{v1.1}{2008/05/24}{Added interface to listings package and
 % upquote package.  Updated documentation} 
-% \changes{v1.2}{2020/04/29}{Updated interface with listings package} 
+% \changes{v1.4}{2020/04/29}{Updated interface with listings package}
+% \changes{v2.0}{2023/03/30}{Incorporated in-house changes by No
+% Starch Press} 
 %
 %
 %\section{Introduction}
@@ -95,6 +96,11 @@
 %
 % The suite provides main class, |nostarch.cls|, hyperref interface
 % |nshyper.sty| and MakeIndex style |nostarch.ist|.
+%
+% The initial version of this class was written in 2008.  Since then a
+% number of changes was made for in-house processing by the \emph{No
+% Starch} team, with special thanks to Alex Freed.  In 2023 these
+% changes were incorporated back to the publicly released version. 
 %
 %\section{User's Guide}
 %\label{sec:manual}
@@ -128,34 +134,74 @@
 % To typeset the books in the distinctive \emph{No Starch Press} style
 % you will need the fonts used by them.  Unfortunately these fonts
 % (New Baskerville, Futura, The Sans Mono Condensed and Dogma) are not
-% free.  You may buy them from the vendor or license from the
-% publisher to typeset your book.  Please contact \emph{No Starch
-% Press} directly for the arrangements.
-%
-% The class uses some other \LaTeX{} classes or packages.  Most
-% probably, some of them they are already installed on your system.
-% If not (or if their versions are very old), you need to download and
-% install them.  Here is the list:
+% free.  You have the following options:
 % \begin{enumerate}
-% \item Font support packages \progname{nbaskerv}~\cite{NbaskervFont},
-% \progname{futurans}~\cite{FuturansFont},
-% \progname{dogma}~\cite{DogmaFont} and
-% \progname{thsmc}~\cite{ThsmcFont}.
-% \item \progname{booktabs} package~\cite{Fear05:Booktabs}.
-% \item \progname{caption} package~\cite{Sommerfeldt07:Caption}.
-% \item \progname{fancyhdr} package~\cite{Oostrum04:Fancyhdr}.
-% \item \progname{fancyvrb} package~\cite{VanZandt98:Fancyvrb}.
-% \item \progname{graphics} package~\cite{Carlisle05:Graphics}.
-% \item \progname{ifpdf} package~\cite{Oberdiek06:Ifpdf}.
-% \item \progname{listings} package~\cite{Heinz07:Listings}.
-% \item \progname{ragged2e} package~\cite{Schroeder03:Ragged2e}.
-% \item \progname{upquote} package~\cite{Covington03:Upquote}.
+% \item Typeset your book using only free fonts (the option |nocfonts|
+% discussed below).
+% \item Buy the fonts and install them.
+% \item Arrange with \emph{No Starch Press} for the use of these fonts
+% for your book.
 % \end{enumerate}
-% These packages are called internally by |nostarch.cls|;  you do not
-% need to explicitly call them from your document.
+% The details of the installation are discussed below in
+% Section~\ref{sec:ug_fonts}. 
 %
 %
-% 
+%
+%\subsection{Fonts installation}
+%\label{sec:ug_fonts}
+%
+% If you wish to try \progname{nostarch} class without bothering to
+% typeset camera-ready copy, you may use the option |nocfonts| for
+% \emph{no commercial fonts,} and the class will use only the free
+% fonts available in \TeX\ distributions.
+%
+% If you work with \emph{No Starch Press} on your book, you might be
+% provided with the fonts.  Today \emph{No Starch Press} typically
+% uses \progname{xelatex} and expects the fonts in True~Type format.
+% If this is the case, use the option |cfonts|.  \emph{No Starch
+% Press} recommends the authors to put the font files in the
+% subdirectory \path{fonts} of their main directory.  This is where
+% \progname{nostarch} expects them.  This is also the layout of
+% directories in the \emph{No Starch Press} \emph{Overleaf}
+% templates.  However, if you prefer to put the fonts in another
+% directory, searcheable by \progname{xelatex}, use the option
+% |nofontsdir| in the invocation.
+%
+% These options are summarized in Figure~\ref{fig:fonts}.
+%
+% \begin{figure}
+%   \centering
+%   \begin{tikzpicture}
+%     \node[draw, circle, radius=0.1] (start) {};
+%     \node[draw, align=center, below=of start]
+%     (haveFonts) {Do you have \\commercial fonts?};
+%     \node[draw, left=of haveFonts, align=center] (nocfonts)
+%     {Use |nocfonts|\\ option};
+%     \node[draw, below=of nocfonts, rounded corners]
+%     (any) {Use any engine};
+%     \node[draw, right=of haveFonts, align=center] (cfonts)
+%     {Use |cfonts|\\option};
+%     \node[draw, below=of cfonts, align=center] (haveSubdir) {Are the fonts
+%     \\in |fonts| \\subdirectory?};
+%     \node[draw, left=of haveSubdir, align=center]
+%     (nofontsdir) {Use |nofontsdir|\\option};
+%     \node[draw, below=of haveSubdir, align=center] (fontsdir)
+%     {Use |fontsdir|\\option};
+%     \node[draw, below=of fontsdir, rounded corners] (xelatex)
+%     {Use \progname{xelatex} engine};
+%     \draw[-latex] (start) -- (haveFonts);
+%     \draw[-latex] (haveFonts) -- node[above] {No} (nocfonts);
+%     \draw[-latex] (haveFonts) -- node[above] {Yes} (cfonts);
+%     \draw[-latex] (nocfonts) --  (any);
+%     \draw[-latex] (cfonts) --  (haveSubdir);
+%     \draw[-latex] (haveSubdir) -- node[above] {No} (nofontsdir);
+%     \draw[-latex] (haveSubdir) -- node[right] {Yes} (fontsdir);
+%     \draw[-latex] (nofontsdir) |- (xelatex);
+%     \draw[-latex] (fontsdir) -- (xelatex);
+%   \end{tikzpicture}
+%   \caption{Flowchart for font-related options}
+%   \label{fig:fonts}
+% \end{figure}
 %
 %
 %\subsection{Invocation}
@@ -166,7 +212,7 @@
 % |\documentclass[|\meta{options}|]{nostarch}|
 % \end{flushleft}
 %
-% \DescribeOptions{cfonts,nocfonts} 
+% \DescribeOptions{cfonts,nocfonts}%
 % As discussed above, \emph{No  Starch Press} uses a number of
 % commercial fonts to typeset their  books.  
 % The option |cfonts| (default) tells \LaTeX{} that you do have these
@@ -175,22 +221,16 @@
 % to use freely available fonts for typesetting.  Of course in this
 % case the result will not look like a \emph{No Starch Press} Book.
 %
-% 
-% \DescribeOptions{8pt,9pt,10pt,11pt,12pt}
-% The fontsize changing options (|8pt|, |9pt|, \dots, |12pt|) have no
-% effect other than producing a warning in the log.
+% \DescribeOptions{fontsdir,nofontsdir}%
+% If you use commercial fonts \emph{and} \progname{xelatex}, the
+% latter usually expects them in the subdirectory \path{fonts} of the
+% main directory (see Section~\ref{sec:ug_fonts}).  The options
+% |fontsdir| (default) sets up this behavior.  Use the option
+% |nofontsdir| to tell \progname{xelatex} to search standard font
+% directories insted.
 %
+% Figure~\ref{fig:fonts} may help to choose the right options.  
 %
-%
-% \emph{No Starch Press} uses a special paper size.  If you process the
-% manuscript with \progname{pdflatex} to produce PDF output, the paper
-% dimensions will be automatically set up by the class.  However, if
-% you use \progname{latex} and \progname{dvips}, you need to tell
-% \progname{dvips} what paper size to choose.  One way to do this is
-% to add to the \progname{dvips} options the following:
-% \begin{verbatim}
-%   -T 7in,9.25in
-% \end{verbatim}
 % 
 %\subsection{Use of \progname{hyperref} Package}
 %\label{sec:guide:hyperref}
@@ -211,7 +251,7 @@
 % \progname{hyperref} by |\usepackage{hyperref}| will not work since
 % \progname{nshyper} patches hyperref to work with our class.
 % 
-%
+% 
 %
 %\subsection{Front Matter}
 %\label{sec:guide:frontmatter}
@@ -543,6 +583,7 @@
 % example, in quote characters.
 %
 %
+%
 %\subsection{Back Matter}
 %\label{sec:guide:backmatter}
 %  
@@ -645,7 +686,7 @@
 %<class>\ProvidesClass{nostarch}
 %<nshyper>\ProvidesPackage{nshyper}
 %<*!ist>
-[2020/04/29 v1.4 Typesetting books for No Starch Press]
+[2023/03/30 v2.0 Typesetting books for No Starch Press]
 %</!ist>
 %    \end{macrocode}
 %
@@ -654,9 +695,10 @@
 %<*gobble>
 \documentclass{ltxdoc}
 \usepackage{array}
-\usepackage{url,amsfonts}
+\usepackage{url,amsfonts, tikz}
 \usepackage[breaklinks,colorlinks,linkcolor=black,citecolor=black,
-            pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
+pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
+\usetikzlibrary{positioning}
 \PageIndex
 \CodelineIndex
 \RecordChanges
@@ -672,14 +714,27 @@
 %\subsection{Options}
 %\label{sec:options}
 %
-%
+%\begin{macro}{\ifnostarch@cfonts}
 % First, let us decide whether we have non-free fonts:
 %    \begin{macrocode}
 \newif\ifnostarch@cfonts
 \nostarch@cfontstrue
 \DeclareOption{cfonts}{\nostarch@cfontstrue}
 \DeclareOption{nocfonts}{\nostarch@cfontsfalse}
+%    \end{macrocode} 
+% \end{macro}
+%
+% \begin{macro}{\ifnostarch@fontsdir}
+% \changes{v2.0}{2023/03/31}{Introduced macro} 
+% We also need to check whether we want to use \emph{No Starch} in
+% house |fonts| directory
+%    \begin{macrocode}
+\newif\ifnostarch@fontsdir
+\nostarch@fontsdirtrue
+\DeclareOption{fontsdir}{\nostarch@fontsdirtrue}
+\DeclareOption{nofontsdir}{\nostarch@fontsdirfalse}
 %    \end{macrocode}
+% \end{macro}
 %
 % The size-changing options produce a warning:
 %    \begin{macrocode}
@@ -727,8 +782,15 @@
 %
 % A bunch of packages:
 %    \begin{macrocode}
-\RequirePackage{ifpdf, fancyhdr, fancyvrb, booktabs, graphicx,
-  listings, caption, makeidx, upquote}
+\RequirePackage[table]{xcolor}  
+\RequirePackage{iftex, ifpdf, fancyhdr, fancyvrb, booktabs, graphicx,
+  listings, caption, makeidx, upquote, pifont,
+  textcomp, xcolor, lmodern, nameref, float, amssymb, etoolbox,
+  setspace, marginnote}
+\RequirePackage[framemethod=TikZ]{mdframed}
+\RequirePackage{soul}
+\RequirePackage[T1]{fontenc}  
+\RequirePackage{ragged2e}
 %    \end{macrocode}
 %
 % We do not want the option |document| with \progname{ragged2e}: this
@@ -753,17 +815,103 @@
 %\subsection{Fonts}
 %\label{sec:fonts}
 %
-% If we have commercial fonts, we load them.  Note that the body text
-% has roman font at 10pt, and typewriter at 8.5pt.
-% Therefore we will load |thsmc| scaled.  We also add |dgdefault| for
-% dogma family
+% \begin{macro}{\nostarch@fontspath}
+% \changes{v2.0}{2023/03/31}{Introduced macro} 
+% The path to load fonts
+%    \begin{macrocode}
+\ifnostarch@fontsdir
+  \def\nostarch@fontspath#1{Path=fonts/#1/,}
+\else
+  \def\nostarch@fontspath#1{Path,}
+\fi
+%    \end{macrocode}
+% \end{macro}
+%
+% If we have commercial fonts, we load them.  
 %    \begin{macrocode}
 \ifnostarch@cfonts
-  \RequirePackage{nbaskerv}%
-  \RequirePackage{futurans}%
-  \RequirePackage[scaled=0.85]{thsmc}%
-  \RequirePackage{dogma}%
-  \newcommand{\dgdefault}{fdg}%
+  \ifpdftex
+    \ClassWarning{nostarch}{Commercial fonts usually require xelatex engine}
+    \RequirePackage{nbaskerv}%
+    \RequirePackage{futurans}%
+    \RequirePackage[scaled=0.85]{thsmc}%
+    \RequirePackage{dogma}%
+    \newcommand{\dogma}{\fontfamily{fdg}\selectfont}%
+  \else %XeTeX or LuaTeX
+    \RequirePackage{fontspec}  
+    \newfontface\dogma[
+    \nostarch@fontspath{dogma}
+    UprightFont=dogmab01.ttf,
+    Ligatures=TeX
+    ]{dogma}  % Font used for chapter titles
+    
+    \newfontface\timesnewroman[
+    \nostarch@fontspath{tnr}
+    UprightFont=times.ttf,
+    BoldFont=timesbd.ttf,
+    ItalicFont=timesi.ttf,
+    BoldItalicFont=timesbi.ttf,
+    Ligatures=TeX
+    ]{timesnewroman}
+    
+    \newfontface\futurabook[
+    \nostarch@fontspath{futurans}
+    UprightFont=FuturB37.ttf,
+    BoldFont=FuturH79.ttf,
+    ItalicFont=FutuBO08.ttf,
+    BoldItalicFont=FutCBO63.ttf,
+    Ligatures=TeX
+    ]{futurabook}
+
+    \newfontface\futuraheavy[
+    \nostarch@fontspath{futurans}
+    UprightFont=FuturH79.ttf,
+    Ligatures=TeX
+    ]{futuraheavy}
+    
+    \newfontface\futuraboldc[
+    \nostarch@fontspath{futurans}
+    UprightFont=futucb18.ttf,
+    Ligatures=TeX
+    ]{futuraboldc}
+    
+    \newfontface\futuraboldcoblique[
+    \nostarch@fontspath{futurans}
+    UprightFont=FutCBO63.ttf,
+    Ligatures=TeX
+    ]{futuraboldcoblique}
+
+    \newfontface\futuraoblique[
+    \nostarch@fontspath{futurans}
+    UprightFont=FutuBO08.ttf,
+    Ligatures=TeX
+    ]{futuraoblique}
+    
+    \setmainfont{nbaskerv}[
+    \nostarch@fontspath{nbaskerv}
+    UprightFont=NewBaskervilleEF-Roman.ttf,
+    BoldFont=NewBaskervilleEF-Bold.ttf,
+    ItalicFont=NewBaskervilleEF-RomanIta.ttf,
+    BoldItalicFont=NewBaskervilleEF-BoldIta.ttf,
+    Ligatures=TeX]
+    
+    \setmonofont[Scale=0.85,
+    \nostarch@fontspath{thsmc}
+    UprightFont=ThSMCP25.ttf,
+    BoldFont=ThSMCB02.ttf,
+    ItalicFont=ThSMCI29.ttf,
+    BoldItalicFont=TSMCBI56.ttf]{thsmc}
+    
+    \setsansfont[
+    \nostarch@fontspath{futurans}
+    UprightFont=futura.ttf,
+    BoldFont=FuturB41.ttf,
+    ItalicFont=FutuBO08.ttf,
+    BoldItalicFont=FutCBO63.ttf,
+    Ligatures=TeX
+    ]{futurans}
+    
+  \fi  
 %    \end{macrocode}
 % Otherwise we just use sans serif font for dogma.
 %    \begin{macrocode}
@@ -772,13 +920,99 @@
 \fi
 %    \end{macrocode}
 %
+% A number of commands to provide font defaults in case we use
+% non-commercial fonts
+%    \begin{macrocode}
+\providecommand{\dogma}{\fontfamily{dgdefault}\selectfont}
+\providecommand{\futuraboldc}{\fontfamily{\sfdefault}\fontseries{bc}%
+  \selectfont}
+\providecommand{\futuraboldcoblique}{\fontfamily{\sfdefault}\fontseries{bc}%
+  \itshape\selectfont}
+\providecommand{\futuraheavy}{\fontfamily{\sfdefault}\fontseries{hq}%
+  \selectfont}
+\providecommand{\futurabook}{\fontfamily{\sfdefault}\fontseries{k}%
+  \selectfont}
+%    \end{macrocode}
 %
 % And switch to normal size---just in case
 %    \begin{macrocode}
 \normalsize
 %    \end{macrocode}
 % 
+% Special commands for number balls
+% \begin{macro}{\wingding}
+% \changes{v2.0}{2023/03/31}{Introduced macro} 
+% The number ball
+%    \begin{macrocode}
+\newcommand{\wingding}[1]{\ding{\the\numexpr #1 + 181 \relax}} 
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\codewingding}
+% \changes{v2.0}{2023/03/31}{Introduced macro} 
+% The number ball inside code
+%    \begin{macrocode}
+\newcommand{\codewingding}[1]{\vbox{\llap{\wingding{#1}\hskip 0.5em}}}
+%    \end{macrocode}
+% \end{macro}
 %
+% \begin{macro}{\menuarrow}
+% \changes{v2.0}{2023/04/08}{Introduced macro}
+%    \begin{macrocode}
+\newcommand\menuarrow{\raisebox{.2ex}{\small $\blacktriangleright$}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\bettertilde}
+% \changes{v2.0}{2023/04/04}{Introduced macro}
+% A tilde uses for some texts
+%    \begin{macrocode}
+\newcommand{\bettertilde}{\raisebox{-1ex}{\textasciitilde}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\slashslash}
+% \changes{v2.0}{2023/04/04}{Introduced macro}
+% The special slash
+%    \begin{macrocode}
+\newcommand{\slashslash}{%
+  \raisebox{.53ex}{%
+    \scalebox{.5}{%
+      \rotatebox[origin=c]{18}{$\mathbf{/}$}%
+    }%
+  }%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\neq}
+% \changes{v2.0}{2023/04/04}{Introduced macro}
+% A better $\neq$
+%    \begin{macrocode}
+\renewcommand{\neq}{\mathrel
+  {%
+   \vphantom{=}%
+   \ooalign{\kern.05em\smash{\slashslash}\hidewidth\cr$=$\cr}%
+  }%
+}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\keycap}
+% Taken from:
+% \url{https://tex.stackexchange.com/questions/55664/fake-small-caps-with-xetex-fontspec/225078} 
+%    \begin{macrocode}
+\newcommand\keycap[1]{\fauxschelper#1 \relax\relax}
+\def\fauxschelper#1 #2\relax{%
+  \fauxschelphelp#1\relax\relax%
+  \if\relax#2\relax\else\ \fauxschelper#2\relax\fi%
+}
+\def\Hscale{.83}\def\Vscale{.72}\def\Cscale{1.00}
+\def\fauxschelphelp#1#2\relax{%
+  \ifnum`#1>``\ifnum`#1<`\{\scalebox{\Hscale}[\Vscale]{\uppercase{#1}}\else%
+    \scalebox{\Cscale}[1]{#1}\fi\else\scalebox{\Cscale}[1]{#1}\fi%
+  \ifx\relax#2\relax\else\fauxschelphelp#2\relax\fi}
+%    \end{macrocode}
+% \end{macro}
 %
 %\subsection{Page Dimensions and Paragraphing}
 %\label{sec:page}
@@ -903,7 +1137,25 @@
 % \end{macro}
 % \end{macro}
 % 
-% 
+% \begin{macro}{\sochapter}
+% \changes{v2.0}{2023/04/04}{Introduced macro}
+% \begin{macro}{\sotitle}
+% \changes{v2.0}{2023/04/04}{Introduced macro}
+% \begin{macro}{\sobox}
+% \changes{v2.0}{2023/04/04}{Introduced macro}
+% \begin{macro}{\sonote}
+% \changes{v2.0}{2023/04/04}{Introduced macro}
+% Some spacing commands.
+%    \begin{macrocode}
+\sodef\sochapter{}{.150em}{.5em}{1em}
+\sodef\sotitle{}{.125em}{.5em}{1em}
+\sodef\sobox{}{.075em}{.5em}{1em}
+\sodef\sonote{}{.200em}{.5em}{1em}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
 %
 %\subsection{Headers and Footers}
 %\label{sec:headers}
@@ -935,19 +1187,19 @@
 %
 % On even pages we put page number and chapter title in footer. 
 %    \begin{macrocode}
-\fancyfoot[RO]{\fontfamily{\sfdefault}\fontsize{6pt}{6pt}%
+\fancyfoot[RO]{\sffamily \fontsize{6pt}{6pt}%
   \fontseries{lq}\selectfont\rightmark%
-  \hspace{2em}\fontseries{bc}\fontsize{9pt}{6pt}\selectfont\thepage}
+  \hspace{2em} \futuraboldc \fontsize{9pt}{6pt}\selectfont\thepage}
 \fancyfoot[LO]{}
 \fancyfoot[CO]{}
 %    \end{macrocode}
 % 
 % On even pages we put page number and chapter number in footer:
 %    \begin{macrocode}
-\fancyfoot[LE]{\fontfamily{\sfdefault}\fontseries{bc}\fontsize{9pt}{6pt}%
-  \selectfont\thepage\hspace{2em}%
-  \fontseries{lq}\fontsize{6pt}{6pt}\selectfont%
-  \leftmark}
+\fancyfoot[LE]{\futuraboldc \fontsize{9pt}{6pt}%
+  \selectfont\thepage%
+  \fontseries{lq}\sffamily \fontsize{6pt}{6pt}\selectfont%
+  \hspace{2em}\leftmark}
 \fancyfoot[RE]{}
 \fancyfoot[CE]{}
 %    \end{macrocode}
@@ -1013,12 +1265,11 @@
   \clearpage
   {\pagestyle{empty}\cleardoublepage}%
   \thispagestyle{empty}%
-  \null\vskip1.025in%
+  \null%\vskip1.025in%
   \leavevmode\noindent\hspace{1.66in}%
     \begin{minipage}[t]{2.5625in}%
     \flushright 
-    \fontfamily{\sfdefault}\fontseries{b}%
-    \fontsize{12\p@}{13\p@}\selectfont
+    \sffamily\bfseries\fontsize{12\p@}{13\p@}\selectfont
     \MakeUppercase{\@title}%
   \end{minipage}}
 %    \end{macrocode}
@@ -1042,18 +1293,18 @@
   \item\relax
   \centering
   \null\vskip0.855in%
-  {\fontfamily{\dgdefault}\fontseries{bk}\fontsize{36\p@}{37\p@}\selectfont
-    \MakeUppercase{\@title}\par}%
+  {\dogma \fontsize{36\p@}{37\p@}\selectfont
+    \MakeUppercase{\sotitle{\@title}}\par}%
   \if\@subtitle\@empty\relax\else
      {\null\vskip25\p@%
-     \fontfamily{\dgdefault}\fontseries{bq}\fontsize{24\p@}{25\p@}\selectfont
+    \dogma \fontsize{24\p@}{25\p@}\selectfont
     \@subtitle\par}%
   \fi
-  \vspace{1.7in}%
+  \vspace{2.15in}%
   \vspace{-\baselineskip}%
-  {\fontfamily{\sfdefault}\fontseries{hq}\fontsize{18\p@}{22\p@}\selectfont
+  {\futuraheavy\fontsize{18\p@}{22\p@}\selectfont
     by \@author\par}%
-  \vspace{0.45in}%
+  \vspace{12\p@}%
   \vspace{\baselineskip}%
   \if\@nostarchlogo\@empty\relax\else
     \includegraphics[height=1.08in]{\@nostarchlogo}\par
@@ -1100,15 +1351,23 @@
 %
 %
 % \begin{macro}{dedicationpage}
-% \changes{v0.5}{2008/03/19}{Introduced the macro} 
+% \changes{v0.5}{2008/03/19}{Introduced the macro}
+% \changes{v2.0}{2023/04/04}{Rewritten} 
 %   Dedication is centered:
 %    \begin{macrocode}
 \newenvironment{dedicationpage}{%
   \clearpage
-  {\pagestyle{empty}\cleardoublepage}%
+  \bgroup
+  \list{}{\leftmargin-1in\rightmargin\z@\labelwidth\z@%
+    \labelsep\z@\listparindent\z@\parsep8\p@\itemsep\z@%
+    \topsep\z@\partopsep\z@}%
+  \item\relax
   \thispagestyle{empty}%
   \null\vskip1.175in%
-  \centering\normalfont}{\clearpage}
+  \centering\normalfont}{%
+  \endlist
+  \egroup
+  \clearpage}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1123,7 +1382,7 @@
 % \begin{macro}{\briefcontentsname}
 %   The name for brief contents
 %    \begin{macrocode}
-\def\briefcontentsname{Brief Contents}
+\def\briefcontentsname{{Brief Contents}}
 %    \end{macrocode}
 %   
 % \end{macro}
@@ -1143,6 +1402,13 @@
 %  
 % \end{macro}
 %
+% \begin{macro}{\apptoc}
+% \changes{v2.0}{2023/04/14}{Added macro}
+% Changing chapter names in appendix
+%    \begin{macrocode}
+\newcommand{\apptoc}{\renewcommand{\chaptername}{Appendix}}
+%    \end{macrocode}
+% \end{macro}
 %
 % \begin{macro}{\brieftableofcontents}
 % \changes{v0.5}{2008/03/19}{Introduced macro} 
@@ -1163,8 +1429,8 @@
     \topsep\z@\partopsep\z@}%
   \item\relax  
     {\centering
-      \fontfamily{\dgdefault}\fontseries{bs}\fontsize{16\p@}{18\p@}\selectfont
-      \MakeUppercase{\briefcontentsname}\par}\vskip40pt%
+     \dogma\fontsize{16\p@}{18\p@}\selectfont
+      \MakeUppercase{\sochapter{Brief Contents}}\par}\vskip40pt%
   \@starttoc{tbc}%
   \endlist
   \egroup}
@@ -1191,8 +1457,8 @@
     \topsep\z@\partopsep\z@}%
   \item\relax  
     {\centering
-      \fontfamily{\dgdefault}\fontseries{bs}\fontsize{16\p@}{18\p@}\selectfont
-      \MakeUppercase{\contentsname}\par}\vskip18pt%
+     \dogma\fontsize{16\p@}{18\p@}\selectfont
+      \MakeUppercase{\sochapter{Contents in Detail}}\par}\vskip18pt%
   \@starttoc{toc}%
   \endlist
   \egroup}
@@ -1222,7 +1488,7 @@
       \parindent \z@ \rightskip \@pnumwidth
       \parfillskip -\@pnumwidth
       {\leavevmode
-       \fontfamily{\sfdefault}\fontseries{bq}\fontsize{12\p@}{14\p@}\selectfont
+       \sffamily\bfseries\fontsize{12\p@}{14\p@}\selectfont
        #1}\par
        \nobreak
          \global\@nobreaktrue
@@ -1244,8 +1510,8 @@
       \parindent \z@ \rightskip \@pnumwidth
       \parfillskip -\@pnumwidth
       \leavevmode 
-      \fontfamily{\sfdefault}\fontseries{bq}\fontsize{10\p@}{12\p@}\selectfont
-      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+      \sffamily \bfseries \fontsize{10\p@}{12\p@}\selectfont{#1}%
+      \nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
       \vskip4\p@\penalty\@highpenalty
     \endgroup
   \fi}
@@ -1258,7 +1524,17 @@
 %    \begin{macrocode}
 \newlength{\sectionnumberwidth}
 \settowidth{\sectionnumberwidth}{%
-  \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont
+  \futurabook\fontsize{9\p@}{11\p@}\selectfont
+  99.99}
+%    \end{macrocode}   
+% \end{macro}
+% \begin{macro}{\boldsectionnumberwidth}
+% \changes{v2.0}{2023/04/06}{Introduced the length} 
+%   The number width for bold sections.  Normally the width of |99.99|
+%    \begin{macrocode}
+\newlength{\boldsectionnumberwidth}
+\settowidth{\boldsectionnumberwidth}{%
+  \futuraheavy\fontsize{9\p@}{11\p@}\selectfont
   99.99}
 %    \end{macrocode}   
 % \end{macro}
@@ -1269,7 +1545,7 @@
 %    \begin{macrocode}
 \newlength{\subsectionnumberwidth}
 \settowidth{\subsectionnumberwidth}{%
-  \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont
+  \futurabook\fontsize{9\p@}{11\p@}\selectfont
   99.99.99}
 %    \end{macrocode}   
 % \end{macro}
@@ -1281,8 +1557,8 @@
 %    \begin{macrocode}
 \renewcommand{\l@section}[2]{\@dottedtocline{1}{\z@}{%
     \sectionnumberwidth}{%
-    \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#1}{%
-    \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#2}}
+    \futurabook\fontsize{9\p@}{11\p@}\selectfont#1}{%
+    \futurabook\fontsize{9\p@}{11\p@}\selectfont#2}}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1295,11 +1571,21 @@
 %    \begin{macrocode}
 \renewcommand{\l@subsection}[2]{\@dottedtocline{2}{0.5in}%
   {\subsectionnumberwidth}{%
-    \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#1}{%
-    \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{11\p@}\selectfont#2}}
+    \futurabook\fontsize{9\p@}{11\p@}\selectfont#1}{%
+    \futurabook\fontsize{9\p@}{11\p@}\selectfont#2}}
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\l@boldsection}
+% \changes{v2.0}{2023/04/06}{Introduced the macro} 
+%   This is how we typeset bold sections in the table of contents
+%    \begin{macrocode}
+\newcommand*\l@boldsection[2]{{\bfseries\@dottedtocline{1}{\z@}{%
+    \boldsectionnumberwidth}{%
+    \futuraheavy\fontsize{9\p@}{11\p@}\selectfont#1}{%
+    \futuraheavy\fontsize{9\p@}{11\p@}\selectfont#2}}}
+%    \end{macrocode}
+% \end{macro}
 %
 %
 % \begin{macro}{\l@bpart}
@@ -1315,13 +1601,20 @@
       \parindent \z@ \rightskip \@pnumwidth
       \parfillskip -\@pnumwidth
       {\leavevmode
-       \fontfamily{\sfdefault}\fontseries{h}\fontsize{9\p@}{14\p@}\selectfont
+       \futuraheavy\fontsize{9\p@}{14\p@}\selectfont
        #1}\par\vskip7\p@%
        \nobreak
          \global\@nobreaktrue
          \everypar{\global\@nobreakfalse\everypar{}}%
     \endgroup
   \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@pnumwidth}
+% \changes{v2.0}{2023/04/08}{Redefined macro}
+%    \begin{macrocode}
+\renewcommand{\@pnumwidth}{17pt}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -1338,7 +1631,7 @@
       \parindent \z@ \rightskip \@pnumwidth
       \parfillskip -\@pnumwidth
       \leavevmode 
-      \fontfamily{\sfdefault}\fontseries{k}\fontsize{9\p@}{14\p@}\selectfont
+      \futurabook\fontsize{9\p@}{14\p@}\selectfont
       #1\nobreak\leaders\hbox{$\m@th
         \mkern \@dotsep mu\hbox{.}\mkern \@dotsep
         mu$}\hfill
@@ -1415,6 +1708,14 @@
 %    \end{macrocode}   
 % \end{macro}
 %
+% \begin{macro}{\turnoffbigpara}
+% \changes{v2.0}{2023/04/01}{Introduced macro}
+% And the code to manually turn it off
+%    \begin{macrocode}
+\newcommand{\turnoffbigpara}{\@firstparafalse}
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\@chapterart}
 %   We also keep track of the current artwork for chapter start:
 %    \begin{macrocode}
@@ -1461,22 +1762,22 @@
       \refstepcounter{part}%
       \addcontentsline{toc}{part}{\MakeUppercase{\partname} 
         \thepart\protect\linebreak\penalty\@highpenalty\MakeUppercase{#1}}%
-      \addcontentsline{tbc}{bpart}{\MakeUppercase{\partname~\thepart: #1}}%
+      \addcontentsline{tbc}{bpart}{\MakeUppercase{\partname~\thepart: \futuraheavy #1}}%
     \else
       \addcontentsline{toc}{part}{\MakeUppercase{#1}}%
-      \addcontentsline{tbc}{bpart}{\MakeUppercase{#1}}%
+      \addcontentsline{tbc}{bpart}{\MakeUppercase{\futuraheavy #1}}%
     \fi
     {\centering
      \interlinepenalty \@M
      \normalfont
      \ifnum \c@secnumdepth >-2\relax
-       \fontfamily{\sfdefault}\fontsize{80pt}{80pt}\fontseries{bc}\selectfont
+       \futuraboldc\fontsize{80pt}{80pt}\selectfont
        \MakeUppercase{\partname\nobreakspace\thepart}%
        \par
        \vskip 0.45in%
      \fi
-     \fontfamily{\dgdefault}\fontsize{16pt}{16pt}\fontseries{br}\selectfont
-     \MakeUppercase{#2}\par}%
+    \dogma \fontsize{16pt}{16pt}\selectfont
+     \MakeUppercase{\sochapter{#2}}\par}%
     \@endpart}
 %    \end{macrocode}
 % \end{macro}
@@ -1490,8 +1791,8 @@
   \addcontentsline{toc}{part}{\MakeUppercase{#1}}%
   \addcontentsline{tbc}{bpart}{\MakeUppercase{#1}}%
     {\centering
-      \fontfamily{\dgdefault}\fontsize{16pt}{16pt}\fontseries{br}\selectfont
-     \MakeUppercase{#2}\par}%
+     \dogma \fontsize{16pt}{16pt}\selectfont
+     \MakeUppercase{\sochapter{#2}}\par}%
     \@endpart}
 %    \end{macrocode}
 % \end{macro}
@@ -1548,7 +1849,7 @@
   \addcontentsline{tbc}{bchapter}{%
     \chaptername~\thechapter:~#1}%
   {\centering
-    \fontfamily{\sfdefault}\fontseries{bc}\fontsize{120pt}{120pt}
+    \futuraboldc\fontsize{120pt}{120pt}
     \selectfont
     \thechapter\par\nobreak\vskip27pt}%
   \else
@@ -1558,8 +1859,8 @@
   \markboth{#1}{#1}%
   \fi
   {\centering
-    \fontfamily{\dgdefault}\fontseries{br}\fontsize{16pt}{20pt}\selectfont
-    \MakeUppercase{#2}\par}\nobreak\vskip25pt\relax%
+   \dogma\fontsize{16pt}{18pt}\selectfont
+    \MakeUppercase{\sochapter{#2}}\par}\nobreak\vskip25pt\relax%
   \@firstparatrue
   \@afterheading}%
 %    \end{macrocode}
@@ -1573,12 +1874,13 @@
 \def\@schapter[#1]#2{%
   \vspace*{2.747in}
   {\centering
+    \phantomsection
     \addcontentsline{toc}{chapter}{%
       \MakeUppercase{#1}}%
     \addcontentsline{tbc}{bchapter}{#1}%
     \markboth{#1}{#1}%
-    {\fontfamily{\dgdefault}\fontseries{br}\fontsize{16pt}{20pt}\selectfont
-      \MakeUppercase{#2}\par}}\nobreak\vskip25pt\relax%
+    {\fontsize{16pt}{18pt}\selectfont
+      \MakeUppercase{\dogma \sochapter{#2}}\par}}\nobreak\vskip25pt\relax%
    \@firstparatrue
    \@afterheading}%
 %    \end{macrocode}
@@ -1630,6 +1932,53 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\chapterwithquote}
+% \changes{v2.0}{2023/04/08}{Introduced the command}
+%    \begin{macrocode}
+\def\chapterwithquote{%
+  \clearpage
+  {\pagestyle{empty}\cleardoublepage}%
+  \everypar{}%
+  \thispagestyle{empty}%
+  \global\@topnum\z@
+  \@afterindentfalse
+  \gdef\@chapterart{}%
+  \secdef\@chapterwithquote\@schapter}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@chapterwithquote}
+% \changes{v2.0}{2023/04/08}{Introduced the command}
+%    \begin{macrocode}
+\def\@chapterwithquote[#1]#2#3#4{%
+  \vspace*{0.622in}
+  \ifnum \c@secnumdepth > \m@ne
+  \refstepcounter{chapter}%
+  \typeout{Chapter:\thechapter\space\@currentlabel}%
+  \markboth{\@chapapp~\thechapter}{#1}%
+  \typeout{\@chapapp\space\thechapter.}%
+  \addcontentsline{toc}{chapter}{\thechapter%
+    \protect\linebreak\penalty\@highpenalty
+    \MakeUppercase{#1}}%
+  \addcontentsline{tbc}{bchapter}{%
+    \chaptername~\thechapter:~#1}%
+  {\centering
+    \futuraboldc\fontsize{120pt}{120pt}
+    \selectfont
+    \thechapter\par\nobreak\vskip27pt}%
+  \else
+  \addcontentsline{toc}{chapter}{%
+    \MakeUppercase{#1}}%
+  \addcontentsline{tbc}{bchapter}{#1}%
+  \markboth{#1}{#1}%
+  \fi
+  {\centering
+    \dogma\fontsize{16pt}{18pt}\selectfont
+    \MakeUppercase{\sochapter{#2}}\par\vspace{.1in}\normalfont\fontsize{9pt}{11pt}\selectfont\textit{#3}\par\textit{\textemdash#4}\par}\nobreak\vskip25pt\relax%
+  \@firstparatrue
+  \@afterheading}%
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\chapterart}
 % \changes{v0.6}{2008/03/21}{Introduced the command} 
 %   This creates the chapterart:
@@ -1656,7 +2005,7 @@
 %    \begin{macrocode}
 \renewcommand{\section}{\everypar{}%
   \@startsection{section}{1}{-0.75in}{16pt}{6pt}{%
-    \fontfamily{\sfdefault}\fontseries{b}\fontsize{12pt}{16pt}\selectfont}}%
+    \sffamily \bfseries \fontsize{12pt}{16pt}\selectfont}}%
 %    \end{macrocode}   
 % \end{macro}
 % 
@@ -1665,8 +2014,8 @@
 %    \begin{macrocode}
 \renewcommand{\subsection}{\everypar{}%
   \@startsection{subsection}{2}{0pt}{14pt}{4pt}{%
-    \fontfamily{\sfdefault}\fontshape{it}%
-    \fontseries{bc}\fontsize{12pt}{17pt}\selectfont}}%
+    \futuraboldcoblique
+    \fontsize{12pt}{17pt}\selectfont}}%
 %    \end{macrocode}   
 % \end{macro}
 %
@@ -1676,7 +2025,7 @@
 %    \begin{macrocode}
 \renewcommand{\subsubsection}{\everypar{}%
   \@startsection{subsubsection}{3}{0pt}{10pt}{2pt}{%
-  \fontfamily{\sfdefault}\fontseries{bp}\fontsize{10pt}{14pt}%
+  \futuraboldc \fontsize{10pt}{14pt}%
     \selectfont}}%
 %    \end{macrocode}   
 % \end{macro}
@@ -1723,7 +2072,7 @@
 %   This is the default list on the first level
 %    \begin{macrocode}
 \def\@listi{\leftmargin\leftmargini
-  \labelwidth\leftmargin\relax
+  \labelwidth\leftmargini\relax
   \advance\labelwidth-\labelsep\relax
   \parsep0\p@\relax
   \topsep6\p@\relax
@@ -1810,7 +2159,16 @@
 %    \end{macrocode}
 %   
 % \end{macro}
-% 
+%
+% \begin{macro}{description}
+% \changes{v2.0}{2023/04/08}{Redefined}
+%    \begin{macrocode}
+\renewenvironment{description}%
+  {\list{}{\labelwidth=0pt \leftmargin=18pt
+   \let\makelabel\descriptionlabel}}
+  {\endlist}
+%    \end{macrocode}
+% \end{macro}
 %
 % \begin{macro}{quotation}
 %   In |quotation| environment the paragraphs are indented.  We use
@@ -1842,10 +2200,9 @@
 %   Note is a special environment for asides.  It is in italics with
 %   the word ``NOTE'' on the margin:
 %    \begin{macrocode}
-\newenvironment{note}{%  
-  \list{\makebox[0pt][r]{\fontfamily{%
-          \dgdefault}\fontseries{b}\fontsize{9pt}{11pt}\selectfont 
-        NOTE\hspace{2em}}}{\listparindent0pt\relax
+\newenvironment{note}{%
+  \list{\makebox[0pt][r]{\dogma \fontsize{7.5pt}{12pt}
+      \colorbox{black}{\textcolor{white}{\sonote{NOTE}}}\hspace{2em}}}{\listparindent0pt\relax
     \topsep9\p@\relax
     \itemindent0\p@\relax
     \rightmargin0\p@\relax
@@ -1856,7 +2213,17 @@
 %    \end{macrocode}
 % \end{macro}
 %
-%
+% \begin{macro}{plainlist}
+% \changes{v2.0}{2023/04/08}{Added macro}
+\newenvironment{plainlist}{%
+  \renewcommand{\descriptionlabel}[1]{\hspace{\labelsep}\textbf{##1}} % Add em space to description label
+  \begin{description}%
+  }{%
+    \renewcommand{\descriptionlabel}[1]{\hspace{\labelsep}\textbf{##1 \quad}} % Add em space to description label
+  \end{description}%
+}
+
+% \end{macro}
 %
 %\subsection{Footnotes}
 %\label{sec:footnotes}
@@ -1899,7 +2266,7 @@
 % \changes{v0.3}{2008/03/11}{Changed LaTeX defaults} 
 %   We make some space between footnotes:
 %    \begin{macrocode}
-\setlength{\skip\footins}{16\p@ \@plus 4\p@ \@minus 0\p@}
+\setlength{\skip\footins}{20\p@ \@plus 4\p@ \@minus 0\p@}
 %    \end{macrocode}
 %   
 % \end{macro}
@@ -1910,14 +2277,16 @@
 % footnote text} 
 %   We do not indent the footnotes:
 %    \begin{macrocode}
+% \renewcommand\@makefntext[1]{%
+%     \parindent 0\p@%
+%     \RaggedRightParindent0\p@%
+%     \noindent
+%     \@makefnmark\space#1}
 \renewcommand\@makefntext[1]{%
-    \parindent 0\p@%
-    \RaggedRightParindent0\p@%
-    \noindent
-    \@makefnmark\space#1}
+\@thefnmark.~#1}  
 %    \end{macrocode}
 % \end{macro}
-%
+% 
 %
 %\subsection{Tables,  Figures and Listings}
 %\label{sec:tbl_fig}
@@ -1945,46 +2314,97 @@
 %    \begin{macrocode}
 \AtBeginDocument{%
   \renewcommand \thelstlisting
-    {\ifnum \c@chapter>\z@ \thechapter-\fi \@arabic\c@lstlisting}}
+  {\ifnum \c@chapter>\z@ \thechapter-\fi \@arabic\c@lstlisting}%
+}
 %    \end{macrocode}
 % \end{macro}
-% 
 %
-% \begin{macro}{nostarchfigfmt}
-%   This is our captions format for figures and listings
-% \changes{v0.3}{2008/03/11}{Added style} 
+% Default listings settings
 %    \begin{macrocode}
-\DeclareCaptionFormat{nostarchfigfmt}{\fontfamily{\sfdefault}%
-  \fontshape{it}\fontsize{8.5pt}{9pt}\fontseries{k}\selectfont\unskip#1#2#3}
+\lstset{
+    frame = lines, 
+    showstringspaces=false,
+    tabsize=4,
+    title=\lstname,
+    numbers = none,
+    caption={},
+    literate={\ }{{\ }}1{"}{\textquotedbl}1,  
+    escapeinside={(@}{@)},
+    captionpos=b,
+    basicstyle=\ttfamily,
+    columns=fullflexible,
+    moredelim=[is][\bfseries]{***}{***},
+    moredelim=[is][\itshape]{___}{___},
+    moredelim=[is][\bfseries\itshape]{&&&}{&&&},
+    aboveskip=8pt,
+}
+%    \end{macrocode}
+%
+% \begin{macro}{codewide}
+% \changes{v2.0}{2023/4/08}{Added environment}
+%    \begin{macrocode}
+\lstnewenvironment
+    {codewide}[1][]
+    {
+    \renewcommand{\codewingding}[1]
+    {\ding{\the\numexpr ##1 + 181 \relax}} 
+   \captionsetup[lstlisting]{font=nostarchfigfont,singlelinecheck=off,
+  aboveskip=4pt, belowskip=-12pt, margin=-70pt}
+    \lstset{
+    frame = lines, 
+    showstringspaces=false,
+    tabsize=4,
+    title=\lstname,
+    numbers = none,
+    literate={\ }{{\ }}1{"}{\textquotedbl}1,  
+    escapeinside={(@}{@)},
+    captionpos=b,
+    caption={},
+    basicstyle=\ttfamily,
+    columns=fullflexible,
+    moredelim=[is][\bfseries]{***}{***},
+    moredelim=[is][\itshape]{___}{___},
+    moredelim=[is][\bfseries\itshape]{&&&}{&&&},
+    xleftmargin=-70pt,
+    aboveskip=8pt,
+    #1
+    }}
+    {
+    \renewcommand{\codewingding}[1]
+    {\vbox{\llap{\wingding{#1}\hskip 0.5em}}}
+    \captionsetup[lstlisting]{font=nostarchfigfont,singlelinecheck=off,
+  aboveskip=4pt, belowskip=0pt, margin=0pt}}
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{nostarchtabfmt}
-% \changes{v0.3}{2008/03/11}{Added style} 
-%   This is our captions format for tables
+%
+%
+% Fonts for captions
 %    \begin{macrocode}
-\DeclareCaptionFormat{nostarchtabfmt}{\fontfamily{\sfdefault}%
-  \fontshape{rm}\fontsize{8.5pt}{9pt}\fontseries{h}\selectfont\unskip#1#2%
-  \fontseries{k}\selectfont#3}
+\DeclareCaptionFont{nostarchfigfont}{\sffamily \itshape \fontsize{8.5pt}{9pt}\selectfont}
+\DeclareCaptionFont{nostarchtabfont}{\futurabook \fontsize{9pt}{9pt}\selectfont}
+\captionsetup[figure]{font=nostarchfigfont,singlelinecheck=off,
+  aboveskip=8pt,belowskip=-8pt}
+\captionsetup[lstlisting]{font=nostarchfigfont,singlelinecheck=off,
+  aboveskip=4pt, belowskip=0pt}
+\captionsetup[table]{font=nostarchtabfont,singlelinecheck=off,
+  aboveskip=0pt,belowskip=4pt, labelfont=bf}
 %    \end{macrocode}
+%
+% \begin{macro}{\captionlst}
+% \begin{macro}{\boxlst}
+% \begin{macro}{\tablelst}
+\newcommand{\captionlst}[1]{{\ttfamily \itshape \fontsize{10pt}{9pt}\selectfont #1}}
+\newcommand{\boxlst}[1]{{\ttfamily \fontsize{10pt}{9pt}\selectfont #1}}
+\newcommand{\tablelst}[1]{{\ttfamily \fontsize{10pt}{9pt}\selectfont #1}}
 % \end{macro}
-%  
-%
-%
-% The figure, listing and and table styles:
-%    \begin{macrocode}
-\captionsetup[figure]{format=nostarchfigfmt,singlelinecheck=off,
-  aboveskip=8pt,belowskip=8pt}
-\captionsetup[lstlisting]{format=nostarchfigfmt,singlelinecheck=off,
-  aboveskip=8pt,belowskip=8pt}
-\captionsetup[table]{format=nostarchtabfmt,singlelinecheck=off,
-  aboveskip=0pt,belowskip=4pt}
-%    \end{macrocode}
+% \end{macro}
+% \end{macro}
 %
 % \begin{macro}{\tbfont}
 %   This is the font used for table body:
 %    \begin{macrocode}
 \def\tbfont{%
-  \fontfamily{\sfdefault}\fontseries{k}\fontsize{8pt}{10pt}\selectfont}
+  \futurabook\fontsize{8.5pt}{10pt}\selectfont}
 %    \end{macrocode} 
 % \end{macro}
 %
@@ -1992,10 +2412,12 @@
 %   Font for table headers:
 %    \begin{macrocode}
 \def\thfont{%
-  \fontfamily{\sfdefault}\fontseries{h}\fontsize{8pt}{10pt}\selectfont}
+  \futuraheavy\fontsize{9pt}{10pt}\selectfont}
 %    \end{macrocode}
 % \end{macro}
-%
+%    \begin{macrocode}
+\AtBeginEnvironment{tabular}{\tbfont}
+%    \end{macrocode}
 %
 % \begin{macro}{\heawyrulewidth}
 % \begin{macro}{\lightrulewidth}
@@ -2003,7 +2425,7 @@
 %   Changing \progname{booktabs} defaults:
 %    \begin{macrocode}
 \heavyrulewidth=3\p@
-\lightrulewidth=1.5\p@
+\lightrulewidth=1\p@
 \cmidrulewidth=1.5\p@
 %    \end{macrocode}
 % \end{macro}
@@ -2038,7 +2460,54 @@
 % \end{macro}
 % \end{macro}
 %  
+% \begin{macro}{tablewide}
+% Wide table
+%    \begin{macrocode}
+\newenvironment{tablewide}[1][]
+    {
+        \captionsetup[table]{font=nostarchtabfont,singlelinecheck=off,
+  aboveskip=0pt,belowskip=4pt, labelfont=bf, margin=-70pt}
+        \begin{table}[#1]
+    }
+    {
+        \end{table}
+        \captionsetup[table]{font=nostarchtabfont,singlelinecheck=off,
+  aboveskip=0pt,belowskip=4pt, labelfont=bf, margin=0pt}
+    }
+%    \end{macrocode}
+% \end{macro}
 %
+% \begin{macro}{tabularwide}
+% Wide tabular
+%    \begin{macrocode}
+\newenvironment{tabularwide}[1]
+    {
+        \hspace*{-72pt}
+        \begin{tabular}{#1}
+    }
+    {
+        \end{tabular}
+    }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{figurewide}
+% Wide figure
+%    \begin{macrocode}
+    \newenvironment{figurewide}[1][]
+    {
+        \captionsetup[figure]{font=nostarchfigfont,singlelinecheck=off,
+  aboveskip=8pt,belowskip=-8pt, margin=-70pt}
+        \begin{figure}[#1]
+        \hspace*{-70pt}
+    }
+    {
+        \end{figure}
+        \captionsetup[figure]{font=nostarchfigfont,singlelinecheck=off,
+  aboveskip=8pt,belowskip=-8pt}
+    }
+%    \end{macrocode}
+% \end{macro}
 %
 %\subsection{Verbatim and Listings Customization}
 %\label{sec:verbatim}
@@ -2046,7 +2515,7 @@
 % \begin{macro}{Code}
 %   This is for framed code:
 %    \begin{macrocode}
-\DefineVerbatimEnvironment{Code}{Verbatim}{frame=lines,framerule=0.25pt}
+\DefineVerbatimEnvironment{Code}{Verbatim}{frame=lines,framerule=0.25pt, commandchars=\\\{\}}
 %    \end{macrocode}   
 % \end{macro}
 %
@@ -2063,17 +2532,184 @@
 \VerbatimFootnotes
 %    \end{macrocode}
 % 
-% We set up captions with \progname{captions}:
-%    \begin{macrocode}
-\lstset{captionpos=b}
-%    \end{macrocode}
-% 
-% And make the code to be in typewriter font:
-%    \begin{macrocode}
-\lstset{basicstyle=\ttfamily,columns=fullflexible}
-%    \end{macrocode}
-% 
 %
+%\subsection{Boxes and projects}
+%\label{sec:boxes}
+%
+% Various boxes.
+%
+% \begin{macro}{nspgray}
+% The color for boxes
+%    \begin{macrocode}
+\definecolor{nspgray}{cmyk}{0, 0, 0, 0.1}
+%    \end{macrocode}
+% \end{macro}
+%
+% And various mdframed styled boxes
+%    \begin{macrocode}
+\mdfdefinestyle{nspbox}{%
+    linecolor=black,
+    outerlinewidth=1pt,
+    roundcorner=5pt,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    innerrightmargin=18pt,
+    innerleftmargin=18pt,
+    backgroundcolor=nspgray,
+    }
+    
+\mdfdefinestyle{custombox}{%
+    linecolor=black,
+    outerlinewidth=1pt,
+    roundcorner=5pt,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    innerrightmargin=18pt,
+    innerleftmargin=18pt,
+    }
+\newenvironment{nspbox}[1]
+{\begin{mdframed}[style=nspbox]
+    \begin{center} 
+    {\dogma \fontsize{9pt}{15pt} \MakeUppercase{\sobox{#1}}}
+    \end{center}
+    \begin{flushright}
+    \begin{flushleft}
+    \parskip=.5\baselineskip
+    \tbfont
+}
+{\end{flushleft}\end{flushright}
+\end{mdframed}}
+\newenvironment{nspboxcontinued}
+{\begin{mdframed}[style=nspbox]
+    \begin{flushright}
+    \begin{flushleft}
+    \parskip=.5\baselineskip
+    \tbfont
+}
+{
+\end{flushleft}
+\end{flushright}
+\end{mdframed}}
+\newenvironment{custombox}[1]
+{\begin{mdframed}[style=custombox]
+    \begin{center} 
+    {\dogma \fontsize{9pt}{15pt} \MakeUppercase{\sobox{#1}}}
+    \end{center}
+    \begin{flushright}
+    \begin{flushleft}
+    \parskip=.5\baselineskip
+    \tbfont
+}
+{\end{flushleft}\end{flushright}
+\end{mdframed}}
+
+\newenvironment{customboxcontinued}
+{\begin{mdframed}[style=custombox]
+    \begin{flushright}
+    \begin{flushleft}
+    \parskip=.5\baselineskip
+    \tbfont
+}
+{
+\end{flushleft}
+\end{flushright}
+\end{mdframed}}
+
+\newcommand{\continued}[0]{%
+    {\begin{flushright}%
+    \emph{(continued)}%
+    \end{flushright}}%
+}
+%    \end{macrocode}
+%
+%
+% Project stuff
+%    \begin{macrocode}
+\newcounter{project}
+\stepcounter{project}
+\newcommand{\projecthead}[1]{
+    \vspace{16pt}%
+    \noindent%
+    \hspace{-.75in}%
+    \addcontentsline{toc}{boldsection}{Project~\#\theproject: #1}%
+     {\sffamily\bfseries\fontsize{12pt}{16pt}\selectfont 
+        \colorbox{black}{\textcolor{white}{Project~\#\theproject: #1}}}%
+    \vspace{6pt}%
+    \@afterindentfalse\@afterheading%
+    \refstepcounter{project}%
+}
+%    \end{macrocode}
+%
+%
+%\subsection{Margin notes}
+%\label{sec:margins}
+%
+% Filenames on margins
+%    \begin{macrocode}
+\renewcommand*{\marginfont}{\sffamily\itshape\fontsize{8.5}{10}\selectfont}
+\renewcommand*{\marginnotevadjust}{-\baselineskip}
+\newcommand{\marginwingding}[1]{{\fontsize{10pt}{12pt}\selectfont \wingding{#1}}}
+%    \end{macrocode}
+%
+% Code below makes the margin note always on the left, taken from:
+% \url{https://tex.stackexchange.com/questions/472728/marginnote-always-on-left-side-of-the-page}
+%    \begin{macrocode}
+\long\def\@mn@@@marginnote[#1]#2[#3]{%
+  \begingroup
+    \ifmmode\mn@strut\let\@tempa\mn@vadjust\else
+      \if@inlabel\leavevmode\fi
+      \ifhmode\mn@strut\let\@tempa\mn@vadjust\else\let\@tempa\mn@vlap\fi
+    \fi
+    \@tempa{%
+      \vbox to\z@{%
+        \vss
+        \@mn@margintest
+        \if@reversemargin\if@tempswa
+            \@tempswafalse
+          \else
+            \@tempswatrue
+        \fi\fi
+
+          \llap{%
+            \vbox to\z@{\kern\marginnotevadjust\kern #3
+              \vbox to\z@{%
+                \hsize\marginparwidth
+                \linewidth\hsize
+                \kern-\parskip
+                %\mn@parboxrestore
+                \marginfont\raggedleftmarginnote\strut\hspace{\z@}%
+                \ignorespaces#1\endgraf
+                \vss
+              }%
+              \vss
+            }%
+            \if@mn@verbose
+              \PackageInfo{marginnote}{xpos seems to be \@mn@currxpos}%
+            \fi
+            \begingroup
+              \ifx\@mn@currxpos\relax\else\ifx\@mn@currpos\@empty\else
+                  \kern\@mn@currxpos
+              \fi\fi
+              \ifx\@mn@currpage\relax
+                \let\@mn@currpage\@ne
+              \fi
+              \if@twoside\ifodd\@mn@currpage\relax
+                  \kern-\oddsidemargin
+                \else
+                  \kern-\evensidemargin
+                \fi
+              \else
+                \kern-\oddsidemargin
+              \fi
+              \kern-1in
+            \endgroup
+            \kern\marginparsep
+          }%
+      }%
+    }%
+  \endgroup
+}
+%    \end{macrocode}
 %
 %\subsection{Bibliography}
 %\label{sec:biblio}
@@ -2097,9 +2733,9 @@
     \addcontentsline{toc}{chapter}{\MakeUppercase{\bibname}}%
     \addcontentsline{tbc}{bchapter}{\bibname}%
     {\centering
-      {\fontfamily{\dgdefault}\fontseries{br}\fontsize{16pt}{20pt}\selectfont
-        \MakeUppercase{\bibname}\par}}\nobreak\vskip25pt\relax%
-    \@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}}}%
+      {\dogma\fontsize{16pt}{20pt}\selectfont
+        \MakeUppercase{\sochapter{\bibname}}\par}}\nobreak\vskip25pt\relax%
+    \@mkboth{\bibname}{\bibname}}}%
 %    \end{macrocode}
 %   
 % \end{macro}
@@ -2133,6 +2769,15 @@
 %
 %\subsection{Index}
 %\label{sec:index}
+%
+% \begin{macro}{\term}
+% \changes{v2.0}{2023/04/04}{Introduced the macro}
+% An indexed term
+%    \begin{macrocode}
+\newcommand{\term}[1]{\emph{#1}\index{#1}}
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{theindex}
 % \changes{v0.6}{2008/03/22}{Introduced the macro} 
 %  We want our index to be in the table of contents too:
@@ -2156,12 +2801,12 @@
   \addcontentsline{toc}{chapter}{\MakeUppercase{\indexname}}%
   \addcontentsline{tbc}{bchapter}{\indexname}%
   {\centering
-    {\fontfamily{\dgdefault}\fontseries{br}%
+    {\dogma%
       \fontsize{16pt}{20pt}\selectfont
-      \MakeUppercase{\indexname}\par}}%
+      \MakeUppercase{\sochapter{\indexname}}\par}}%
   \nobreak\vskip25pt\relax]%
-  \@mkboth{\MakeUppercase\indexname}%
-  {\MakeUppercase\indexname}%
+  \@mkboth{\indexname}%
+  {\indexname}%
   \parindent\z@
   \parskip\z@ \@plus .3\p@\relax
   \columnseprule \z@
@@ -2205,7 +2850,7 @@
 % \changes{v0.6}{2008/03/22}{Introduced the macro} 
 %   When an index starts a new letter, we call this macro:
 %    \begin{macrocode}
-\newcommand\indexgroup[1]{{\fontfamily{\sfdefault}%
+\newcommand\indexgroup[1]{{\futuraboldc
     \fontseries{bc}\fontsize{11\p@}{13\p@}\selectfont#1}\par\vskip4\p@}
 %    \end{macrocode}   
 % \end{macro}
@@ -2240,9 +2885,9 @@
   \gdef\@chapterart{}%
   \vspace*{1.875in}%
   {\centering
-    \fontfamily{\dgdefault}\fontseries{br}%
+   \dogma%
     \fontsize{16pt}{20pt}\selectfont
-    \MakeUppercase{\updatesname}\par\nobreak\vskip40\p@}%
+    \MakeUppercase{\sochapter{\updatesname}}\par\nobreak\vskip40\p@}%
   \@nobreaktrue
   \everypar{%
     \if@nobreak
@@ -2275,10 +2920,10 @@
   \global\@topnum\z@
   \gdef\@chapterart{}%
   \vspace*{0.875in}%
-  {\centering
-    \fontfamily{\dgdefault}\fontseries{br}%
-    \fontsize{16pt}{20pt}\selectfont
-    \MakeUppercase{\colophonname}\par\nobreak\vskip40\p@}%
+  %{\centering
+   %\dogma%
+   % \fontsize{16pt}{20pt}\selectfont
+    %\MakeUppercase{\sochapter{\colophonname}}\par\nobreak\vskip40\p@}%
   \@nobreaktrue
   \everypar{%
     \if@nobreak
@@ -2290,9 +2935,10 @@
     \everypar{}%
     \fi}\par
     The fonts used in \emph{\@title} are New Baskerville, Futura, The
-    Sans Mono Condensed and Dogma.  The book was typeset with
+    Sans Mono Condensed, and Dogma.  The book was typeset with
     \LaTeXe{} package 
-    \texttt{nostarch} by Boris Veytsman
+    \texttt{nostarch} by Boris Veytsman with many additions by Alex
+    Freed and other members of the \emph{No Starch Press} team
     \emph{(\csname ver@nostarch.cls\endcsname).}\par} 
 %    \end{macrocode}   
 % \end{macro}

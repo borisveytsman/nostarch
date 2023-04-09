@@ -10,6 +10,10 @@ nshyper.sty and MakeIndex style nostarch.ist.
 
 CHANGES:
 
+Version 2.0:
+    Incorporated the changes by Alex Freed and other members of
+    the NoStarch team over the years.
+
 Version 1.1:  
 
     Added interface to listings package

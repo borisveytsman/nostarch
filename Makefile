@@ -17,28 +17,28 @@ all:  ${PDF}
 
 
 %.pdf:  %.dtx   $(PACKAGE).cls
-	pdflatex $<
+	xelatex $<
 	- bibtex $*
-	pdflatex $<
+	xelatex $<
 	- makeindex -s gind.ist -o $*.ind $*.idx
 	- makeindex -s gglo.ist -o $*.gls $*.glo
-	pdflatex $<
+	xelatex $<
 	while ( grep -q '^LaTeX Warning: Label(s) may have changed' $*.log) \
-	do pdflatex $<; done
+	do xelatex $<; done
 
 
 %.cls:   %.ins %.dtx  
-	pdflatex $<
+	xelatex $<
 
 %.pdf:  %.tex   $(PACKAGE).cls
-	pdflatex $<
+	xelatex $<
 	- bibtex $*
 	- makeindex -s $(PACKAGE).ist -o $*.ind $*.idx
-	pdflatex $<
-	pdflatex $<
+	xelatex $<
+	xelatex $<
 	- makeindex -s $(PACKAGE).ist -o $*.ind $*.idx
 	while ( grep -q '^LaTeX Warning: Label(s) may have changed' $*.log) \
-	do pdflatex $<; done
+	do xelatex $<; done
 
 
 
@@ -47,7 +47,7 @@ all:  ${PDF}
 
 clean:
 	$(RM)  $(PACKAGE).cls *.log *.aux \
-	*.glo *.idx *.toc *.tbc \
+	*.glo *.idx *.toc *.tbc *.hd \
 	*.ilg *.ind *.out *.lof \
 	*.lot *.bbl *.blg *.gls *.sty *.ist \
 	*.dvi *.ps *.thm *.tgz *.zip
@@ -59,10 +59,9 @@ distclean: clean
 # Archive for the distribution. Includes typeset documentation
 #
 archive:  all clean
-	tar -czvf $(PACKAGE).tgz  --exclude 'debug*' \
-	--exclude '*~' --exclude '*.tgz' --exclude '*.zip'  --exclude CVS .
+	COPYFILE_DISABLE=1 tar -C .. -czvf ../$(PACKAGE).tgz --exclude '*~' --exclude '*.tgz' --exclude '*.zip'  --exclude CVS --exclude '.git*' $(PACKAGE); mv ../$(PACKAGE).tgz .
 
 
 zip:  all clean
 	zip -r  $(PACKAGE).zip * \
-	-x 'debug*' -x '*~' -x '*.tgz' -x '*.zip' -x CVS -x 'CVS/*'
+	-x 'debug*' -x '*~' -x '*.tgz' -x '*.zip' -x .git* -x '.git/*'
