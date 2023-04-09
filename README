@@ -10,6 +10,11 @@ nshyper.sty and MakeIndex style nostarch.ist.
 
 CHANGES:
 
+Version 2.1
+    Urls now correspond to the requirements of NoStarch: italic font,
+    low tilde, splitting according to the NoStarch rules
+    Bibliography updates
+
 Version 2.0:
     Incorporated the changes by Alex Freed and other members of
     the NoStarch team over the years.
