@@ -474,16 +474,21 @@
 % captions. The captions for figures go \emph{below} the figures, the
 % captions for tables go \emph{above} the tabular data.  
 %
-% If a caption for a table or figure turns out to be wider than the
-% body, you might want to split the caption into lines.  Remember,
-% however, that the mandatory argument to |\caption| becomes
-% ``robust'' in the \LaTeX{} parlance~\cite{Lamport94} only when there
-% is the optional one.  Therefore the correct way to split a caption
-% is the following:
+% \DescribeMacro{\NextCaptionWidth}%
+% The captions of tables and figures are automatically typeset with
+% the same width as the table or figure.  Sometimes, however, \LaTeX\
+% makes a mistake in the calculation.  In this case the macro
+% \cs{NextCaptionWidth}\marg{length} overrides this calculation and
+% sets the width of the caption for the next figure or table to
+% \marg{length}, for example
 % \begin{verbatim}
-% \caption[A Long Caption With Lines To Split]{%
-%   A Long Caption\\ With Lines To Split}
+% \NextCaptionWidth{2in}
+% \begin{figure}
+%   ...
+%   \caption{...}
+% \end{figure}
 % \end{verbatim}
+%
 % 
 % Typesetting tables, unfortunately, is rarely done right, and
 % standard \LaTeX{} is not an exception.  The authors are urged to
@@ -2377,13 +2382,81 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 %    \end{macrocode}
 % \end{macro}
 %
+% \begin{macro}{\ifnostarch@overridecaptionwidth}
+% \changes{v2.1}{2023/04/09}{Introduced macro}
+% Whether the user wants to override automatically selected caption
+% width
+%    \begin{macrocode}
+\newif\ifnostarch@overridecaptionwidth
+\nostarch@overridecaptionwidthfalse
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\nostarch@captionwidth}
+% \changes{v2.1}{2023/04/09}{Introduced macro}
+% The width of the caption.  Either set by the user or measured
+%    \begin{macrocode}
+\newlength\nostarch@captionwidth
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\NextCaptionWidth}
+% \changes{v2.1}{2023/04/09}{Introduced macro}
+% A user-level command to set the caption width
+%    \begin{macrocode}
+\newcommand\NextCaptionWidth[1]{%
+  \global\nostarch@overridecaptionwidthtrue
+  \global\setlength{\nostarch@captionwidth}{#1}%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\nostarch@measurecaptionwidth}
+% \changes{v2.1}{2023/04/09}{Introduced macro}
+% We set \cs{nostarch@captionwidth} to the width of the last box
+% unless the flag \cs{ifnostarch@overridecaptionwidth} is set.  At the
+% end we set the flag to false.
+%    \begin{macrocode}
+\newcommand\nostarch@measurecaptionwidth{%
+  \ifnostarch@overridecaptionwidth\else
+  \par
+  \setbox\@tempboxa\lastbox
+  \setbox\@tempboxa=\hbox{\unhbox\@tempboxa}%
+  \global\setlength{\nostarch@captionwidth}{\wd\@tempboxa}%
+  \box\@tempboxa\par
+  \fi
+  \global\nostarch@overridecaptionwidthfalse
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% We measure the width at the begin of the figure caption.  Note that
+% the cs{AtBeginCaption} hook is too late for us.
+%    \begin{macrocode}
+\AtBeginDocument{%
+\pretocmd{\caption}{\def\@tempa{figure}%
+  \ifx\@tempa\@captype\relax
+  \nostarch@measurecaptionwidth
+  \fi}{}{}}
+%    \end{macrocode}
+%
+%
+% We declare the caption format for figures
+%    \begin{macrocode}
+\DeclareCaptionFormat*{nostarchfigformat}{%
+  \parbox{\nostarch@captionwidth}{#1#2#3}}
+%    \end{macrocode}
+%
+% 
 %
 % Fonts for captions
 %    \begin{macrocode}
-\DeclareCaptionFont{nostarchfigfont}{\sffamily \itshape \fontsize{8.5pt}{9pt}\selectfont}
-\DeclareCaptionFont{nostarchtabfont}{\futurabook \fontsize{9pt}{9pt}\selectfont}
+\DeclareCaptionFont{nostarchfigfont}{\sffamily
+  \itshape \fontsize{8.5pt}{9pt}\selectfont}
+\DeclareCaptionFont{nostarchtabfont}{\futurabook
+  \fontsize{9pt}{9pt}\selectfont}
 \captionsetup[figure]{font=nostarchfigfont,singlelinecheck=off,
-  aboveskip=8pt,belowskip=-8pt}
+  aboveskip=8pt,belowskip=-8pt, format=nostarchfigformat}
 \captionsetup[lstlisting]{font=nostarchfigfont,singlelinecheck=off,
   aboveskip=4pt, belowskip=0pt}
 \captionsetup[table]{font=nostarchtabfont,singlelinecheck=off,
