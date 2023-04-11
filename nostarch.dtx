@@ -2441,13 +2441,78 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 %    \end{macrocode}
 %
 %
-% We declare the caption format for figures
+% We declare the caption format for figures and tables
 %    \begin{macrocode}
-\DeclareCaptionFormat*{nostarchfigformat}{%
+\DeclareCaptionFormat*{nostarchfigtblformat}{%
   \parbox{\nostarch@captionwidth}{#1#2#3}}
 %    \end{macrocode}
 %
-% 
+% Tables are more complex, because captions are \emph{before} the
+% tables.  Therefore we need to write the width into aux file and read
+% it from there.  Most of the ideas here are stolen from
+% \textsl{longtable} code.
+%
+% \begin{macro}{\nostarch@tbl@warn}
+% \changes{v2.1}{2023/04/10}{Introduced macro}
+% Whether to ask the user for rerun due to changed widths
+%    \begin{macrocode}
+\def\nostarch@tbl@warn{}
+\AtEndDocument{\nostarch@tbl@warn}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\c@nostarch@tbl}
+% \changes{v2.1}{2023/04/10}{Introduced macro}
+% We write the table width into the macro \cs{nostarch@tbl@N}, where
+% $N$ is the roman representation of the table number
+%    \begin{macrocode}
+\newcounter{nostarch@tbl}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\nostarch@read@tbl@width}
+% \changes{v2.1}{2023/04/10}{Introduced macro}
+% At the beginning of table environment we read the latest value of the
+% width for the given table and set the caption size
+%    \begin{macrocode}
+\newcommand\nostarch@read@tbl@width{%
+  \stepcounter{nostarch@tbl}%
+  \expandafter\ifx\csname nostarch@tbl@\romannumeral\c@nostarch@tbl\endcsname\relax
+     \edef\@tempa{\the\textwidth}%
+  \else
+     \edef\@tempa{\csname nostarch@tbl@\romannumeral\c@nostarch@tbl\endcsname}%
+  \fi
+  \expandafter\setlength\expandafter\nostarch@captionwidth\expandafter{\@tempa}%
+}
+\AtBeginEnvironment{table}{\nostarch@read@tbl@width}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\nostarch@save@tbl@width}
+% \changes{v2.1}{2023/04/10}{Introduced macro}
+% At the end of the table environment we measure the width of the last
+% box and write it in the aux file.
+%    \begin{macrocode}
+\newcommand\nostarch@save@tbl@width{%
+  \nostarch@measurecaptionwidth
+  \if@filesw
+     \immediate\write\@auxout{%
+     \gdef\expandafter\noexpand\csname nostarch@tbl@\romannumeral\c@nostarch@tbl\endcsname
+     {\the\nostarch@captionwidth}}%
+  \fi
+  \expandafter\ifx\csname nostarch@tbl@\romannumeral\c@nostarch@tbl\endcsname\relax
+    \edef\@tempa{\the\textwidth}%
+  \else
+    \edef\@tempa{\csname nostarch@tbl@\romannumeral\c@nostarch@tbl\endcsname}%
+  \fi
+  \expandafter\ifdim\@tempa=\nostarch@captionwidth\else
+  \gdef\nostarch@tbl@warn{\ClassWarningNoLine{nostarch}
+    {Table widths have changed.  Rerun LaTeX.}}
+ \fi
+}
+\preto{\endtable}{\nostarch@save@tbl@width}
+%    \end{macrocode}
+% \end{macro}
 %
 % Fonts for captions
 %    \begin{macrocode}
@@ -2455,12 +2520,15 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
   \itshape \fontsize{8.5pt}{9pt}\selectfont}
 \DeclareCaptionFont{nostarchtabfont}{\futurabook
   \fontsize{9pt}{9pt}\selectfont}
+%    \end{macrocode}
+% And the setup
+%    \begin{macrocode}
 \captionsetup[figure]{font=nostarchfigfont,singlelinecheck=off,
-  aboveskip=8pt,belowskip=-8pt, format=nostarchfigformat}
+  aboveskip=8pt,belowskip=-8pt, format=nostarchfigtblformat}
 \captionsetup[lstlisting]{font=nostarchfigfont,singlelinecheck=off,
   aboveskip=4pt, belowskip=0pt}
 \captionsetup[table]{font=nostarchtabfont,singlelinecheck=off,
-  aboveskip=0pt,belowskip=4pt, labelfont=bf}
+  aboveskip=0pt,belowskip=4pt, labelfont=bf, format=nostarchfigtblformat}
 %    \end{macrocode}
 %
 % \begin{macro}{\captionlst}
