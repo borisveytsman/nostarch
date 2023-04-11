@@ -2716,7 +2716,8 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 % Urls are typeset in italics, with upper tilde, and according to the
 % following rules: URLs should break \emph{before} periods,
 % underscores, equal signs, ampersands, and hyphens but \emph{after}
-% colons, slashes and hash marks.  
+% colons, slashes and hash marks.  Also, we do not allow splitting
+% before slashes.
 % \begin{macro}{\UrlFont}
 % \changes{v2.1}{2023/04/08}{Redefined macro}
 % Urls are in italic
@@ -2733,16 +2734,20 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 % \end{macro}
 % \begin{macro}{\UrlBreaks}
 % \changes{v2.1}{2023/04/08}{Redefined macro}
+% \changes{v2.1}{2023/04/10}{Moved slashes to specials}
 % Breaks after colons, slashes, hash marks.  Colons are defined in
 % \cs{UrlBigBreaks}, so we need the other signs.  We also add some
 % other signs here
 %    \begin{macrocode}
-\def\UrlBreaks{\do\#\do\\\do\/\do\>\do\]\do\)\do\}}
+\def\UrlBreaks{\do\#\do\\\do\>\do\]\do\)\do\}}
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{\UrlSpecials}
 % \changes{v2.1}{2023/04/08}{Redefined macro}
-% We add to macro special treatment of the chars with breaking URLs
+% \changes{v2.1}{2023/04/11}{Added slashes and double quote}
+% We add to macro special treatment of the chars with breaking URLs.
+% Slashes are interesting: we allow breaking after them, but not
+% before, even after other slashes or colons
 % \emph{before} them
 %    \begin{macrocode}
 \g@addto@macro{\UrlSpecials}{%
@@ -2758,11 +2763,13 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
   \do\;{\penalty\UrlBreakPenalty\mathchar59\relax}%
   \do\@{\penalty\UrlBreakPenalty\mathchar64\relax}%
   \do\'{\penalty\UrlBreakPenalty\mathchar39\relax}%
+  \do\"{\penalty\UrlBreakPenalty\mathchar34\relax}%
   \do\+{\penalty\UrlBreakPenalty\mathchar43\relax}%
   \do\<{\penalty\UrlBreakPenalty\mathchar60\relax}%
   \do\[{\penalty\UrlBreakPenalty\mathchar91\relax}%
   \do\({\penalty\UrlBreakPenalty\mathchar40\relax}%
   \do\{{\penalty\UrlBreakPenalty\mathchar123\relax}%
+  \do\/{\unpenalty\penalty\@M\mathchar47\penalty\UrlBreakPenalty}%
 }
 %    \end{macrocode}
 % \end{macro}
