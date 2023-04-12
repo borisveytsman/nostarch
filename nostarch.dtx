@@ -788,7 +788,8 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 % A bunch of packages:
 %    \begin{macrocode}
 \RequirePackage[table]{xcolor}  
-\RequirePackage{iftex, ifpdf, fancyhdr, fancyvrb, booktabs, graphicx,
+\RequirePackage{iftex, ifpdf, longtable,
+  fancyhdr, fancyvrb, booktabs, graphicx,
   listings, caption, makeidx, upquote, pifont,
   textcomp, xcolor, lmodern, nameref, float, amssymb, etoolbox,
   setspace, marginnote, url}
@@ -2382,6 +2383,12 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 %    \end{macrocode}
 % \end{macro}
 %
+% Setting up longtables
+%    \begin{macrocode}
+\def\LTleft{\z@}
+\def\LTright{\fill}
+%    \end{macrocode}
+%
 % \begin{macro}{\ifnostarch@overridecaptionwidth}
 % \changes{v2.1}{2023/04/09}{Introduced macro}
 % Whether the user wants to override automatically selected caption
@@ -2510,9 +2517,32 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
     {Table widths have changed.  Rerun LaTeX.}}
  \fi
 }
-\preto{\endtable}{\nostarch@save@tbl@width}
+\pretocmd{\endtable}{\nostarch@save@tbl@width}{}{}
 %    \end{macrocode}
 % \end{macro}
+%
+% \begin{macro}{\nostarch@read@LT@width}
+% \changes{v2.1}{2023/04/10}{Introduced macro}
+% The long table version of setting caption width is different.
+% First, longtable knows its width, so we can use it.  Second,
+% longtable typesets the caption in a parbox of width \cs{LTcapwidth},
+% which we can use
+%    \begin{macrocode}
+\def\nostarch@read@LT@width{%
+  \ifnostarch@overridecaptionwidth\else
+     \global\setlength{\nostarch@captionwidth}{\z@}%
+     \bgroup
+        \def\LT@entry##1##2{%
+          \global\addtolength{\nostarch@captionwidth}{##2}}%
+        \csname LT@\romannumeral\c@LT@tables\endcsname        
+     \egroup
+  \fi
+ \global\nostarch@overridecaptionwidthfalse
+}
+\AtBeginDocument{\pretocmd{\caption@LT@config}{\nostarch@read@LT@width}{}{}}
+%    \end{macrocode}
+% \end{macro}
+%
 %
 % Fonts for captions
 %    \begin{macrocode}

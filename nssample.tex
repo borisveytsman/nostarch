@@ -367,9 +367,47 @@ condimentum. Nullam imperdiet mattis neque. Proin eget magna porta
 erat rhoncus consectetuer. Aenean pulvinar erat vitae\index{vita} mi.
 \index{donec|)}
 
+
 \section{Proin eget magna porta erat rhoncus consectetuer}
 
-\lipsum[123-124]
+\lipsum[123-125]
+
+{\tbfont
+\begin{longtable}{lll}
+  \caption{This is a longtable with a very long caption. It will be
+    typeset in several lines}\label{tab:longtable}\\
+  \toprule
+  \thfont First column & \thfont Second column\\
+  \midrule
+  \endfirsthead
+  \caption[]{This is a longtable with a very long caption. It will be
+    typeset in several lines---continued\ldots}\\
+  \toprule
+  \thfont First column & \thfont Second column\\
+  \midrule
+  \endhead
+  \bottomrule
+  \endfoot
+  a & b\\
+  ab & bc\\
+  $\alpha$ & $\beta$\\
+  a & b\\
+  ab & bc\\
+  $\alpha$ & $\beta$\\
+  a & b\\
+  ab & bc\\
+  $\alpha$ & $\beta$\\
+  a & b\\
+  ab & bc\\
+  $\alpha$ & $\beta$\\
+  a & b\\
+  ab & bc\\
+  $\alpha$ & $\beta$\\
+  a & b\\
+  ab & bc\\
+  $\alpha$ & $\beta$\\
+\end{longtable}}
+
 
 \part{Curabitur vitae}\index{vita|(}
 \label{part:Curabitur}
