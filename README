@@ -14,6 +14,9 @@ Version 2.1
     Urls now correspond to the requirements of NoStarch: italic font,
     low tilde, splitting according to the NoStarch rules
     Bibliography updates
+    New formatting for captions.
+    Longtable is now loaded by default
+    New code for colored rows
 
 Version 2.0:
     Incorporated the changes by Alex Freed and other members of

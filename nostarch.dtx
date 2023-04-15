@@ -588,6 +588,18 @@
 % example, in quote characters.
 %
 %
+%\subsection{Boxes}
+%\label{sec:ug_boxes}
+%
+% \DescribeEnv{nspbox}%
+% You may put some information into \emph{boxes}.  Boxes have a \emph{heading}
+% and a \emph{text}.  The environment |nspbox| can be used to typeset
+% them, for example:
+% \begin{verbatim}
+% \begin{nspbox}{This is a heading}
+%   This is a text for the box.  
+% \end{nspbox}
+% \end{verbatim}
 %
 %\subsection{Back Matter}
 %\label{sec:guide:backmatter}
@@ -2523,10 +2535,8 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 %
 % \begin{macro}{\nostarch@read@LT@width}
 % \changes{v2.1}{2023/04/10}{Introduced macro}
-% The long table version of setting caption width is different.
-% First, longtable knows its width, so we can use it.  Second,
-% longtable typesets the caption in a parbox of width \cs{LTcapwidth},
-% which we can use
+% The long table version of setting caption width is different,
+% because a longtable knows its width.
 %    \begin{macrocode}
 \def\nostarch@read@LT@width{%
   \ifnostarch@overridecaptionwidth\else
@@ -2539,7 +2549,9 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
   \fi
  \global\nostarch@overridecaptionwidthfalse
 }
-\AtBeginDocument{\pretocmd{\caption@LT@config}{\nostarch@read@LT@width}{}{}}
+\AtBeginDocument{\pretocmd{\caption@LT@config}{\global\rownum=1\relax
+    \nostarch@read@LT@width}{}{}}
+\AtBeginEnvironment{longtable}{\global\rownum=0\relax}
 %    \end{macrocode}
 % \end{macro}
 %
@@ -2588,6 +2600,7 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 % \end{macro}
 %    \begin{macrocode}
 \AtBeginEnvironment{tabular}{\tbfont}
+\AtBeginEnvironment{longtable}{\tbfont}
 %    \end{macrocode}
 %
 % \begin{macro}{\heawyrulewidth}
@@ -2680,6 +2693,18 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 %    \end{macrocode}
 % \end{macro}
 %
+% Setting up colors in tables
+%    \begin{macrocode}
+\rowcolors[]{1}{}{nspgray}
+%    \end{macrocode}
+%
+% We extend the height of the rows and delete the space arounr rules
+%    \begin{macrocode}
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\setlength{\extrarowheight}{.8ex}
+%    \end{macrocode}
+%
 %\subsection{Verbatim, url and Listings Customization}
 %\label{sec:verbatim}
 %
@@ -2727,6 +2752,7 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
     innerrightmargin=18pt,
     innerleftmargin=18pt,
     backgroundcolor=nspgray,
+    everyline=true
     }
     
 \mdfdefinestyle{custombox}{%
@@ -2737,6 +2763,7 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
     innerbottommargin=\baselineskip,
     innerrightmargin=18pt,
     innerleftmargin=18pt,
+    everyline=true
     }
 \newenvironment{nspbox}[1]
 {\begin{mdframed}[style=nspbox]
