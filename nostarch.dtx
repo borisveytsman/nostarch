@@ -2533,6 +2533,13 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 %    \end{macrocode}
 % \end{macro}
 %
+% The |H| specifier from the |float| package redefines the end of the
+% float, so we need to patch it too
+%    \begin{macrocode}
+\pretocmd{\float@endH}{\def\@tempa{table}%
+  \ifx\@tempa\@captype\nostarch@save@tbl@width\fi}{}{}
+%    \end{macrocode}
+%
 % \begin{macro}{\nostarch@read@LT@width}
 % \changes{v2.1}{2023/04/10}{Introduced macro}
 % The long table version of setting caption width is different,
