@@ -11,11 +11,11 @@
 
 \frontmatter
 
-\author{A.~U.~Thor, C.~O.~R.~Respondent and W.~R.~Iter}
+\author{Boris Veytsman}
 
-\title{Pellentesque habitant morbi}
+\title{\emph{No Starch Press} example file}
 
-\subtitle{Cum sociis natoque penatibus}
+\subtitle{A short demonstration}
 
 \nostarchlogo{vitruvian.jpg}
 
@@ -25,9 +25,8 @@
 
 
 \begin{copyrightpage}
-  \textbf{\sffamily\MakeUppercase{Pellentesque habitant morbi.}}
-  Copyright \textcopyright{} 2008 by A.~U.~Thor, C.~O.~R.~Respondent
-  and W.~R.~Iter
+  \textbf{\sffamily\MakeUppercase{\emph{No Start Press} example file}}
+  Copyright \textcopyright{} 2023 by Boris Veytsman
 
   No rights reserved. Any part of this work may be reproduced or
   transmitted in any form or by any means, electronic or mechanical,
@@ -116,7 +115,14 @@ Or was I a worm---too low crawling for death?\\
 
 \chapter*[Foreword by R.~E.~Viewer]{Foreword}
 
-\lipsum[48-60]
+This is a foreword.  Note that the chapter\index{chapter} has two
+arguments: the title of the chapter and the title for the table of
+contents\index{table of contents!adding to}.  The first paragraph
+is automatically typeset in a larger font.
+
+Now a couple of paragraphs of filler text to make some pages.
+
+\lipsum[1-3]
 
 \bigskip
 
@@ -128,21 +134,31 @@ December 2007
 \end{raggedright}
 
 \mainmatter
-\part{Mi aliquam dictum}
+\part{The first part}
+
+The main part of the book starts with the command, well,
+\path{\mainmatter}\index{main matter}.
+
+Again some filler.
 
 \lipsum[77-78]
 
-\chapter[Morbi ac orci]{Morbi ac orci et nisl hendrerit
-  mollis}
+\chapter[The first chapter]{The first chapter (the long title)}
 
 \chapterartfile{1eurogr}\index{euro, coin!Greece}\index{Greek euro|see{euro}}
 
-
-Fusce adipiscing justo nec ante. Nullam in enim.  Pellentesque felis
-orci, sagittis ac, malesuada et, facilisis in, ligula\index{ligula}.
-Nunc\index{nunc} non magna sit amet mi aliquam dictum\index{dictum}.
+The first chapter again has two versions of the title.  There is a
+special command \path{\chapterartfile}.  It adds the art vignette to
+the start of the chapter.  Now again some filler---but here we show
+how to add index entries to the text.  Fusce adipiscing justo nec
+ante. Nullam in enim.  Pellentesque felis orci, sagittis ac, malesuada
+et, facilisis in, ligula\index{ligula}.  Nunc\index{nunc} non magna
+sit amet mi aliquam dictum\index{dictum}.
 
 \section{Quisque aliquam ipsum sed turpis}
+
+Some additional filler\ldots
+
 
 \lipsum[1]
 
@@ -167,6 +183,8 @@ Pellentesque cursus luctus mauris\footnote{\lipsum[3]}.
 
 \section{Nunc\index{nunc} non magna sit amet mi aliquam dictum}
 
+The index can be even in the section head.
+
 \lipsum[32-33]
 
 \subsection{Nam sed augue}
@@ -177,15 +195,17 @@ Pellentesque cursus luctus mauris\footnote{\lipsum[3]}.
 
 \lipsum[36-38]
 
-\chapter{Proin vel urna}
+\chapter{Footnotes, figures and tables}
 \label{chap:proin}
 \chapterartfile{100euroit}\index{euro, coin!Italy}\index{Italian
   euro|see{euro}} 
 
-Aenean imperdiet\footnote{Quisque aliquam ipsum sed turpis\index{turpis}}.
-Vestibulum ante ipsum pri\-m\-is in faucibus orci luctus et ultrices
-posuere cubilia Curae; Donec lacinia nonummy lectus. Proin vel urna.
-Fusce sit amet orci ac magna iaculis pharetra.
+
+Some examples of footnotes.  Aenean imperdiet\footnote{Quisque aliquam
+  ipsum sed turpis\index{turpis}}.  Vestibulum ante ipsum pri\-m\-is
+in faucibus orci luctus et ultrices posuere cubilia Curae; Donec
+lacinia nonummy lectus. Proin vel urna.  Fusce sit amet orci ac magna
+iaculis pharetra.
 
 Fusce adipiscing justo nec ante. Nullam in enim.  Pellentesque felis
 orci, sagittis ac, malesuada et, facilisis in, ligula\index{ligula}.
@@ -235,8 +255,8 @@ sit amet augue tristique gravida.\index{ante}
   \index{Leonardo Da Vinci@\emph{Leonardo Da Vinci}|see{Da Vinci,
       Leonardo}}
   \index{Vitruvian Man}
-  \caption{Pellentesque laoreet velit nec justo. Morbi a turpis sed
-    libero consequat porta. Quisque lacinia consequat odio.}
+  \caption{Vitruvian man.  Note that the caption is typeset in a box
+    with the width automatically calculated from the image.}
   \label{fig:one}
 \end{figure}
 
