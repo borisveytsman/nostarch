@@ -450,18 +450,32 @@
 % \DescribeMacro{itemize}
 % \DescribeMacro{enumerate}
 % \DescribeMacro{description}
+% \DescribeMacro{aside}
 % \DescribeMacro{note}
+% \DescribeMacro{warning}
 % The class offers standard |itemize|, |enumerate| and |description|
-% environment.  There is an environment specific for it:  |note|.  It
-% is intended for ``asides'':
+% environment. There are also special environments reserverd for
+% asides. The |aside| environment has a mandatory argument: aside
+% name.  It typesets its contents in italics with the name in bold on
+% the marginh:
+% \begin{verbatim}
+% \begin{aside}{Reminder}
+%   Do not forget to plug off the computer before doing any
+%   modifications! 
+% \end{aside}
+% \end{verbatim}
+% The environments |note| and |warning| are similar, but have
+% pre-defined names NOTE and WARNING, e.g
 % \begin{verbatim}
 % \begin{note}
 %   Do not forget to plug off the computer before doing any
 %   modifications! 
 % \end{note}
+% \begin{warning}
+%   Do not forget to plug off the computer before doing any
+%   modifications! 
+% \end{warning}
 % \end{verbatim}
-% The material in a |note| will be typeset in italics with bold
-% ``NOTE'' on the margin.
 %
 %
 %\subsubsection{Tables and Figures}
@@ -703,7 +717,7 @@
 %<class>\ProvidesClass{nostarch}
 %<nshyper>\ProvidesPackage{nshyper}
 %<*!ist>
-[2023/04/08 v2.1 Typesetting books for No Starch Press]
+[2023/06/10 v2.2 Typesetting books for No Starch Press]
 %</!ist>
 %    \end{macrocode}
 %
@@ -804,7 +818,7 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
   fancyhdr, fancyvrb, booktabs, graphicx,
   listings, caption, makeidx, upquote, pifont,
   textcomp, xcolor, lmodern, nameref, float, amssymb, etoolbox,
-  setspace, marginnote, url}
+  setspace, marginnote, url, subfigure}
 \RequirePackage[framemethod=TikZ]{mdframed}
 \RequirePackage{soul}
 \RequirePackage[T1]{fontenc}  
@@ -2214,13 +2228,14 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 %    \end{macrocode}   
 % \end{macro}
 %
-% \begin{macro}{note}
-%   Note is a special environment for asides.  It is in italics with
-%   the word ``NOTE'' on the margin:
+% \begin{macro}{\aside}
+% \changes{v2.2}{2023/06/10}{Added macro}
+% An environment for asides.  Italics with the name (the mandatory
+% arg) on the margin
 %    \begin{macrocode}
-\newenvironment{note}{%
+\newenvironment{aside}[1]{%
   \list{\makebox[0pt][r]{\dogma \fontsize{7.5pt}{12pt}
-      \colorbox{black}{\textcolor{white}{\sonote{NOTE}}}\hspace{2em}}}{\listparindent0pt\relax
+      \colorbox{black}{\textcolor{white}{\sonote{#1}}}\hspace{2em}}}{\listparindent0pt\relax
     \topsep9\p@\relax
     \itemindent0\p@\relax
     \rightmargin0\p@\relax
@@ -2228,6 +2243,23 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
     \labelwidth0\p@\relax
     \labelsep0\p@}%
     \item\itshape}{\vspace{-3pt}\endlist}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\note}
+% \changes{v2.2}{2023/06/10}{Redefined using generic}
+%   Note is in italics with
+%   the word ``NOTE'' on the margin:
+%    \begin{macrocode}
+\newenvironment{note}{\begin{aside}{NOTE}}{\end{aside}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\warning}
+% \changes{v2.2}{2023/06/10}{Defined using generic}
+%   Warning is in italics with
+%   the word ``WARNING'' on the margin:
+%    \begin{macrocode}
+\newenvironment{warning}{\begin{aside}{WARNING}}{\end{aside}}
 %    \end{macrocode}
 % \end{macro}
 %

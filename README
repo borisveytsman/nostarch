@@ -10,6 +10,10 @@ nshyper.sty and MakeIndex style nostarch.ist.
 
 CHANGES:
 
+Version 2.2
+    New environments: note and aside
+    Subfigure package is now the default
+
 Version 2.1
     Urls now correspond to the requirements of NoStarch: italic font,
     low tilde, splitting according to the NoStarch rules
