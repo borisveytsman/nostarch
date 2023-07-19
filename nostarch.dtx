@@ -717,7 +717,7 @@
 %<class>\ProvidesClass{nostarch}
 %<nshyper>\ProvidesPackage{nshyper}
 %<*!ist>
-[2023/06/18 v2.3 Typesetting books for No Starch Press]
+[2023/07/19 v2.4 Typesetting books for No Starch Press]
 %</!ist>
 %    \end{macrocode}
 %
@@ -2911,6 +2911,8 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 % \changes{v2.1}{2023/04/11}{Added slashes and double quote}
 % \changes{v2.3}{2023/06/18}{Moved out opening braces for
 % compatibility with amsmath}
+% \changes{v2.4}{2023/07/19}{Restored opening brackets using David
+% Carlisle's advice}
 % We add to macro special treatment of the chars with breaking URLs.
 % Slashes are interesting: we allow breaking after them, but not
 % before, even after other slashes or colons
@@ -2931,6 +2933,10 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
   \do\'{\penalty\UrlBreakPenalty\mathchar39\relax}%
   \do\"{\penalty\UrlBreakPenalty\mathchar34\relax}%
   \do\+{\penalty\UrlBreakPenalty\mathchar43\relax}%
+  \do\<{\penalty\UrlBreakPenalty\mathchar60\relax}%
+  \do\[{\penalty\UrlBreakPenalty\mathchar91\relax}%
+  \do\({\penalty\UrlBreakPenalty\mathchar40\relax}%
+  \do\{{\penalty\UrlBreakPenalty\mathchar123\relax}%
   \do\/{\unpenalty\penalty\@M\mathchar47\penalty\UrlBreakPenalty}%
 }
 %    \end{macrocode}
@@ -2942,6 +2948,17 @@ pagecolor=black,urlcolor=black,hyperindex=false]{hyperref}
 % We do not allow breaks in urls after brackets
 %    \begin{macrocode}
 % \def\UrlNoBreaks{}  % Rolled back redefinition
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Url@MathSetup}
+% \changes{v2.4}{2023/07/19}{Added to the macro}
+% Amsmath redefines math catcodes every math expression.  This lead to
+% incompatibility.  By David Carlisle's advice, we reset this
+% resetting.  We add this to the macro that is called at the beginning
+% of every url
+%    \begin{macrocode}
+\g@addto@macro{\Url@MathSetup}{\let\resetMathstrut@\relax}
 %    \end{macrocode}
 % \end{macro}
 %

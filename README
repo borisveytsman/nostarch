@@ -10,6 +10,9 @@ nshyper.sty and MakeIndex style nostarch.ist.
 
 CHANGES:
 
+Version 2.4
+    Better handling of URLs (thanks to David Carlisle)
+
 Version 2.3
     Compatibility with amsmath restored
 
